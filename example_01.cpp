@@ -21,8 +21,7 @@
 #include <time.h>
 #include <math.h>
 
-
-#include "RGB.h"
+#include "Image.h"
 
 
 #define PI 3.14159265  // Should be used from mathlib
