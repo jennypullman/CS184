@@ -7,11 +7,11 @@ RGB::RGB(float red, float green, float blue) {
 }
 
 RGB RGB::rgb_add(RGB color1, RGB color2) const {
-	return RGB(color1.get_r()+color2.get_r(), color1.get_g()+color2.get_g(), color1.get_b()+color2.get_b());
+	return RGB(color1.get_r() + color2.get_r(), color1.get_g() + color2.get_g(), color1.get_b() + color2.get_b());
 }
 
 RGB RGB::rgb_sub(RGB color1, RGB color2) const {
-	return RGB(color1.get_r()-color2.get_r(), color1.get_g()-color2.get_g(), color1.get_b()-color2.get_b());
+	return RGB(color1.get_r() - color2.get_r(), color1.get_g() - color2.get_g(), color1.get_b() - color2.get_b());
 }
 
 RGB RGB::rgb_mult(RGB color1, RGB color2) const {
@@ -26,7 +26,7 @@ RGB RGB::scalar_mult(RGB color, float scalar) const {
 	if (0 == scalar) { // Can't divide by 0
 		scalar = 1.0;
 	}
-	return RGB(color.get_r()/scalar, color.get_g()/scalar, color.get_b()/scalar);
+	return RGB(color.get_r() / scalar, color.get_g() / scalar, color.get_b() / scalar);
 }
 
 void RGB::udpate_r(float red){

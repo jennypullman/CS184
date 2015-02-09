@@ -20,15 +20,13 @@
 #include <time.h>
 #include <math.h>
 
-#include "Image.h"
-
 
 #define PI 3.14159265  // Should be used from mathlib
 inline float sqr(float x) { return x*x; }
 
 using namespace std;
 
-using namespace Utils;
+#include "Vector3.h"
 //****************************************************
 // Some Classes
 //****************************************************
@@ -48,7 +46,6 @@ Viewport	viewport;
 
 
 
-
 //****************************************************
 // Simple init function
 //****************************************************
@@ -65,6 +62,7 @@ void initScene(){
 void myReshape(int w, int h) {
   viewport.w = w;
   viewport.h = h;
+  
   glViewport (0,0,viewport.w,viewport.h);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
@@ -149,7 +147,7 @@ void myDisplay() {
 
 
   // Start drawing
-  circle(viewport.w / 2.0 , viewport.h / 2.0 , min(viewport.w, viewport.h)*0.9 / 2.0);
+  circle(viewport.w / 2.0 , viewport.h / 2.0 , min(viewport.w, viewport.h) / 3.0);
 
   glFlush();
   glutSwapBuffers();					// swap buffers (we earlier set double buffer)

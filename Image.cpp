@@ -11,12 +11,12 @@ Image::Image(int height, int width) {
 }
 
 int Image::get_z(int x, int y) const {
-	return * (zCoords + x + w*y); // index (x,y) = y*(#elems/row) + x
+	return *(zCoords + x + w*y); // index (x,y) = y*(#elems/row) + x
 }
 
 
 RGB Image::get_rgb(int x, int y) const {
-	return * (rgb + x + w*y); // index (x,y) = y*(#elems/row) + x
+	return *(rgb + x + w*y); // index (x,y) = y*(#elems/row) + x
 }
 
 void Image::set_rgb(int x, int y, RGB color){
