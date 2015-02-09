@@ -1,5 +1,5 @@
 #include <stdexcept>
-namespace Utils {
+#include "Vector3.h"
 	class Vector3 {
 		int x;
 		int y;
@@ -33,4 +33,3 @@ namespace Utils {
 			throw std::overflow_error("Divide by zero error.");
 		}
 	};
-}
