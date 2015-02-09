@@ -1,13 +1,19 @@
-﻿Build started 2/8/2015 7:52:37 PM.
+﻿Build started 2/9/2015 10:54:09 AM.
      1>Project "C:\Users\jpleazy\Documents\cs184\as1\as1.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"glut-3.7.6-bin" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt example_01.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"glut-3.7.6-bin" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Color.cpp Vector3.cpp example_01.cpp
+         Vector3.cpp
+     1>c:\users\jpleazy\documents\cs184\as1\vector3.cpp(41): error C2039: 'overflow_error' : is not a member of 'std'
+     1>c:\users\jpleazy\documents\cs184\as1\vector3.cpp(41): error C3861: 'overflow_error': identifier not found
+         Color.cpp
+     1>c:\users\jpleazy\documents\cs184\as1\color.cpp(28): error C2084: function 'Color Color::scalar_mult(Color,float) const' already has a body
+                 c:\users\jpleazy\documents\cs184\as1\color.h(9) : see previous definition of 'scalar_mult'
+         Generating Code...
+         Compiling...
          example_01.cpp
-       Link:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Users\jpleazy\Documents\cs184\as1\Debug\as1.exe" /INCREMENTAL /NOLOGO /LIBPATH:"glut-3.7.6-bin" kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /DEBUG /PDB:"C:\Users\jpleazy\Documents\cs184\as1\Debug\as1.pdb" /SUBSYSTEM:CONSOLE /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Users\jpleazy\Documents\cs184\as1\Debug\as1.lib" /MACHINE:X86 Debug\example_01.obj
-         as1.vcxproj -> C:\Users\jpleazy\Documents\cs184\as1\Debug\as1.exe
-     1>Done Building Project "C:\Users\jpleazy\Documents\cs184\as1\as1.vcxproj" (Build target(s)).
+         Generating Code...
+     1>Done Building Project "C:\Users\jpleazy\Documents\cs184\as1\as1.vcxproj" (Build target(s)) -- FAILED.
 
-Build succeeded.
+Build FAILED.
 
-Time Elapsed 00:00:07.81
+Time Elapsed 00:00:04.90

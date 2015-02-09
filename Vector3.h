@@ -1,4 +1,3 @@
-#include <stdexcept>
 class Vector3{
 public:
 	Vector3(int x, int y, int z);

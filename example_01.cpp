@@ -50,6 +50,7 @@ Viewport	viewport;
 // Simple init function
 //****************************************************
 void initScene(){
+	Color color1 = Color(1.0, 1.0, 1.0);
 
   // Nothing to do here for this simple example.
 }
