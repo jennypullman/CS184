@@ -25,7 +25,7 @@ Color Color::scalar_mult(Color color, float scalar) const {
 	return Color(color.get_r()*scalar, color.get_g()*scalar, color.get_b()*scalar);
 }
 
-Color Color::scalar_mult(Color color, float scalar) const {
+Color Color::scalar_div(Color color, float scalar) const {
 	if (0 == scalar) { // Can't divide by 0
 		scalar = 1.0;
 	}
