@@ -1,4 +1,3 @@
-
 #include <vector>
 #include <iostream>
 #include <fstream>
@@ -27,6 +26,7 @@ inline float sqr(float x) { return x*x; }
 
 using namespace std;
 
+using namespace Utils;
 //****************************************************
 // Some Classes
 //****************************************************
@@ -63,7 +63,6 @@ void initScene(){
 void myReshape(int w, int h) {
   viewport.w = w;
   viewport.h = h;
-
   glViewport (0,0,viewport.w,viewport.h);
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
@@ -107,7 +106,6 @@ void circle(float centerX, float centerY, float radius) {
 
   int minJ = max(0,(int)floor(centerY-radius));
   int maxJ = min(viewport.h-1,(int)ceil(centerY+radius));
-
 
 
   for (i=0;i<viewport.w;i++) {
