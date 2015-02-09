@@ -1,9 +1,11 @@
 #include <stdexcept>
 #include "Vector3.h"
 class Vector3 {
+private:
 	int x;
 	int y;
 	int z;
+public:
 	Vector3(int x, int y, int z){
 		this->x = x;
 		this->y = y;
@@ -18,7 +20,7 @@ class Vector3 {
 	int getZ(){
 		return z;
 	}
-	static Vector3 add(static Vector3 vec1, static Vector3 vec2){
+	static Vector3 add(Vector3 vec1, Vector3 vec2){
 		return Vector3(vec1.x + vec2.x, vec1.y + vec2.y, vec1.z + vec2.z);
 	}
 	//return vec1 - vec2

@@ -27,6 +27,7 @@ inline float sqr(float x) { return x*x; }
 using namespace std;
 
 #include "Vector3.h"
+#include "Image.h"
 //****************************************************
 // Some Classes
 //****************************************************
@@ -45,14 +46,12 @@ class Viewport {
 Viewport	viewport;
 
 
-
 //****************************************************
 // Simple init function
 //****************************************************
 void initScene(){
 
   // Nothing to do here for this simple example.
-
 }
 
 
@@ -67,7 +66,6 @@ void myReshape(int w, int h) {
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
   gluOrtho2D(0, viewport.w, 0, viewport.h);
-
 }
 
 
