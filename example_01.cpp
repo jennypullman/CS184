@@ -44,6 +44,10 @@ class Viewport {
 // Global Variables
 //****************************************************
 Viewport	viewport;
+float ka_r, ka_g, ka_b = 0.0;
+float kd_r, kd_g, kd_b = 0.0;
+float ks_r, ks_g, ks_b = 0.0;
+float sp = 0.0;
 
 
 //****************************************************
@@ -144,33 +148,59 @@ void myDisplay() {
 
 
   // Start drawing
-  circle(viewport.w / 2.0 , viewport.h / 2.0 , min(viewport.w, viewport.h) / 3.0);
+  circle(viewport.w / 2.0 , viewport.h / 2.0 , min(viewport.w, viewport.h)*0.9 / 2.0);
 
   glFlush();
   glutSwapBuffers();					// swap buffers (we earlier set double buffer)
 }
 
-void handleKA(char *argv[], int start) {
-  cout << "ka" << "\n";
+void handleKA(int argc, char *argv[], int start) {
+  // cout << "ka" << "\n";
+  if (start+2 >= argc) {
+    // TODO input error
+  }
+
+  ka_r = atof(argv[start]);
+  ka_b = atof(argv[start+1]);
+  ka_g = atof(argv[start+2]);
 }
 
-void handleKD(char *argv[], int start) {
-  cout << "kd" << "\n";
+void handleKD(int argc, char *argv[], int start) {
+  // cout << "kd" << "\n";
+  if (start+2 >= argc) {
+    // TODO input error
+  }
+
+  kd_r = atof(argv[start]);
+  kd_b = atof(argv[start+1]);
+  kd_g = atof(argv[start+2]);
 }
 
-void handleKS(char *argv[], int start) {
-  cout << "ks" << "\n";
+void handleKS(int argc, char *argv[], int start) {
+  // cout << "ks" << "\n";
+  if (start+2 >= argc) {
+    // TODO input error
+  }
+
+  ks_r = atof(argv[start]);
+  ks_b = atof(argv[start+1]);
+  ks_g = atof(argv[start+2]);
 }
 
-void handleSP(char *argv[], int start) {
-  cout << "sp" << "\n";
+void handleSP(int argc, char *argv[], int start) {
+  // cout << "sp" << "\n";
+  if (start >= argc) {
+    // TODO input error
+  }
+
+  sp = atof(argv[start]);
 }
 
-void handlePL(char *argv[], int start) {
+void handlePL(int argc, char *argv[], int start) {
   cout << "pl" << "\n";
 }
 
-void handleDL(char *argv[], int start) {
+void handleDL(int argc, char *argv[], int start) {
   cout << "dl" << "\n";
 }
 
@@ -188,32 +218,32 @@ void processArgs(int argc, char *argv[]) {
 
     if (arg.compare("-ka") == 0){
       // cout << "ka" << "\n";
-      handleKA(argv, i+1);
+      handleKA(argc, argv, i+1);
     }
     
     if (arg.compare("-kd") == 0){
       // cout << "kd" << "\n";
-      handleKD(argv, i+1);
+      handleKD(argc, argv, i+1);
     }
 
     if (arg.compare("-ks") == 0){
       // cout << "ks" << "\n";
-      handleKS(argv, i+1);
+      handleKS(argc, argv, i+1);
     }
 
     if (arg.compare("-sp") == 0){
       // cout << "sp" << "\n";
-      handleSP(argv, i+1);
+      handleSP(argc, argv, i+1);
     }
 
     if (arg.compare("-pl") == 0){
       // cout << "pl" << "\n";
-      handlePL(argv, i+1);
+      handlePL(argc, argv, i+1);
     }
 
     if (arg.compare("-dl") == 0){
       // cout << "dl" << "\n";
-      handleDL(argv, i+1);
+      handleDL(argc, argv, i+1);
     }
   }
 }
@@ -239,7 +269,7 @@ int main(int argc, char *argv[]) {
   glutCreateWindow(argv[0]);
 
   initScene();							// quick function to set up scene
-  processArgs(argc, argv);   // 
+  processArgs(argc, argv);   // extra arguments from command
 
   glutDisplayFunc(myDisplay);				// function to run when its time to draw something
   glutReshapeFunc(myReshape);				// function to run when the window gets resized
