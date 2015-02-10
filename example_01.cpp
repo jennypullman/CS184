@@ -45,6 +45,10 @@ class Viewport {
 //****************************************************
 Viewport	viewport;
 float ka_r, ka_g, ka_b = 0.0;
+//RGB floats
+float ka[3] = { 0.0, 0.0, 0.0 };
+float kd[3] = { 0.0, 0.0, 0.0 };
+float ks[3] = { 0.0, 0.0, 0.0 };
 float kd_r, kd_g, kd_b = 0.0;
 float ks_r, ks_g, ks_b = 0.0;
 float sp = 0.0;
@@ -130,21 +134,53 @@ void circle(float centerX, float centerY, float radius) {
 
 		//TO DO
 		//initialize R, G, B to 0.0
+		float RGB[3] = { 0.0, 0.0, 0.0 };
 		//find normal
+		Vector3 normal = Vector3(x, y, z);
 		//find viewer vector
+		Vector3 viewerVector = Vector3(0.0, 0.0, 1.0);
 		//for each light
-		//calculate light vector
-		//calculate reflection vector
-		//for each color:
-		//DIFFUSE COMPONENT
-		//compute diffuse component, add to respective float color
-		//SPECULAR COMPONENT
-		//compute spec
-		//AMBIENT COMPONENT
-		//compute ambient
+		for (Light light : dir_lights){
+			Color lightColor = light.getColor();
+			float lightColorArr[3] = { lightColor.get_r(), lightColor.get_g(), lightColor.get_b() };
+			//calculate light vector
+			Vector3 lightVector = light.getLightVector(x, y, z);
+			//calculate reflection vector
+			Vector3 reflectVector = light.getReflectionVector(normal);
+			//for each color:
+			for (int i = 0; i <= 2; i++){
+				//DIFFUSE COMPONENT
+				//ASSUMPTION: i didn't normalize I
+				float diffuse = kd[i] * lightColorArr[i] * max(Vector3::dot(lightVector, normal), 0);
+				//SPECULAR COMPONENT
+				float specular = ks[i] * lightColorArr[i] * pow(max(Vector3::dot(reflectVector, viewerVector), 0), sp);
+				//AMBIENT COMPONENT
+				float ambient = ka[i] * lightColorArr[i];
+				RGB[i] += diffuse + specular + ambient;
+			}
+		}
+		for (Light light : point_lights){
+			Color lightColor = light.getColor();
+			float lightColorArr[3] = { lightColor.get_r(), lightColor.get_g(), lightColor.get_b() };
+			//calculate light vector
+			Vector3 lightVector = light.getLightVector(x, y, z);
+			//calculate reflection vector
+			Vector3 reflectVector = light.getReflectionVector(normal);
+			//for each color:
+			for (int i = 0; i <= 2; i++){
+				//DIFFUSE COMPONENT
+				//ASSUMPTION: i didn't normalize I
+				float diffuse = kd[i] * lightColorArr[i] * max(Vector3::dot(lightVector, normal), 0);
+				//SPECULAR COMPONENT
+				float specular = ks[i] * lightColorArr[i] * pow(max(Vector3::dot(reflectVector, viewerVector), 0), sp);
+				//AMBIENT COMPONENT
+				float ambient = ka[i] * lightColorArr[i];
+				RGB[i] += diffuse + specular + ambient;
+			}
+		}
 
-		
-        setPixel(i,j, 1.0, 0.0, 0.0);
+		setPixel(i, j, RGB[0], RGB[1], RGB[2]);
+        //setPixel(i,j, 1.0, 0.0, 0.0);
 
         // This is amusing, but it assumes negative color values are treated reasonably.
         // setPixel(i,j, x/radius, y/radius, z/radius );
@@ -181,9 +217,9 @@ void handleKA(int argc, char *argv[], int start) {
     // TODO input error
   }
 
-  ka_r = atof(argv[start]);
-  ka_b = atof(argv[start+1]);
-  ka_g = atof(argv[start+2]);
+  ka[0] = atof(argv[start]);
+  ka[1] = atof(argv[start+1]);
+  ka[2] = atof(argv[start+2]);
 }
 
 void handleKD(int argc, char *argv[], int start) {
@@ -192,9 +228,9 @@ void handleKD(int argc, char *argv[], int start) {
     // TODO input error
   }
 
-  kd_r = atof(argv[start]);
-  kd_b = atof(argv[start+1]);
-  kd_g = atof(argv[start+2]);
+  kd[0] = atof(argv[start]);
+  kd[1] = atof(argv[start+1]);
+  kd[2] = atof(argv[start+2]);
 }
 
 void handleKS(int argc, char *argv[], int start) {
@@ -203,9 +239,9 @@ void handleKS(int argc, char *argv[], int start) {
     // TODO input error
   }
 
-  ks_r = atof(argv[start]);
-  ks_b = atof(argv[start+1]);
-  ks_g = atof(argv[start+2]);
+  ks[0] = atof(argv[start]);
+  ks[1] = atof(argv[start+1]);
+  ks[2] = atof(argv[start+2]);
 }
 
 void handleSP(int argc, char *argv[], int start) {

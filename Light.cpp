@@ -20,23 +20,24 @@ Color Light::getColor(){
 }
 
 Vector3 Light::getLightVector(float x, float y, float z){
-	Vector3 lightVector;
 	if (isDir){
-		lightVector = Vector3(-this->x, -this->y, -this->z);
-		lightVector.normalize();
+		this->lightVector = new Vector3(-this->x, -this->y, -this->z);
+		(*this->lightVector).normalize();
 	}
 	else {
-		lightVector = Vector3(x - this->x, y - this->y, z - this->z);
-		lightVector.normalize();
+		this->lightVector = new Vector3(x - this->x, y - this->y, z - this->z);
+		(*this->lightVector).normalize();
 	}
-	return lightVector;
+	return *this->lightVector;
 }
 	
 Vector3 Light::getReflectionVector(Vector3 n){
 	float tmpScalar;
 	try{
 		tmpScalar = 2*Vector3::dot(n, *lightVector);
-		return Vector3::add(Vector3::scalarMultiply(*lightVector, -1), Vector3::scalarMultiply(n, tmpScalar));
+		Vector3 tmp = Vector3::add(Vector3::scalarMultiply(*lightVector, -1), Vector3::scalarMultiply(n, tmpScalar));
+		tmp.normalize();
+		return tmp;
 	}
 	catch (char *exception){
 		cout << exception;
