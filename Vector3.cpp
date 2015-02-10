@@ -1,4 +1,5 @@
 #include <stdexcept>
+#include <math.h>
 class Vector3 {
 	float x;
 	float y;
@@ -44,5 +45,12 @@ class Vector3 {
 			return Vector3(vec.x / i, vec.y / i, vec.z / i);
 		}
 		throw std::overflow_error("Divide by zero error.");
+	}
+
+	void normalize() {
+		float magnitude = sqrt( x^2 + y^2 + z^2 );
+		x = x/magnitude;
+		y = y/magnitude;
+		z = z/magnitude;
 	}
 };
