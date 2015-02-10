@@ -48,6 +48,10 @@ float ka_r, ka_g, ka_b = 0.0;
 float kd_r, kd_g, kd_b = 0.0;
 float ks_r, ks_g, ks_b = 0.0;
 float sp = 0.0;
+Light dir_lights[5];
+int num_dir_lights = 0;
+Light point_lights[5];
+int num_point_lights = 0;
 
 
 
@@ -201,11 +205,27 @@ void handleSP(int argc, char *argv[], int start) {
 }
 
 void handlePL(int argc, char *argv[], int start) {
-  cout << "pl" << "\n";
+  // cout << "pl" << "\n";
+  if (start+5 >= argc) {
+    // TODO input error
+  }
+
+  if (num_point_lights < 5) {
+    point_lights[num_point_lights] = Light(atof(argv[start]), atof(argv[start+1]), atof(argv[start+2]), atof(argv[start+3]), atof(argv[start+4]), atof(argv[start+5]), false);
+    num_point_lights++;
+  }
 }
 
 void handleDL(int argc, char *argv[], int start) {
-  cout << "dl" << "\n";
+  // cout << "dl" << "\n";
+  if (start+5 >= argc) {
+    // TODO input error
+  }
+
+  if (num_dir_lights < 5) {
+    dir_lights[num_dir_lights] = Light(atof(argv[start]), atof(argv[start+1]), atof(argv[start+2]), atof(argv[start+3]), atof(argv[start+4]), atof(argv[start+5]), true);
+    num_dir_lights++;
+  }
 }
 
 void processArgs(int argc, char *argv[]) {
@@ -274,6 +294,13 @@ int main(int argc, char *argv[]) {
 
   initScene();							// quick function to set up scene
   processArgs(argc, argv);   // extra arguments from command
+
+  // cout << "ka_r: " << ka_r << " ka_g: " << ka_g << " ka_b: " << ka_b << endl;
+  // cout << "kd_r: " << kd_r << " kd_g: " << kd_g << " kd_b: " << kd_b << endl;
+  // cout << "ks_r: " << ks_r << " ks_g: " << ks_g << " ks_b: " << ks_b << endl;
+  // cout << "sp: " << sp << endl;
+  // cout << "num_dir_lights: " << num_dir_lights << endl;
+  // cout << "num_point_lights: " << num_point_lights << endl;
 
   glutDisplayFunc(myDisplay);				// function to run when its time to draw something
   glutReshapeFunc(myReshape);				// function to run when the window gets resized
