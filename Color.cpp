@@ -9,23 +9,23 @@ Color::Color() {
 	r = g = b = 0.0;
 }
 
-Color Color::rgb_add(Color color1, Color color2) const {
+Color Color::rgb_add(Color color1, Color color2){
 	return Color(color1.get_r() + color2.get_r(), color1.get_g() + color2.get_g(), color1.get_b() + color2.get_b());
 }
 
-Color Color::rgb_sub(Color color1, Color color2) const {
+Color Color::rgb_sub(Color color1, Color color2){
 	return Color(color1.get_r() - color2.get_r(), color1.get_g() - color2.get_g(), color1.get_b() - color2.get_b());
 }
 
-Color Color::rgb_mult(Color color1, Color color2) const {
+Color Color::rgb_mult(Color color1, Color color2){
 	return Color(color1.get_r()*color2.get_r(), color1.get_g()*color2.get_g(), color1.get_b()*color2.get_b());
 }
 
-Color Color::scalar_mult(Color color, float scalar) const {
+Color Color::scalar_mult(Color color, float scalar){
 	return Color(color.get_r()*scalar, color.get_g()*scalar, color.get_b()*scalar);
 }
 
-Color Color::scalar_div(Color color, float scalar) const {
+Color Color::scalar_div(Color color, float scalar){
 	if (0 == scalar) { // Can't divide by 0
 		scalar = 1.0;
 	}
