@@ -129,7 +129,20 @@ void circle(float centerX, float centerY, float radius) {
         float z = sqrt(radius*radius-dist*dist);
 
 		//TO DO
-		
+		//initialize R, G, B to 0.0
+		//find normal
+		//find viewer vector
+		//for each light
+		//calculate light vector
+		//calculate reflection vector
+		//for each color:
+		//DIFFUSE COMPONENT
+		//compute diffuse component, add to respective float color
+		//SPECULAR COMPONENT
+		//compute spec
+		//AMBIENT COMPONENT
+		//compute ambient
+
 		
         setPixel(i,j, 1.0, 0.0, 0.0);
 
