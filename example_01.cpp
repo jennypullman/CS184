@@ -150,6 +150,73 @@ void myDisplay() {
   glutSwapBuffers();					// swap buffers (we earlier set double buffer)
 }
 
+void handleKA(char *argv[], int start) {
+  cout << "ka" << "\n";
+}
+
+void handleKD(char *argv[], int start) {
+  cout << "kd" << "\n";
+}
+
+void handleKS(char *argv[], int start) {
+  cout << "ks" << "\n";
+}
+
+void handleSP(char *argv[], int start) {
+  cout << "sp" << "\n";
+}
+
+void handlePL(char *argv[], int start) {
+  cout << "pl" << "\n";
+}
+
+void handleDL(char *argv[], int start) {
+  cout << "dl" << "\n";
+}
+
+void processArgs(int argc, char *argv[]) {
+  // cout << "argc: " << argc << "\n";
+  // for (int i = argc - 1; i >= 0; i--) { 
+  //   cout << argv[i] << "\n";
+  // }
+  string arg;
+  for (int i = 1; i < argc; i++) {
+    arg = argv[i];
+    if (arg[0] != '-') {
+      continue;
+    }
+
+    if (arg.compare("-ka") == 0){
+      // cout << "ka" << "\n";
+      handleKA(argv, i+1);
+    }
+    
+    if (arg.compare("-kd") == 0){
+      // cout << "kd" << "\n";
+      handleKD(argv, i+1);
+    }
+
+    if (arg.compare("-ks") == 0){
+      // cout << "ks" << "\n";
+      handleKS(argv, i+1);
+    }
+
+    if (arg.compare("-sp") == 0){
+      // cout << "sp" << "\n";
+      handleSP(argv, i+1);
+    }
+
+    if (arg.compare("-pl") == 0){
+      // cout << "pl" << "\n";
+      handlePL(argv, i+1);
+    }
+
+    if (arg.compare("-dl") == 0){
+      // cout << "dl" << "\n";
+      handleDL(argv, i+1);
+    }
+  }
+}
 
 
 //****************************************************
@@ -172,6 +239,7 @@ int main(int argc, char *argv[]) {
   glutCreateWindow(argv[0]);
 
   initScene();							// quick function to set up scene
+  processArgs(argc, argv);   // 
 
   glutDisplayFunc(myDisplay);				// function to run when its time to draw something
   glutReshapeFunc(myReshape);				// function to run when the window gets resized
