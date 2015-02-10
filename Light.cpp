@@ -1,6 +1,4 @@
 #include "Light.h"
-#include <iostream>
-using namespace std;
 
 Light::Light(){
 	x, y, z, r, g, b = 0.0;
@@ -15,15 +13,11 @@ Light::Light(float x, float y, float z, float r, float g, float b, bool isDir){
 	this->g = g;
 	this->b = b;
 	this->isDir = isDir;
-	lightVector = nullptr;
+	this->lightVector;
 }
 
-float* Light::getPosition(){
-	return new float[] { x, y, z };
-}
-
-float* Light::getColor(){
-	return new float[] {r, g, b};
+Color Light::getColor(){
+	return Color(r, g, b);
 }
 
 Vector3 Light::getLightVector(float x, float y, float z){
@@ -36,6 +30,7 @@ Vector3 Light::getLightVector(float x, float y, float z){
 		lightVector = Vector3(x - this->x, y - this->y, z - this->z);
 		lightVector.normalize();
 	}
+	return lightVector;
 }
 	
 Vector3 Light::getReflectionVector(Vector3 n){

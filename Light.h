@@ -1,12 +1,14 @@
 #include "Vector3.h"
+#include <iostream>
+using namespace std;
+#include "Color.h"
 
 class Light {
 public:
 	Light();
 	Light(float x, float y, float z, float r, float g, float b, bool isDir);
 
-	float* getPosition();
-	float* getColor();
+	Color getColor();
 	Vector3 getLightVector(float x, float y, float z);
 	Vector3 getReflectionVector(Vector3 n);
 	bool IsDirectional();

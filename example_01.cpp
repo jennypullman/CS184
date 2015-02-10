@@ -26,8 +26,8 @@ inline float sqr(float x) { return x*x; }
 
 using namespace std;
 
-#include "Vector3.h"
-#include "Image.h"
+#include <stdlib.h>
+#include "Light.h"
 //****************************************************
 // Some Classes
 //****************************************************
@@ -48,6 +48,7 @@ float ka_r, ka_g, ka_b = 0.0;
 float kd_r, kd_g, kd_b = 0.0;
 float ks_r, ks_g, ks_b = 0.0;
 float sp = 0.0;
+
 
 
 //****************************************************
@@ -123,6 +124,9 @@ void circle(float centerX, float centerY, float radius) {
         // This is the front-facing Z coordinate
         float z = sqrt(radius*radius-dist*dist);
 
+		//TO DO
+		
+		
         setPixel(i,j, 1.0, 0.0, 0.0);
 
         // This is amusing, but it assumes negative color values are treated reasonably.
