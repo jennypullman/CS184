@@ -48,7 +48,7 @@ class Vector3 {
 	}
 
 	void normalize() {
-		float magnitude = sqrt( x^2 + y^2 + z^2 );
+		float magnitude = sqrt( pow(x,2) + pow(y,2) + pow(z,2) );
 		x = x/magnitude;
 		y = y/magnitude;
 		z = z/magnitude;
