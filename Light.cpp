@@ -1,5 +1,4 @@
 #include "Light.h"
-
 Light::Light(){
 	x, y, z, r, g, b = 0.0;
 	isDir = false;

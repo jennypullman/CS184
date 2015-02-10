@@ -12,7 +12,7 @@ endif
 RM = /bin/rm -f 
 all: main 
 main: Vector3.o Color.o Image.o Light.o example_01.o 
-	$(CC) $(CFLAGS) -o as1 Vector3.o Color.o Image.o example_01.o $(LDFLAGS)
+	$(CC) $(CFLAGS) -o as1 Vector3.o Light.o Color.o Image.o example_01.o $(LDFLAGS)
 Vector3.o: Vector3.cpp
 	$(CC) $(CFLAGS) -c Vector3.cpp -o Vector3.o
 Color.o: Color.cpp
