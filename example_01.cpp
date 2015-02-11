@@ -218,75 +218,89 @@ void myDisplay() {
   glutSwapBuffers();					// swap buffers (we earlier set double buffer)
 }
 
-void handleKA(int argc, char *argv[], int start) {
+int handleKA(int argc, char *argv[], int start) {
   // cout << "ka" << "\n";
   if (start+2 >= argc) {
     // TODO input error
+    return 0;
   }
 
   ka[0] = atof(argv[start]);
   ka[1] = atof(argv[start+1]);
   ka[2] = atof(argv[start+2]);
-  cout << ka[0] << ka[1] << ka[2];
+  // cout << ka[0] << ka[1] << ka[2];
+  return 3;
 }
 
-void handleKD(int argc, char *argv[], int start) {
+int handleKD(int argc, char *argv[], int start) {
   // cout << "kd" << "\n";
   if (start+2 >= argc) {
     // TODO input error
+    return 0;
   }
 
   kd[0] = atof(argv[start]);
   kd[1] = atof(argv[start+1]);
   kd[2] = atof(argv[start+2]);
-  cout << kd[0] << kd[1] << kd[2];
+  // cout << kd[0] << kd[1] << kd[2];
+  return 3;
 }
 
-void handleKS(int argc, char *argv[], int start) {
+int handleKS(int argc, char *argv[], int start) {
   // cout << "ks" << "\n";
   if (start+2 >= argc) {
     // TODO input error
+    return 0;
   }
 
   ks[0] = atof(argv[start]);
   ks[1] = atof(argv[start+1]);
   ks[2] = atof(argv[start+2]);
-  cout << ks[0] << ks[1] << ks[2];
+  // cout << ks[0] << ks[1] << ks[2];
+  return 3;
 
 }
 
-void handleSP(int argc, char *argv[], int start) {
+int handleSP(int argc, char *argv[], int start) {
   // cout << "sp" << "\n";
   if (start >= argc) {
     // TODO input error
+    return 0;
   }
 
   sp = atof(argv[start]);
-  cout << sp;
+  // cout << sp;
+  return 1;
 }
 
-void handlePL(int argc, char *argv[], int start) {
+int handlePL(int argc, char *argv[], int start) {
   // cout << "pl" << "\n";r
   if (start+5 >= argc) {
     // TODO input error
+    return 0;
   }
 
   if (num_point_lights < 5) {
 	  point_lights[num_point_lights] = Light(min(viewport.w, viewport.h)*0.9 / 2.0*atof(argv[start]), min(viewport.w, viewport.h)*0.9 / 2.0*atof(argv[start + 1]), min(viewport.w, viewport.h)*0.9 / 2.0*atof(argv[start + 2]), atof(argv[start + 3]), atof(argv[start + 4]), atof(argv[start + 5]), false);
     num_point_lights++;
+    return 6;
   }
+  return 0;
 }
 
-void handleDL(int argc, char *argv[], int start) {
+int handleDL(int argc, char *argv[], int start) {
   // cout << "dl" << "\n";
   if (start+5 >= argc) {
     // TODO input error
+    return 0;
   }
 
   if (num_dir_lights < 5) {
 	  dir_lights[num_dir_lights] = Light(min(viewport.w, viewport.h)*0.9 / 2.0*atof(argv[start]), min(viewport.w, viewport.h)*0.9 / 2.0*atof(argv[start + 1]), min(viewport.w, viewport.h)*0.9 / 2.0*atof(argv[start + 2]), atof(argv[start + 3]), atof(argv[start + 4]), atof(argv[start + 5]), true);
     num_dir_lights++;
+    return 6;
   }
+  return 0;
 }
 
 void processArgs(int argc, char *argv[]) {
@@ -301,36 +315,39 @@ void processArgs(int argc, char *argv[]) {
       continue;
     }
 
+    int inc = 0;
     if (arg.compare("-ka") == 0){
       // cout << "ka" << "\n";
-      handleKA(argc, argv, i+1);
+      inc = handleKA(argc, argv, i+1);
     }
     
     if (arg.compare("-kd") == 0){
       // cout << "kd" << "\n";
-      handleKD(argc, argv, i+1);
+      inc = handleKD(argc, argv, i+1);
     }
 
     if (arg.compare("-ks") == 0){
       // cout << "ks" << "\n";
-      handleKS(argc, argv, i+1);
+      inc = handleKS(argc, argv, i+1);
     }
 
     if (arg.compare("-sp") == 0){
       // cout << "sp" << "\n";
-      handleSP(argc, argv, i+1);
+      inc = handleSP(argc, argv, i+1);
     }
 
     if (arg.compare("-pl") == 0){
       // cout << "pl" << "\n";
-      handlePL(argc, argv, i+1);
+      inc = handlePL(argc, argv, i+1);
 	  cout << "good";
     }
 
     if (arg.compare("-dl") == 0){
       // cout << "dl" << "\n";
-      handleDL(argc, argv, i+1);
+      inc = handleDL(argc, argv, i+1);
     }
+
+    i += inc;
   }
 }
 
@@ -357,9 +374,9 @@ int main(int argc, char *argv[]) {
   initScene();							// quick function to set up scene
   processArgs(argc, argv);   // extra arguments from command
 
-  // cout << "ka_r: " << ka_r << " ka_g: " << ka_g << " ka_b: " << ka_b << endl;
-  // cout << "kd_r: " << kd_r << " kd_g: " << kd_g << " kd_b: " << kd_b << endl;
-  // cout << "ks_r: " << ks_r << " ks_g: " << ks_g << " ks_b: " << ks_b << endl;
+  // cout << "ka_r: " << ka[0] << " ka_g: " << ka[1] << " ka_b: " << ka[2] << endl;
+  // cout << "kd_r: " << kd[0] << " kd_g: " << kd[1] << " kd_b: " << kd[2] << endl;
+  // cout << "ks_r: " << ks[0] << " ks_g: " << ks[1] << " ks_b: " << ks[2] << endl;
   // cout << "sp: " << sp << endl;
   // cout << "num_dir_lights: " << num_dir_lights << endl;
   // cout << "num_point_lights: " << num_point_lights << endl;
