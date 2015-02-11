@@ -269,7 +269,7 @@ int handleSP(int argc, char *argv[], int start) {
   }
 
   sp = atof(argv[start]);
-  // cout << sp;
+  // cout <<g sp;
   return 1;
 }
 
