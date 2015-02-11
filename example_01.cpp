@@ -28,6 +28,7 @@ using namespace std;
 
 #include <stdlib.h>
 #include "Light.h"
+#include <cfloat>
 //****************************************************
 // Some Classes
 //****************************************************
@@ -117,80 +118,83 @@ void circle(float centerX, float centerY, float radius) {
   int minJ = max(0,(int)floor(centerY-radius));
   int maxJ = min(viewport.h-1,(int)ceil(centerY+radius));
 
-  for (i=0;i<viewport.w;i++) {
-    for (j=0;j<viewport.h;j++) {
 
-      // Location of the center of pixel relative to center of sphere
-      float x = (i+0.5-centerX);
-      float y = (j+0.5-centerY);
-      float dist = sqrt(sqr(x) + sqr(y));
+  Light light;
 
-      if (dist<=radius) {
+  for (i = 0; i < viewport.w; i++) {
+	  for (j = 0; j < viewport.h; j++) {
 
-        // This is the front-facing Z coordinate
-        float z = sqrt(radius*radius-dist*dist);
+		  // Location of the center of pixel relative to center of sphere
+		  float x = (i + 0.5 - centerX);
+		  float y = (j + 0.5 - centerY);
+		  float dist = sqrt(sqr(x) + sqr(y));
 
-		//TO DO
-		//initialize R, G, B to 0.0
-		float RGB[3] = { 0.0, 0.0, 0.0 };
-		//find normal
-		Vector3 normal = Vector3(x, y, z);
-		normal.normalize();
-		//find viewer vector
-		Vector3 viewerVector = Vector3(0.0, 0.0, 1.0);
-		//for each light
-		for (Light light : dir_lights){
-			if (light.IsActivated()){
-				Color lightColor = light.getColor();
-				float lightColorArr[3] = { lightColor.get_r(), lightColor.get_g(), lightColor.get_b() };
-				//calculate light vector
-				Vector3 lightVector = light.getLightVector(x, y, z);
-				//calculate reflection vector
-				Vector3 reflectVector = light.getReflectionVector(normal);
-				//for each color:
-				for (int j = 0; j <= 2; j++){
-					//DIFFUSE COMPONENT
-					//ASSUMPTION: i didn't normalize I
-					float diffuse = kd[j] * lightColorArr[j] * max(Vector3::dot(lightVector, normal), 0);
-					//SPECULAR COMPONENT
-					float specular = ks[j] * lightColorArr[j] * pow(max(Vector3::dot(reflectVector, viewerVector), 0), sp);
-					//AMBIENT COMPONENT
-					float ambient = ka[j] * lightColorArr[j];
-					RGB[j] += diffuse + specular + ambient;
-				}
-			}
-		}
-		for (Light light : point_lights){
-			if (light.IsActivated()){
-				Color lightColor = light.getColor();
-				float lightColorArr[3] = { lightColor.get_r(), lightColor.get_g(), lightColor.get_b() };
-				//calculate light vector
-				Vector3 lightVector = light.getLightVector(x, y, z);
-				//calculate reflection vector
-				Vector3 reflectVector = light.getReflectionVector(normal);
-				//for each color:
-				for (int j = 0; j <= 2; j++){
-					//DIFFUSE COMPONENT
-					//ASSUMPTION: i didn't normalize I
-					float diffuse = kd[j] * lightColorArr[j] * max(Vector3::dot(lightVector, normal), 0);
-					//SPECULAR COMPONENT
-					float specular = ks[j] * lightColorArr[j] * pow(max(Vector3::dot(reflectVector, viewerVector), 0), sp);
-					//AMBIENT COMPONENT
-					float ambient = ka[j] * lightColorArr[j];
-					RGB[j] += diffuse + specular + ambient;
-				}
-			}
-		}
+		  if (dist <= radius) {
 
-		setPixel(i, j, min(RGB[0], 1.0), min(RGB[1], 1.0), min(RGB[2], 1.0));
-        //setPixel(i,j, 1.0, 0.0, 0.0);
+			  // This is the front-facing Z coordinate
+			  float z = sqrt(radius*radius - dist*dist);
 
-        // This is amusing, but it assumes negative color values are treated reasonably.
-        // setPixel(i,j, x/radius, y/radius, z/radius );
-      }
-	  
+			  //TO DO
+			  //initialize R, G, B to 0.0
+			  float RGB[3] = { 0.0, 0.0, 0.0 };
+			  //find normal
+			  Vector3 normal = Vector3(x, y, z);
+			  normal.normalize();
+			  //find viewer vector
+			  Vector3 viewerVector = Vector3(0.0, 0.0, 1.0);
+			  //for each light
+			  for (int i = 0; i < num_dir_lights; i++){
+				  light = dir_lights[i];
+				  if (light.IsActivated()){
+					  Color lightColor = light.getColor();
+					  float lightColorArr[3] = { lightColor.get_r(), lightColor.get_g(), lightColor.get_b() };
+					  //calculate light vector
+					  Vector3 lightVector = light.getLightVector(x, y, z);
+					  //calculate reflection vector
+					  Vector3 reflectVector = light.getReflectionVector(normal);
+					  //for each color:
+					  for (int j = 0; j <= 2; j++){
+						  //DIFFUSE COMPONENT
+						  //ASSUMPTION: i didn't normalize I
+						  float diffuse = kd[j] * lightColorArr[j] * max(Vector3::dot(lightVector, normal), 0.f);
+						  //SPECULAR COMPONENT
+						  float specular = ks[j] * lightColorArr[j] * pow(max(Vector3::dot(reflectVector, viewerVector), 0.f), sp);
+						  //AMBIENT COMPONENT
+						  float ambient = ka[j] * lightColorArr[j];
+						  RGB[j] += diffuse + specular + ambient;
+					  }
+				  }
+			  }
+			  for (int i = 0; i < num_point_lights; i++){
+				  light = point_lights[i];
+				  if (light.IsActivated()){
+					  Color lightColor = light.getColor();
+					  float lightColorArr[3] = { lightColor.get_r(), lightColor.get_g(), lightColor.get_b() };
+					  //calculate light vector
+					  Vector3 lightVector = light.getLightVector(x, y, z);
+					  //calculate reflection vector
+					  Vector3 reflectVector = light.getReflectionVector(normal);
+					  //for each color:
+					  for (int j = 0; j <= 2; j++){
+						  //DIFFUSE COMPONENT
+						  //ASSUMPTION: i didn't normalize I
+						  float diffuse = kd[j] * lightColorArr[j] * max(Vector3::dot(lightVector, normal), 0.f);
+						  //SPECULAR COMPONENT
+						  float specular = ks[j] * lightColorArr[j] * pow(max(Vector3::dot(reflectVector, viewerVector), 0.f), sp);
+						  //AMBIENT COMPONENT
+						  float ambient = ka[j] * lightColorArr[j];
+						  RGB[j] += diffuse + specular + ambient;
+					  }
+				  }
+			  }
 
-    }
+			  setPixel(i, j, min(RGB[0], 1.f), min(RGB[1], 1.f), min(RGB[2], 1.f));
+			  //setPixel(i,j, 1.0, 0.0, 0.0);
+
+			  // This is amusing, but it assumes negative color values are treated reasonably.
+			  // setPixel(i,j, x/radius, y/radius, z/radius );
+		  }
+	  }
   }
 
 
