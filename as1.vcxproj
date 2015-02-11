@@ -87,6 +87,7 @@
     <ClCompile Include="Vector3.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="glut-3.7.6-bin\GL\glut.h" />
     <ClInclude Include="Image.h" />
     <ClInclude Include="Color.h" />
     <ClInclude Include="Light.h" />

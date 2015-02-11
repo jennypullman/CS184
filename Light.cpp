@@ -36,6 +36,7 @@ Vector3 Light::getLightVector(float x, float y, float z){
 Vector3 Light::getReflectionVector(Vector3 n){
 	float tmpScalar;
 	try{
+		
 		tmpScalar = 2*Vector3::dot(n, *lightVector);
 		Vector3 tmp = Vector3::add(Vector3::scalarMultiply(*lightVector,-1.0), Vector3::scalarMultiply(n, tmpScalar));
 		tmp.normalize();
