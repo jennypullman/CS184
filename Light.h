@@ -12,6 +12,7 @@ public:
 	Vector3 getLightVector(float x, float y, float z);
 	Vector3 getReflectionVector(Vector3 n);
 	bool IsDirectional();
+	bool IsActivated();
 private:
 	float x;
 	float y;
@@ -21,4 +22,5 @@ private:
 	float b;
 	bool isDir;
 	Vector3 *lightVector;
+	bool activated;
 };
