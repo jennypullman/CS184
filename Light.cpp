@@ -23,7 +23,7 @@ Color Light::getColor(){
 
 Vector3 Light::getLightVector(float x, float y, float z){
 	if (isDir){
-		this->lightVector = new Vector3(this->x, this->y, this->z);
+		this->lightVector = new Vector3(-1*this->x, -1*this->y, -1*this->z);
 		(*this->lightVector).normalize();
 	}
 	else {
