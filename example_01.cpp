@@ -218,6 +218,13 @@ void myDisplay() {
   glutSwapBuffers();					// swap buffers (we earlier set double buffer)
 }
 
+void myKeyboardFunc(unsigned char key, int x, int y) {
+  switch(key) {
+    case ' ':  exit(1);  // exit on space
+    break;
+  };
+}
+
 int handleKA(int argc, char *argv[], int start) {
   // cout << "ka" << "\n";
   if (start+2 >= argc) {
@@ -383,6 +390,8 @@ int main(int argc, char *argv[]) {
 
   glutDisplayFunc(myDisplay);				// function to run when its time to draw something
   glutReshapeFunc(myReshape);				// function to run when the window gets resized
+
+  glutKeyboardFunc(myKeyboardFunc); // function to run on keyboard input - exit on spacebar
 
   glutMainLoop();							// infinite loop that will keep drawing and resizing
   // and whatever else
