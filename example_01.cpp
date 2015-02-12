@@ -145,6 +145,7 @@ void circle(float centerX, float centerY, float radius) {
 			  //for each light
 			  for (int i = 0; i < num_dir_lights; i++){
 				  light = dir_lights[i];
+          light.scaleLocation(min(viewport.w, viewport.h)*0.9 / 2.0);
 				  if (light.IsActivated()){
 					  Color lightColor = light.getColor();
 					  float lightColorArr[3] = { lightColor.get_r(), lightColor.get_g(), lightColor.get_b() };
@@ -164,9 +165,11 @@ void circle(float centerX, float centerY, float radius) {
 						  RGB[j] += diffuse + specular + ambient;
 					  }
 				  }
+          light.scaleLocation(1/(min(viewport.w, viewport.h)*0.9 / 2.0));
 			  }
 			  for (int i = 0; i < num_point_lights; i++){
 				  light = point_lights[i];
+          light.scaleLocation(min(viewport.w, viewport.h)*0.9 / 2.0);
 				  if (light.IsActivated()){
 					  Color lightColor = light.getColor();
 					  float lightColorArr[3] = { lightColor.get_r(), lightColor.get_g(), lightColor.get_b() };
@@ -186,6 +189,7 @@ void circle(float centerX, float centerY, float radius) {
 						  RGB[j] += diffuse + specular + ambient;
 					  }
 				  }
+          light.scaleLocation(1/(min(viewport.w, viewport.h)*0.9 / 2.0));
 			  }
 
 			  setPixel(i, j, min(RGB[0], 1.f), min(RGB[1], 1.f), min(RGB[2], 1.f));
@@ -288,7 +292,7 @@ int handlePL(int argc, char *argv[], int start) {
   }
 
   if (num_point_lights < 5) {
-	  point_lights[num_point_lights] = Light(min(viewport.w, viewport.h)*0.9 / 2.0*atof(argv[start]), min(viewport.w, viewport.h)*0.9 / 2.0*atof(argv[start + 1]), min(viewport.w, viewport.h)*0.9 / 2.0*atof(argv[start + 2]), atof(argv[start + 3]), atof(argv[start + 4]), atof(argv[start + 5]), false);
+	  point_lights[num_point_lights] = Light(atof(argv[start]), atof(argv[start + 1]), atof(argv[start + 2]), atof(argv[start + 3]), atof(argv[start + 4]), atof(argv[start + 5]), false);
     num_point_lights++;
     return 6;
   }
@@ -303,7 +307,7 @@ int handleDL(int argc, char *argv[], int start) {
   }
 
   if (num_dir_lights < 5) {
-	  dir_lights[num_dir_lights] = Light(min(viewport.w, viewport.h)*0.9 / 2.0*atof(argv[start]), min(viewport.w, viewport.h)*0.9 / 2.0*atof(argv[start + 1]), min(viewport.w, viewport.h)*0.9 / 2.0*atof(argv[start + 2]), atof(argv[start + 3]), atof(argv[start + 4]), atof(argv[start + 5]), true);
+	  dir_lights[num_dir_lights] = Light(atof(argv[start]), atof(argv[start + 1]), atof(argv[start + 2]), atof(argv[start + 3]), atof(argv[start + 4]), atof(argv[start + 5]), true);
     num_dir_lights++;
     return 6;
   }
@@ -346,7 +350,7 @@ void processArgs(int argc, char *argv[]) {
     if (arg.compare("-pl") == 0){
       // cout << "pl" << "\n";
       inc = handlePL(argc, argv, i+1);
-	  cout << "good";
+	  // cout << "good";
     }
 
     if (arg.compare("-dl") == 0){

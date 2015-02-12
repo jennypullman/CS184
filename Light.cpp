@@ -54,3 +54,9 @@ bool Light::IsDirectional(){
 bool Light::IsActivated(){
 	return activated;
 }
+
+void Light::scaleLocation(float scalar){
+	x = x*scalar;
+	y = y*scalar;
+	z = z*scalar;
+}

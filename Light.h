@@ -13,6 +13,7 @@ public:
 	Vector3 getReflectionVector(Vector3 n);
 	bool IsDirectional();
 	bool IsActivated();
+	void scaleLocation(float scalar);
 private:
 	float x;
 	float y;
