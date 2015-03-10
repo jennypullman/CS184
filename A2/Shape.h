@@ -14,5 +14,4 @@ private:
 	float r;
 	float g;
 	float b;
-	
 };
