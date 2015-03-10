@@ -1,12 +1,9 @@
-#include <iostream>
-using namespace std;
-#include "Color.h"
-#include "Vector3.h"
+#include "Light.h"
 
-class Light {
+class DirectedLight : Light {
 public:
-	Light();
-	Light(float x, float y, float z, float r, float g, float b);
+	DirectedLight();
+	DirectedLight(float x, float y, float z, float r, float g, float b);
 
 	Color getColor();
 	Vector3 getLightVector(float x, float y, float z);
