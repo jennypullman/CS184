@@ -85,6 +85,7 @@
     <ClCompile Include="Image.cpp" />
     <ClCompile Include="Color.cpp" />
     <ClCompile Include="PointLight.cpp" />
+    <ClCompile Include="ray_tracer.cpp" />
     <ClCompile Include="Triangle.cpp" />
     <ClCompile Include="Vector3.cpp" />
   </ItemGroup>

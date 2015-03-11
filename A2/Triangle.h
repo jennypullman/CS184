@@ -1,4 +1,5 @@
 #include "Shape.h";
+#include "Vertex.h";
 
 class Triangle : Shape{
 public:

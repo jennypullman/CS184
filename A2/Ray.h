@@ -3,8 +3,14 @@ public:
 	Ray(float startx, float starty, float startz, float dirx, float diry, float dirz);
 
 	//instance methods
-	float getStart();
-	float getDirection();
+	float getStartX();
+	float getStartY();
+	float getStartZ();
+
+	float getDirectionX();
+	float getDirectionY();
+	float getDirectionZ();
+
 
 private:
 	float startx, starty, startz, dirz, diry, dirz;
