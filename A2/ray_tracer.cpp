@@ -14,7 +14,6 @@ inline float sqr(float x) { return x*x; }
 //#include "Sphere.h";
 //#include "Ray.h";
 
-
 void runTests(){
   std::cout << "Running Test 1:  printToFile test" << std::endl;
   Image testImg = Image(10,10);
