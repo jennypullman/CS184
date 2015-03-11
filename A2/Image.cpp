@@ -4,7 +4,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include <string.h> // TODO decide if this is necessary
-#include "libpng-1.6.16/png.h"
+#include <png.h>
 
 Image::Image(int height, int width) {
 	h = height;
