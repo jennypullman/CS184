@@ -1,5 +1,4 @@
 #include "Triangle.h";
-#include "Vector3.h";
 
 Triangle::Triangle() {
 	this->r, this->g, this->b = 0.0;

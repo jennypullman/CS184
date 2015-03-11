@@ -7,12 +7,13 @@ inline float sqr(float x) { return x*x; }
 
 #include <stdlib.h>
 
-#include "Color.h";
-#include "Polygon.h";
-//#include "Sphere.h";
-#include "Ray.h";
-
+//#include "Color.h"
 #include "Image.h"
+
+#include "Polygon.h"
+//#include "Sphere.h";
+//#include "Ray.h";
+
 
 void runTests(){
   std::cout << "Running Test 1:  printToFile test" << std::endl;
