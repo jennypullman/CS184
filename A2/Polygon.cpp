@@ -19,6 +19,7 @@ Polygon::Polygon(float r, float g, float b, Vertex *vertices, int verticesLength
 };
 	//instance methods
 Color Polygon::getColor(){
+	return Color(this->r, this->g, this->b);
 };
 float Polygon::hit(Ray ray){
 	float t = -1.0;

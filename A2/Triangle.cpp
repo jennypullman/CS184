@@ -14,6 +14,7 @@ Triangle::Triangle(float r, float g, float b, Vertex *vertices){
 
 //instance methods
 Color Triangle::getColor(){
+	return Color(this->r, this->g, this->b);
 };
 float Triangle::hit(Ray ray){
 	Vertex vert1 = (this->vertices)[0];
