@@ -1,5 +1,3 @@
-#include "Shape.h"
-#include "Vertex.h"
 #include "Triangle.h"
 
 class Polygon: Shape{

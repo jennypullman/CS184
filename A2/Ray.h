@@ -13,5 +13,5 @@ public:
 
 
 private:
-	float startx, starty, startz, dirz, diry, dirz;
+	float startx, starty, startz, dirx, diry, dirz;
 };

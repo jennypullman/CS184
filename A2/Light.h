@@ -1,6 +1,6 @@
 #include <iostream>
 using namespace std;
-#include "Color.h"
+//#include "Color.h"
 #include "Vector3.h"
 
 class Light {

@@ -3,7 +3,7 @@
 class Shpere : Shape {
 public: 
 	Sphere();
-	Sphere(float r, float g, float b, float cx, float, cy, float cz, float rad);
+	Sphere(float r, float g, float b, float cx, float, float cy, float cz, float rad);
 
 	//instance methods
 	Color getColor();

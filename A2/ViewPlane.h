@@ -1,3 +1,5 @@
+#include "Point.h";
+
 class ViewPlane{
 public:
 	ViewPlane();
