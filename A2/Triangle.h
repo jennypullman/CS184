@@ -4,15 +4,13 @@
 class Triangle : Shape{
 public:
 	Triangle();
-	Triangle(float r, float g, float b, Vertex *vertices);
+	Triangle(Material mat, Vertex vert1, Vertex vert2, Vertex vert3);
 
 	//instance methods
-	Color getColor();
+	Material getMaterial();
 	float hit(Ray ray);
 
 private:
-	float r;
-	float g;
-	float b;
-	Vertex *vertices;
+	Material material;
+	Vertex vert1, vert2, vert3;
 };

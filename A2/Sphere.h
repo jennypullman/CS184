@@ -1,4 +1,4 @@
-#include "Shape.h"
+#include "Polygon.h"
 
 class Shpere : Shape {
 public: 

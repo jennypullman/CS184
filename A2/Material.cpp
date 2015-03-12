@@ -4,7 +4,7 @@ Material::Material(){
 }
 
 Material::Material(float kar, float kag, float kab, 
-			float kdr, float kdg, float kdb, float ksr, float ksb, float ksp,
+			float kdr, float kdg, float kdb, float ksr, float ksg, float ksb, float ksp,
 			float krr, float krg, float krb){
 	this->kar = kar;
 	this->kag = kag;
@@ -13,6 +13,7 @@ Material::Material(float kar, float kag, float kab,
 	this->kdg = kdg;
 	this->kdb = kdb;
 	this->ksr = ksr;
+	this->ksg = ksg;
 	this->ksb = ksb;
 	this->ksp = ksp;
 	this->krr = krr;

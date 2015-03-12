@@ -2,7 +2,7 @@ class Material{
 public:
 	Material();
 	Material(float kar, float kag, float kab, 
-		float kdr, float kdg, float kdb, float ksr, float ksb, float ksp,
+		float kdr, float kdg, float kdb, float ksr, float ksg, float ksb, float ksp,
 		float krr, float krg, float krb);
 	float getKar();
 	float getKag();
@@ -18,5 +18,5 @@ public:
 	float getKrg();
 	float getKrb();
 private:
-	float kar, kag, kab, kdr, kdg, kdb, ksr, ksb, ksp, krr, krg, krb;
+	float kar, kag, kab, kdr, kdg, kdb, ksr, ksg, ksb, ksp, krr, krg, krb;
 };

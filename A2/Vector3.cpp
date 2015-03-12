@@ -23,11 +23,16 @@ float Vector3::getZ(){
 }
 
 void Vector3::normalize() {
-	float magnitude = sqrt(pow(x, 2) + pow(y, 2) + pow(z, 2));
+	float magnitude = getMagnitude();
 	x = x / magnitude;
 	y = y / magnitude;
 	z = z / magnitude;
 }
+
+float Vector3::getMagnitude() {
+	return sqrt(x*x + y*y + z*z);
+}
+
 Vector3 Vector3::add(Vector3 vec1, Vector3 vec2){
 	return Vector3(vec1.x + vec2.x, vec1.y + vec2.y, vec1.z + vec2.z);
 }

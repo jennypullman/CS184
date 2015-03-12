@@ -25,7 +25,26 @@ using namespace std;
 list<PointLight> pointLights;
 list<DirectedLight> directedLights;
 list<Color> ambientLights;
+Material curMaterial;
+int numFailedTests = 0;
 
+
+void triangleHitTest(){
+  std::cout << "Running triangleHitTest...\n";
+  Vertex vert1 = Vertex(0,0,0);
+  Vertex vert2 = Vertex(3,0,0);
+  Vertex vert3 = Vertex(0,3,0);
+  Material mat = Material(0,0,0,0,0,0,0,0,0,0,0,0,0);
+  Triangle tri = Triangle(mat, vert1, vert2, vert3);
+  Ray ray = Ray(1,1,-1,0,0,1);
+  float hit = tri.hit(ray);
+  std::cout << "Should be 1: ";
+  std::cout << hit;
+  std::cout << "\n";
+  if (hit != 1.0){
+    numFailedTests += 1;
+  }
+}
 
 void runTests(){
   std::cout << "Running Test 1:  printToFile test" << std::endl;
@@ -58,6 +77,10 @@ void runTests(){
   char fileName[] = {'t','e','s','t','I','m','g','.','p','n','g', '\0'};
   int code = testImg.printToFile(fileName);
   std::cout << "End Test 1:  code = "<< code << std::endl;
+  triangleHitTest();
+  std::cout << "Number of failed tests: ";
+  std::cout << numFailedTests;
+  std::cout << "\n";
 }
 
 void handleArgs(int numArgs, float args[], string info){
@@ -70,7 +93,6 @@ void handleArgs(int numArgs, float args[], string info){
       while (info[i] == ' '){
         i++;
       };
-      std::cout << arg;
       args[argIndex] = stof(arg);
       argIndex += 1;
       arg = "";
@@ -81,7 +103,6 @@ void handleArgs(int numArgs, float args[], string info){
     }
   }
   if (arg != ""){
-    std::cout << arg;
     args[argIndex] = stof(arg);
     argIndex += 1;
   }
@@ -99,6 +120,10 @@ void handleSph(string sphInfo){
 void handleTri(string triInfo){
   float args[9];
   handleArgs(9, args, triInfo);
+  Vertex vert1 = Vertex(args[0], args[1], args[2]);
+  Vertex vert2 = Vertex(args[3], args[4], args[5]);
+  Vertex vert3 = Vertex(args[6], args[7], args[8]);
+  Triangle tri = Triangle(curMaterial, vert1, vert2, vert3);
 }
 void handleObj(string objInfo){
   float args[1];
@@ -121,6 +146,8 @@ void handleLta(string ltaInfo){
 void handleMat(string matInfo){
   float args[13];
   handleArgs(13, args, matInfo);
+  curMaterial = Material(args[0], args[1], args[2], args[3], args[4], args[5], args[6], 
+    args[7], args[8], args[9], args[10], args[11], args[12]);
 }
 void handleXft(string xftInfo){
   float args[3];
@@ -145,7 +172,6 @@ void processArgs(int argc, char *argv[]) {
   // for (int i = argc - 1; i >= 0; i--) { 
   //   cout << argv[i] << "\n";
   // }
-  std::cout << "Processing...\n";
   string arg;
   string objectType = "";
   string args = "";
@@ -174,14 +200,12 @@ void processArgs(int argc, char *argv[]) {
           c = inbuf->sbumpc();
         };
       };
-      std::cout << objectType;
       if (objectType == "cam"){
-        std::cout << "sending to cam handler\n";
         handleCam(args);
       } else if (objectType == "sph"){
-
+        handleSph(args);
       } else if (objectType == "tri"){
-
+        handleTri(args);
       } else if (objectType == "obj"){
 
       } else if (objectType == "ltp"){

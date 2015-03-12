@@ -1,18 +1,15 @@
 //#include "Color.h"
 #include "Ray.h"
 #include "DirectedLight.h"
+#include "Material.h"
 
 class Shape {
 public: 
-	Shape();
-	Shape(float r, float g, float b);
 
 	//instance methods
-	Color getColor();
-	float hit(Ray ray);
+	virtual Material getMaterial() = 0;
+	virtual float hit(Ray ray) = 0;
 
 private:
-	float r;
-	float g;
-	float b;
+	Material material;
 };

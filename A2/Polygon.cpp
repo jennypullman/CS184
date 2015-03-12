@@ -1,23 +1,18 @@
-#include "Polygon.h";
+#include "Polygon.h"
 
 Polygon::Polygon(){
-	this->r, this->g, this->b = 0.0;
-	this->verticesLength = 0;
-	this->trianglesLength = 0;
 };
 
-Polygon::Polygon(float r, float g, float b, Vertex *vertices, int verticesLength, Triangle *triangles, int trianglesLength){
-	this->r = r;
-	this->g = g;
-	this->b = b;
+Polygon::Polygon(Material mat, Vertex *vertices, int verticesLength, Triangle *triangles, int trianglesLength){
+	this->material = mat;
 	this->vertices = vertices;
 	this->verticesLength = verticesLength;
 	this->triangles = triangles;
 	this->trianglesLength = trianglesLength;
 };
 	//instance methods
-Color Polygon::getColor(){
-	return Color(this->r, this->g, this->b);
+Material Polygon::getMaterial(){
+	return this->material;
 };
 float Polygon::hit(Ray ray){
 	float t = -1.0;

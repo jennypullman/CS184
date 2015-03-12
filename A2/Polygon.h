@@ -3,16 +3,14 @@
 class Polygon: Shape{
 public:
 	Polygon();
-	Polygon(float r, float g, float b, Vertex *vertices, int verticesLength, Triangle *triangles, int trianglesLength);
+	Polygon(Material mat, Vertex *vertices, int verticesLength, Triangle *triangles, int trianglesLength);
 
 	//instance methods
-	Color getColor();
+	Material getMaterial();
 	float hit(Ray ray);
 
 private:
-	float r;
-	float g;
-	float b;
+	Material material;
 	Vertex *vertices;
 	Triangle *triangles;
 	int verticesLength;

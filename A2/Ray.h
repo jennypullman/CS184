@@ -1,5 +1,6 @@
 class Ray {
 public:
+	Ray();
 	Ray(float startx, float starty, float startz, float dirx, float diry, float dirz);
 
 	//instance methods
