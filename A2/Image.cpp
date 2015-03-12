@@ -6,6 +6,9 @@
 #include <string.h> // TODO decide if this is necessary
 #include <png.h>
 
+#include <iostream>
+
+
 Image::Image(int height, int width) {
 	h = height;
 	w = width;
@@ -83,9 +86,11 @@ int Image::printToFile(char* filename){
 	int x, y;
 	for (y=0 ; y<h ; y++) {
 		for (x=0 ; x<w ; x++) {
-			row[x*3] = rgb[y*w+x].get_r();
-			row[x*3+1] = rgb[y*w+x].get_g();
-			row[x*3+2] = rgb[y*w+x].get_b();
+			row[x*3] = (int) fmin(255*rgb[y*w+x].get_r(),255);
+			row[x*3+1] = (int) fmin(255*rgb[y*w+x].get_g(),255);
+			row[x*3+2] = (int) fmin(255*rgb[y*w+x].get_b(),255);
+			// std::cout << "Color r = "<< rgb[y*w+x].get_r() << std::endl;
+			// std::cout << "Color r in row = "<< row[x*3] << std::endl;
 		}
 		png_write_row(png_ptr, row);
 	}
