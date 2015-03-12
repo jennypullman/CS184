@@ -1,17 +1,18 @@
 #include "PointLight.h"
 
 PointLight::PointLight(){
-	x, y, z, r, g, b = 0.0;
+	x, y, z, r, g, b, falloff = 0.0;
 	activated = false;
 }
 
-PointLight::PointLight(float x, float y, float z, float r, float g, float b){
+PointLight::PointLight(float x, float y, float z, float r, float g, float b, float falloff){
 	this->x = x;
 	this->y = y;
 	this->z = z;
 	this->r = r;
 	this->g = g;
 	this->b = b;
+	this->falloff = falloff;
 	this->lightVector;
 	activated = true;
 }

@@ -1,8 +1,7 @@
-#include "Triangle.h";
+#include "Triangle.h"
 
 Triangle::Triangle() {
 	this->r, this->g, this->b = 0.0;
-	this->vertices = nullptr;
 };
 Triangle::Triangle(float r, float g, float b, Vertex *vertices){
 	this->r = r;

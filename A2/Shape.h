@@ -1,5 +1,6 @@
 //#include "Color.h"
 #include "Ray.h"
+#include "DirectedLight.h"
 
 class Shape {
 public: 

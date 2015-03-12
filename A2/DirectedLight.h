@@ -1,4 +1,4 @@
-#include "Light.h"
+#include "PointLight.h"
 
 class DirectedLight : Light {
 public:

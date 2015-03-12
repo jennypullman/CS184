@@ -10,14 +10,26 @@ endif
 	
 RM = /bin/rm -f 
 all: main 
-main: Color.o Image.o ray_tracer.o 
-	$(CC) $(CFLAGS) -o as1 Color.o Image.o ray_tracer.o $(LDFLAGS)
+main: Color.o Point.o Material.o Ray.o Vector3.o Image.o Light.o PointLight.o DirectedLight.o Shape.o Triangle.o Polygon.o ray_tracer.o 
+	$(CC) $(CFLAGS) -o as1 Color.o Point.o Image.o PointLight.o ray_tracer.o $(LDFLAGS)
 Image.o: Image.cpp
 	$(CC) $(CFLAGS) -c Image.cpp -o Image.o
 Color.o: Color.cpp
 	$(CC) $(CFLAGS) -c Color.cpp -o Color.o
+Point.o: Point.cpp
+	$(CC) $(CFLAGS) -c Point.cpp -o Point.o
+Material.o: Material.cpp
+	$(CC) $(CFLAGS) -c Material.cpp -o Material.o
+Triangle.o: Triangle.cpp
+	$(CC) $(CFLAGS) -c Triangle.cpp -o Triangle.o
+Polygon.o: Polygon.cpp
+	$(CC) $(CFLAGS) -c Polygon.cpp -o Polygon.o
+PointLight.o: PointLight.cpp
+	$(CC) $(CFLAGS) -c PointLight.cpp -o PointLight.o
+DirectedLight.o: DirectedLight.cpp
+	$(CC) $(CFLAGS) -c DirectedLight.cpp -o DirectedLight.o
 ray_tracer.o: ray_tracer.cpp
-	$(CC) $(CFLAGS) -c ray_tracer.cpp -o ray_tracer.o
+	$(CC) -std=c++11 $(CFLAGS) -c ray_tracer.cpp -o ray_tracer.o
 clean: 
 	$(RM) *.o as1
  

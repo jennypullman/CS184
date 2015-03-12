@@ -2,9 +2,7 @@
 
 Polygon::Polygon(){
 	this->r, this->g, this->b = 0.0;
-	this->vertices = nullptr;
 	this->verticesLength = 0;
-	this->triangles = nullptr;
 	this->trianglesLength = 0;
 };
 

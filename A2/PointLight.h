@@ -3,7 +3,7 @@
 class PointLight : Light {
 public:
 	PointLight();
-	PointLight(float x, float y, float z, float r, float g, float b);
+	PointLight(float x, float y, float z, float r, float g, float b, float falloff);
 
 	Color getColor();
 	Vector3 getLightVector(float x, float y, float z);
@@ -17,6 +17,7 @@ private:
 	float r;
 	float g;
 	float b;
+	float falloff;
 	Vector3 *lightVector;
 	bool activated;
 };
