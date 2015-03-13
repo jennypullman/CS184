@@ -5,7 +5,11 @@ Polygon::Polygon(){
 
 Polygon::Polygon(Material mat, Triangle *triangles, int trianglesLength){
 	this->material = mat;
-	this->triangles = triangles;
+	this->triangles = new Triangle[trianglesLength];
+	for (int i = 0; i < trianglesLength; i++){
+		this->triangles[i] = triangles[i];
+	}
+
 	this->trianglesLength = trianglesLength;
 };
 	//instance methods
@@ -32,6 +36,5 @@ void Polygon::print(){
 		std::cout << i;
 		std::cout << ": ";
 		triangles[i].print();
-		std::cout << "\n";
 	}
 };

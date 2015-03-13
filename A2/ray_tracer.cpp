@@ -109,9 +109,6 @@ Polygon readObj(string fileName){
   list<Vector3> normals;
   list<Face> faces;
   string obj;
-  string arg1;
-  string arg2;
-  string arg3;
   Vertex vert;
   Vector3 normal;
 
@@ -121,39 +118,33 @@ Polygon readObj(string fileName){
       obj += c;
       c = inbuf->sbumpc();
     }
-    if (obj != "f"){
-      while(c == ' '){
+    if (obj == "v" || obj == "vn"){
+      string lastChar = " ";
+      int numIndex = 0;
+      float nums[3];
+      string arg;
+      while (c != EOF && c != '\n'){
+        if (c == ' ') {
+          if (lastChar != " "){
+            nums[numIndex] = stof(arg);
+            numIndex++;
+            arg = "";
+          }
+        } else {
+          arg += c;
+        }
+        lastChar = c;
         c = inbuf->sbumpc();
       }
-      //first argument
-      while(c != ' ' && c != EOF && c != '\n'){
-        arg1 += c;
-        c = inbuf->sbumpc();
-      }
-      while(c == ' '){
-        c = inbuf->sbumpc();
-      }
-      //second argument
-      while(c != ' ' && c != EOF && c != '\n'){
-        arg2 += c;
-        c = inbuf->sbumpc();
-      }
-      while(c == ' '){
-        c = inbuf->sbumpc();
-      } 
-      //third argument   
-      while(c != ' ' && c != EOF && c != '\n'){
-        arg3 += c;
-        c = inbuf->sbumpc();
-      }
-      while(c == ' '){
-        c = inbuf->sbumpc();
+      if (arg != ""){
+        nums[numIndex] = stof(arg);
+        numIndex++;
       }
       if (obj == "v"){
-        vert = Vertex(stof(arg1), stof(arg2), stof(arg3));
+        vert = Vertex(nums[0], nums[1], nums[2]);
         vertices.push_back(vert);
       } else if (obj == "vn"){
-        normal = Vector3(stof(arg1), stof(arg2), stof(arg3));
+        normal = Vector3(nums[0], nums[1], nums[2]);
         normals.push_back(normal);
       }
     } else if (obj == "f"){
@@ -187,16 +178,13 @@ Polygon readObj(string fileName){
       face.norm2 = nums[3];
       face.norm3 = nums[5];
       faces.push_back(face);
-    } else {
-      std::cout << "obj file incorrectly written";
-    };
+    } //else {
+      //std::cout << "obj file incorrectly written";
+    //};
 
-    if (c == '\n' || c == EOF){
+    if (c == '\n' || c == EOF || c == ' '){
       c = inbuf->sbumpc();
     };
-    arg1 = "";
-    arg2 = "";
-    arg3 = "";
     obj = "";
   };
   fs.close();
@@ -225,9 +213,8 @@ Polygon readObj(string fileName){
     curTri = Triangle(curMaterial, vertexArr[face.vert1-1], vertexArr[face.vert2-1], vertexArr[face.vert3-1],
       normalArr[face.norm1-1], normalArr[face.norm2-1], normalArr[face.norm3-1]);    
     triangleArr[i] = curTri;
-    curTri.print();
   };
-  return Polygon(curMaterial, triangleArr, faces.size());
+  return Polygon(curMaterial, triangleArr, numFaces);
 }
 
 void handleArgs(int numArgs, float args[], string info){
@@ -303,8 +290,7 @@ void handleObj(string objInfo){
   std::cout << "\n";
   Polygon polygon = readObj(arg);
   polygons.push_back(polygon);
-  polygon.print();
-
+  //polygon.print();
 }
 void handleLtp(string ltpInfo){
   float args[7];
