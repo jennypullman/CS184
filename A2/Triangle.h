@@ -9,6 +9,7 @@ public:
 	//instance methods
 	Material getMaterial();
 	float hit(Ray ray);
+	void print();
 
 private:
 	Material material;

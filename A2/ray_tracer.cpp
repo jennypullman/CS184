@@ -100,6 +100,9 @@ void runTests(){
 Polygon readObj(string fileName){
   fstream fs;
   fs.open(fileName);
+  if (!fs.is_open()){
+    std::cout << "not valid file name \n";
+  };
   filebuf* inbuf = fs.rdbuf();
   char c = inbuf->sbumpc();
   list<Vertex> vertices;
@@ -112,118 +115,119 @@ Polygon readObj(string fileName){
   Vertex vert;
   Vector3 normal;
 
-
   while (c!=EOF){
     //get the object title
     while(c != ' ' && c!= '\n' && c != EOF){
       obj += c;
       c = inbuf->sbumpc();
     }
-    //first argument
-    while(c != ' ' && c != EOF && c != '\n'){
-      arg1 += c;
-      c = inbuf->sbumpc();
-    }
-    while(c == ' '){
-      c = inbuf->sbumpc();
-    }
-    //second argument
-    while(c != ' ' && c != EOF && c != '\n'){
-      arg2 += c;
-      c = inbuf->sbumpc();
-    }
-    while(c == ' '){
-      c = inbuf->sbumpc();
-    } 
-    //third argument   
-    while(c != ' ' && c != EOF && c != '\n'){
-      arg3 += c;
-      c = inbuf->sbumpc();
-    }
-    while(c == ' '){
-      c = inbuf->sbumpc();
-    }
-    if (obj == "v"){
-      vert = Vertex(stof(arg1), stof(arg2), stof(arg3));
-      vertices.push_back(vert);
-    } else if (obj == "vn"){
-      normal = Vector3(stof(arg1), stof(arg2), stof(arg3));
-      normals.push_back(normal);
+    if (obj != "f"){
+      while(c == ' '){
+        c = inbuf->sbumpc();
+      }
+      //first argument
+      while(c != ' ' && c != EOF && c != '\n'){
+        arg1 += c;
+        c = inbuf->sbumpc();
+      }
+      while(c == ' '){
+        c = inbuf->sbumpc();
+      }
+      //second argument
+      while(c != ' ' && c != EOF && c != '\n'){
+        arg2 += c;
+        c = inbuf->sbumpc();
+      }
+      while(c == ' '){
+        c = inbuf->sbumpc();
+      } 
+      //third argument   
+      while(c != ' ' && c != EOF && c != '\n'){
+        arg3 += c;
+        c = inbuf->sbumpc();
+      }
+      while(c == ' '){
+        c = inbuf->sbumpc();
+      }
+      if (obj == "v"){
+        vert = Vertex(stof(arg1), stof(arg2), stof(arg3));
+        vertices.push_back(vert);
+      } else if (obj == "vn"){
+        normal = Vector3(stof(arg1), stof(arg2), stof(arg3));
+        normals.push_back(normal);
+      }
     } else if (obj == "f"){
-      int vertNum1, vertNum2, vertNum3;
-      int normNum1, normNum2, normNum3;
       string temp = "";
-      for (int i = 0; i < arg1.length(); i++){
-        if (arg1[i] == '/' && temp != ""){
-          vertNum1 = stoi(temp);
-          temp = "";
+      int nums[6];
+      string arg = "";
+      int numIndex = 0;
+      string lastChar = " ";
+      while (c != EOF && c != '\n'){
+        if (c == ' ' || c == '/'){
+          if (lastChar != "/" && lastChar != " "){
+            nums[numIndex] = stoi(arg);
+            numIndex++;
+            arg = "";
+          }
         } else {
-          temp += arg1[i];
-        }
+          arg += c;
+        };
+        lastChar = c;
+        c = inbuf->sbumpc();
+      };
+      if (arg != ""){
+        nums[numIndex] = stoi(arg);
+        numIndex++;
       }
-      normNum1 = stoi(temp);
-      temp = "";
-      for (int i = 0; i < arg2.length(); i++){
-        if (arg2[i] == '/' && temp != ""){
-          vertNum2 = stoi(temp);
-          temp = "";
-        } else {
-          temp += arg2[i];
-        }
-      }
-      normNum2 = stoi(temp);
-      temp = "";
-      for (int i = 0; i < arg3.length(); i++){
-        if (arg3[i] == '/' && temp != ""){
-          vertNum3 = stoi(temp);
-          temp = "";
-        } else {
-          temp += arg3[i];
-        }
-      }
-      normNum3 = stoi(temp);
-      temp = "";
       Face face = Face();
-      face.vert1 = vertNum1;
-      face.vert2 = vertNum2;
-      face.vert3 = vertNum3; 
-      face.norm1 = normNum1;
-      face.norm2 = normNum2;
-      face.norm3 = normNum3;
+      face.vert1 = nums[0];
+      face.vert2 = nums[2];
+      face.vert3 = nums[4];
+      face.norm1 = nums[1];
+      face.norm2 = nums[3];
+      face.norm3 = nums[5];
       faces.push_back(face);
     } else {
       std::cout << "obj file incorrectly written";
-    }
+    };
 
     if (c == '\n' || c == EOF){
       c = inbuf->sbumpc();
-    }
-  }
+    };
+    arg1 = "";
+    arg2 = "";
+    arg3 = "";
+    obj = "";
+  };
   fs.close();
-  Vertex vertexArr [vertices.size()];
-  for (int i = 0; i < vertices.size(); i++){
+  int vertSize = vertices.size();
+  Vertex vertexArr [vertSize];
+  for (int i = 0; i < vertSize; i++){
     vertexArr[i] = vertices.front();
     vertices.pop_front();
-  }
-  Vector3 normalArr [normals.size()];
-  for (int i = 0; i < normals.size(); i++){
+  };
+  int normalSize = normals.size();
+  Vector3 normalArr [normalSize];
+  for (int i = 0; i < normalSize; i++){
     normalArr[i] = normals.front();
     normals.pop_front();
-  }
+  };
   //TO DO
   //not doing anything with normals currently
   Triangle curTri;
-  Triangle triangleArr [faces.size()];
+  int numFaces = faces.size();
+  Triangle triangleArr [numFaces];
   Face face;
-  for (int i = 0; i < faces.size(); i++){
+  for (int i = 0; i < numFaces; i++){
     face = faces.front();
     //make sure this doesn't give errors
     faces.pop_front();
-    curTri = Triangle(curMaterial, vertexArr[face.vert1], vertexArr[face.vert2], vertexArr[face.vert3],
-      normalArr[face.norm1], normalArr[face.norm2], normalArr[face.norm3]);    
+    curTri = Triangle(curMaterial, vertexArr[face.vert1-1], vertexArr[face.vert2-1], vertexArr[face.vert3-1],
+      normalArr[face.norm1-1], normalArr[face.norm2-1], normalArr[face.norm3-1]);    
     triangleArr[i] = curTri;
-  }
-  polygons.push_back(Polygon(curMaterial, triangleArr, faces.size()));
+    curTri.print();
+  };
+  return Polygon(curMaterial, triangleArr, faces.size());
 }
 
 void handleArgs(int numArgs, float args[], string info){
@@ -267,6 +271,7 @@ string handleStringArgs(int numArgs, string info){
       i++;
     }
   }
+  return arg;
 }
 void handleCam(string camInfo){
   float ex, ey, ez, llx, lly, llz, lrx, lry, lrz, ulx, uly, ulz, urx, ury, yrz;
@@ -293,9 +298,13 @@ void handleTri(string triInfo){
   triangles.push_back(tri);
 }
 void handleObj(string objInfo){
-  objInfo = handleStringArgs(1, objInfo);
-  Polygon polygon = readObj(objInfo);
+  string arg = handleStringArgs(1, objInfo);
+  std::cout << arg;
+  std::cout << "\n";
+  Polygon polygon = readObj(arg);
   polygons.push_back(polygon);
+  polygon.print();
+
 }
 void handleLtp(string ltpInfo){
   float args[7];

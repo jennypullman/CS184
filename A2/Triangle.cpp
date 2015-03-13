@@ -68,3 +68,25 @@ float Triangle::hit(Ray ray){
 	};
 	return t;
 };
+
+void Triangle::print(){
+	std::cout << "Vertices = (";
+	std::cout << this->vert1.getX();
+	std::cout << ",";
+	std::cout << this->vert1.getY();
+	std::cout << ","; 
+	std::cout << this->vert1.getZ();
+	std::cout << "), (";
+	std::cout << this->vert2.getX();
+	std::cout << ",";
+	std::cout << this->vert2.getY();
+	std::cout << ","; 
+	std::cout << this->vert2.getZ();
+	std::cout << "), (";
+	std::cout << this->vert3.getX();
+	std::cout << ",";
+	std::cout << this->vert3.getY();
+	std::cout << ","; 
+	std::cout << this->vert3.getZ();
+	std::cout << ")\n";
+}
