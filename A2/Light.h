@@ -12,6 +12,7 @@ public:
 	virtual Vector3 getReflectionVector(Vector3 n) = 0;
 	virtual bool IsActivated() = 0;
 	virtual void scaleLocation(float scalar) = 0;
+	Color getShadingOnObject(Material shp_mat, Point pnt);
 private:
 	float x;
 	float y;
