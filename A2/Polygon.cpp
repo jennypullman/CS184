@@ -28,9 +28,6 @@ float Polygon::hit(Ray ray){
 };
 
 void Polygon::print(){
-	std::cout << "printing polygon...";
-	std::cout << trianglesLength;
-	std::cout << "\n";
 	for (int i = 0; i < trianglesLength; i++) {
 		std::cout << "Triangle ";
 		std::cout << i;

@@ -47,6 +47,8 @@ float Sphere::hit(Ray ray){
 		return -1.0;
 	}
 	dividend = sqrt(dividend);
+	//TO DO
+	//will a ever be 0???
 	float t1 = (-b + dividend)/(2*a);
 	float t2 = (-b - dividend)/(2*a);
 	if (t1 >= 0.0) {

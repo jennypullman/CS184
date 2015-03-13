@@ -100,6 +100,12 @@ void runTests(){
   std::cout << "\n";
 }
 
+
+/*
+ * readObj takes in a .obj fileName and parses the file.
+ * It creates a polygon structure from the file and returns 
+ * the polygon.
+ */
 Polygon readObj(string fileName){
   fstream fs;
   fs.open(fileName);
@@ -236,6 +242,12 @@ Polygon readObj(string fileName){
   return Polygon(curMaterial, triangleArr, numFaces);
 }
 
+
+/*
+ * handleArgs takes in the number of args that there should be, 
+ * parses info in order to retrieve the arguments, and returns 
+ * the argumets by writing to args[].
+ */
 void handleArgs(int numArgs, float args[], string info){
   int argIndex = 0;
   string arg = "";
@@ -261,37 +273,53 @@ void handleArgs(int numArgs, float args[], string info){
   }
 }
 
-string handleStringArgs(int numArgs, string info){
+/* 
+ * handleStringArgs basically just strips info of whitespace and
+ * returns the stripped string.
+ */
+string handleStringArgs(string info){
   int argIndex = 0;
   string arg = "";
   int i = 0;
 
   while (i < info.length() && info[i] != '\n'){
-    if (info[i] == ' '){
-      while (info[i] == ' '){
-        i++;
-      };
-
-    } else {
+    if (info[i] != ' '){
       arg += info[i];
-      i++;
-    }
+    };
+    i++;
   }
   return arg;
 }
+
+/* 
+ * handleCam creates a camera and image object.
+ */
 void handleCam(string camInfo){
   float ex, ey, ez, llx, lly, llz, lrx, lry, lrz, ulx, uly, ulz, urx, ury, urz;
   float args[15];
   handleArgs(15, args, camInfo);
-  //TO DO (image)
+  //TO DO Lauren (image and viewplane)
   camera = Camera(args[0], args[1], args[2]);
 }
+
+/*
+ * handleSph creates a sphere, applies the current transform, 
+ * and adds it to spheres.
+ */
+ //TO DO transform
 void handleSph(string sphInfo){
   float args[4];
   handleArgs(4, args, sphInfo);
-  Sphere sphere = Sphere(curMaterial, args[0], args[1], args[2], args[3]);
+  Vertex center = Vertex(args[0], args[1], args[2]);
+  center = Transformation::transformVertex(curTransform, center);
+  Sphere sphere = Sphere(curMaterial, center.getX(), center.getY(), center.getZ(), args[3]);
   spheres.push_back(sphere);
 }
+
+/*
+ * handleTri creates a triangle, applies the current transform, 
+ * and adds it to triangles.
+ */
 void handleTri(string triInfo){
   float args[9];
   handleArgs(9, args, triInfo);
@@ -306,38 +334,70 @@ void handleTri(string triInfo){
   Triangle tri = Triangle(curMaterial, vert1, vert2, vert3);
   triangles.push_back(tri);
 }
+
+/*
+ * handleObj takes in a .obj filename (contained in objInfo). The
+ * object file is parsed, and a polygon is created.
+ */
 void handleObj(string objInfo){
-  string arg = handleStringArgs(1, objInfo);
+  string arg = handleStringArgs(objInfo);
   std::cout << arg;
   std::cout << "\n";
   Polygon polygon = readObj(arg);
   polygons.push_back(polygon);
   //polygon.print();
 }
+
+/*
+ * handleLtp creates a point light source and pushes it onto the 
+ * list of point light sources. Default falloff value (args[6]), 
+ * should be 0.0. 
+ */
 void handleLtp(string ltpInfo){
   float args[7];
   handleArgs(7, args, ltpInfo);
   PointLight light = PointLight(args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
   pointLights.push_back(light);
 }
+
+/*
+ * handleLtd creates a directional light source and pushes it onto the
+ * list of directional light sources.
+ */
 void handleLtd(string ltdInfo){
   float args[6];
   handleArgs(6, args, ltdInfo);
   DirectedLight light = DirectedLight(args[0], args[1], args[2], args[3], args[4], args[5]);
   directedLights.push_back(light);
 }
+
+/*
+ * handleLta creates an ambient light source and pushes it oto the 
+ * list of ambient light sources.
+ */
+ //TO DO should actually only be one ambient light source
 void handleLta(string ltaInfo){
   float args[3];
   handleArgs(3, args, ltaInfo);
   Color light = Color(args[0], args[1], args[2]);
   ambientLights.push_back(light);
 }
+
+/*
+ * handleMat creates a material and sets curMaterial equal to it (so that
+ * all proceeding objects will have that material value).
+ */
 void handleMat(string matInfo){
   float args[13];
   handleArgs(13, args, matInfo);
   curMaterial = Material(args[0], args[1], args[2], args[3], args[4], args[5], args[6], 
     args[7], args[8], args[9], args[10], args[11], args[12]);
 }
+
+/*
+ * handleXft multiplies the current transform by the transform specified 
+ * by xftInfo.
+ */
 void handleXft(string xftInfo){
   float args[3];
   handleArgs(3, args, xftInfo);
@@ -348,6 +408,11 @@ void handleXft(string xftInfo){
     curTransform = Transformation::transformMultiply(curTransform, newTransform);
   }
 }
+
+/*
+ * handleXfr multiplies the current transform by the transform specified 
+ * by xfrInfo.
+ */
 void handleXfr(string xfrInfo){
   float args[3];
   handleArgs(3, args, xfrInfo);
@@ -358,6 +423,11 @@ void handleXfr(string xfrInfo){
     curTransform = Transformation::transformMultiply(curTransform, newTransform);
   }
 }
+
+/*
+ * handleXfs multiplies the current transform by the transform specified 
+ * by xfsInfo.
+ */
 void handleXfs(string xfsInfo){
   float args[3];
   handleArgs(3, args, xfsInfo);
@@ -369,6 +439,10 @@ void handleXfs(string xfsInfo){
   }
 }
 
+/*
+ * handleXfz resets the current transform (sets current transform equal 
+ * to the identity matrix).
+ */
 void handleXfz(){
   //reset curTransform
   curTransform = Transformation();
@@ -379,6 +453,13 @@ void handleXfz(){
 	//t>=startTime
 
 // };
+
+/*
+ * processArgs takes in the arguments from the command line and parses 
+ * them. The argument should be a text file, which is then parsed to 
+ * determine the different objects (camera, sphere, etc.). Then, those
+ * arguments are handled by their own repective functions (e.g. handleCam).
+ */
 void processArgs(int argc, char *argv[]) {
   string arg;
   string objectType = "";

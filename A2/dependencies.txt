@@ -7,10 +7,9 @@ Vector3.h->math.h
 Image.h->Color.h
 Vertex.h->Point.h
 Camera.h->Ray.h
-
-ViewPlane.h->Vertex.h
 Transformation.h->Vector3.h
 
+ViewPlane.h->Vertex.h
 Light.h->Image.h, Transformation.h
 
 PointLight.h->Light.h
