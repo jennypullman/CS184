@@ -1,7 +1,7 @@
 #include "Transformation.h"
 
 Transformation::Transformation(){
-
+	this->null = true;
 }
 
 Transformation::Transformation(float f1, float f2, float f3, char type){
@@ -42,6 +42,7 @@ Transformation::Transformation(float f1, float f2, float f3, char type){
 		this->matrix[5] = f2;
 		this->matrix[10] = f3;
 	}
+	this->null = false;
 }
 
 Transformation::Transformation(float f[]){
@@ -61,11 +62,15 @@ Transformation::Transformation(float f[]){
 	this->matrix[13] = f[13];
 	this->matrix[14] = f[14];
 	this->matrix[15] = f[15];
-
+	this->null = false;
 }
 
 float* Transformation::getMatrix(){
 	return this->matrix;
+}
+
+bool Transformation::isNull(){
+	return this->null;
 }
 
 Transformation Transformation::transformMultiply(Transformation trans1, Transformation trans2){
@@ -98,4 +103,19 @@ Vector3 Transformation::vectorMultiply(Transformation trans, Vector3 vec){
 	y = y/d;
 	z = z/d;
 	return Vector3(x, y, z);
+}
+
+Vertex Transformation::transformVertex(Transformation trans, Vertex vert){
+	float x,y,z,d;
+	float *matr = trans.getMatrix();
+
+	x = matr[0]*vert.getX()+matr[1]*vert.getY()+matr[2]*vert.getZ()+matr[3];
+	y = matr[4]*vert.getX()+matr[5]*vert.getY()+matr[6]*vert.getZ()+matr[7];
+	z = matr[8]*vert.getX()+matr[9]*vert.getY()+matr[10]*vert.getZ()+matr[11];
+	d = matr[12]*vert.getX()+matr[13]*vert.getY()+matr[14]*vert.getZ()+matr[15];
+
+	x = x/d;
+	y = y/d;
+	z = z/d;
+	return Vertex(x, y, z);
 }

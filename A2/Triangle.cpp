@@ -9,6 +9,15 @@ Triangle::Triangle(Material mat, Vertex vert1, Vertex vert2, Vertex vert3){
 	this->vert3 = vert3;
 };
 
+Triangle::Triangle(Material mat, Vertex vert1, Vertex vert2, Vertex vert3, Vector3 norm1, Vector3 norm2, Vector3 norm3){
+	this->material = mat;
+	this->vert1 = vert1;
+	this->vert2 = vert2;
+	this->vert3 = vert3;
+	this->norm1 = norm1;
+	this->norm2 = norm2;
+	this->norm3 = norm3;
+};
 //instance methods
 Material Triangle::getMaterial(){
 	return this->material;

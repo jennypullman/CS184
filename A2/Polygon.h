@@ -3,7 +3,7 @@
 class Polygon: Shape{
 public:
 	Polygon();
-	Polygon(Material mat, Vertex *vertices, int verticesLength, Triangle *triangles, int trianglesLength);
+	Polygon(Material mat, Triangle *triangles, int trianglesLength);
 
 	//instance methods
 	Material getMaterial();
@@ -11,8 +11,6 @@ public:
 
 private:
 	Material material;
-	Vertex *vertices;
 	Triangle *triangles;
-	int verticesLength;
 	int trianglesLength;
 };

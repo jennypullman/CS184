@@ -3,10 +3,8 @@
 Polygon::Polygon(){
 };
 
-Polygon::Polygon(Material mat, Vertex *vertices, int verticesLength, Triangle *triangles, int trianglesLength){
+Polygon::Polygon(Material mat, Triangle *triangles, int trianglesLength){
 	this->material = mat;
-	this->vertices = vertices;
-	this->verticesLength = verticesLength;
 	this->triangles = triangles;
 	this->trianglesLength = trianglesLength;
 };
