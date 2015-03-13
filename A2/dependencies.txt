@@ -1,0 +1,26 @@
+Camera.h
+Color.h
+Material.h
+Point.h
+Ray.h
+Vector3.h
+
+Image.h->Color.h
+Vertex.h->Point.h
+
+ViewPlane.h->Vertex.h
+Transformation.h->Vector3.h
+
+Light.h->Image.h, Transformation.h
+
+PointLight.h->Light.h
+
+DirectedLight.h->PointLight.h
+
+Shape.h->Ray.h, DirectedLight.h, Material.h
+
+Triangle.h->Shape.h, Vertex.h
+
+Polygon.h->Triangle.h
+
+Sphere.h->Polygon.h

@@ -1,4 +1,4 @@
-#include "Point.h";
+#include "Vertex.h";
 
 class ViewPlane{
 public:

@@ -138,10 +138,14 @@ void handleLtp(string ltpInfo){
 void handleLtd(string ltdInfo){
   float args[6];
   handleArgs(6, args, ltdInfo);
+  DirectedLight light = DirectedLight(args[0], args[1], args[2], args[3], args[4], args[5]);
+  directedLights.push_back(light);
 }
 void handleLta(string ltaInfo){
   float args[3];
   handleArgs(3, args, ltaInfo);
+  Color light = Color(args[0], args[1], args[2]);
+  ambientLights.push_back(light);
 }
 void handleMat(string matInfo){
   float args[13];
@@ -160,6 +164,10 @@ void handleXfr(string xfrInfo){
 void handleXfs(string xfsInfo){
   float args[3];
   handleArgs(3, args, xfsInfo);
+}
+
+void handleXfz(){
+
 }
 
 // Color getColorFromRay(Ray ray, float startTime){
@@ -222,6 +230,8 @@ void processArgs(int argc, char *argv[]) {
 
       } else if (objectType == "xfs"){
 
+      } else {
+        //send warning message
       }
       args = "";
       objectType = "";

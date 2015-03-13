@@ -10,8 +10,8 @@ endif
 	
 RM = /bin/rm -f 
 all: main 
-main: Color.o Point.o Vertex.o Material.o Ray.o Vector3.o Image.o PointLight.o DirectedLight.o Triangle.o Polygon.o ray_tracer.o 
-	$(CC) $(CFLAGS) -o as1 Color.o Point.o Vertex.o Material.o Ray.o Image.o Vector3.o PointLight.o DirectedLight.o Triangle.o Polygon.o ray_tracer.o $(LDFLAGS)
+main: Color.o Point.o Vertex.o Material.o Ray.o Vector3.o Transformation.o Image.o PointLight.o DirectedLight.o Triangle.o Polygon.o ray_tracer.o 
+	$(CC) $(CFLAGS) -o as1 Color.o Point.o Vertex.o Vector3.o Transformation.o Material.o Ray.o Image.o PointLight.o DirectedLight.o Triangle.o Polygon.o ray_tracer.o $(LDFLAGS)
 Image.o: Image.cpp
 	$(CC) $(CFLAGS) -c Image.cpp -o Image.o
 Color.o: Color.cpp
@@ -20,6 +20,8 @@ Vertex.o: Vertex.cpp
 	$(CC) $(CFLAGS) -c Vertex.cpp -o Vertex.o
 Vector3.o: Vector3.cpp
 	$(CC) $(CFLAGS) -c Vector3.cpp -o Vector3.o
+Transformation.o: Transformation.cpp
+	$(CC) -std=c++11 $(CFLAGS) -c Transformation.cpp -o Transformation.o
 Point.o: Point.cpp
 	$(CC) $(CFLAGS) -c Point.cpp -o Point.o
 Ray.o: Ray.cpp
