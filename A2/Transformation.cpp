@@ -1,6 +1,23 @@
 #include "Transformation.h"
 
 Transformation::Transformation(){
+	//identity matrix
+	this->matrix[0] = 1.0;
+	this->matrix[1] = 0.0;
+	this->matrix[2] = 0.0;
+	this->matrix[3] = 0.0;
+	this->matrix[4] = 0.0;
+	this->matrix[5] = 1.0;
+	this->matrix[6] = 0.0;
+	this->matrix[7] = 0.0;
+	this->matrix[8] = 0.0;
+	this->matrix[9] = 0.0;
+	this->matrix[10] = 1.0;
+	this->matrix[11] = 0.0;
+	this->matrix[12] = 0.0;
+	this->matrix[13] = 0.0;
+	this->matrix[14] = 0.0;
+	this->matrix[15] = 1.0;
 	this->null = true;
 }
 

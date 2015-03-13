@@ -204,7 +204,9 @@ Polygon readObj(string fileName){
   int vertSize = vertices.size();
   Vertex vertexArr [vertSize];
   for (int i = 0; i < vertSize; i++){
-    vertexArr[i] = vertices.front();
+    if (!curTransform.isNull()){
+      vertexArr[i] = Transformation::transformVertex(curTransform, vertices.front());
+    }
     vertices.pop_front();
   };
   int normalSize = normals.size();
@@ -297,7 +299,6 @@ void handleTri(string triInfo){
     vert1 = Transformation::transformVertex(curTransform, vert1);
     vert2 = Transformation::transformVertex(curTransform, vert2);
     vert3 = Transformation::transformVertex(curTransform, vert3);
-    curTransform = Transformation();
   }
   Triangle tri = Triangle(curMaterial, vert1, vert2, vert3);
   triangles.push_back(tri);
@@ -366,7 +367,8 @@ void handleXfs(string xfsInfo){
 }
 
 void handleXfz(){
-  //TO DO
+  //reset curTransform
+  curTransform = Transformation();
 }
 
 // Color getColorFromRay(Ray ray, float startTime){
