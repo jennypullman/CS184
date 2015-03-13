@@ -1,22 +1,21 @@
 #include "Polygon.h"
 
-class Shpere : Shape {
+class Sphere : Shape {
 public: 
 	Sphere();
-	Sphere(float r, float g, float b, float cx, float, float cy, float cz, float rad);
+	Sphere(Material material, float cx, float cy, float cz, float rad);
 
 	//instance methods
-	Color getColor();
+	Material getMaterial();
 	float hit(Ray ray);
 	float getCenterX();
 	float getCenterY();
 	float getCenterZ();
 	float getRadius();
+	void print();
 
 private:
-	float r;
-	float g;
-	float b;
+	Material material;   // Material of sphere
 	float cx;		// Center x
 	float cy;		// Center y
 	float cz;		// Center z

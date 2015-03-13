@@ -19,7 +19,7 @@ using namespace std;
 //#include "DirectedLight.h"
 //#include "Sphere.h";
 //#include "Ray.h";
-#include "Polygon.h"
+#include "Sphere.h"
 
 
 struct Face {
@@ -39,6 +39,7 @@ Material curMaterial;
 Transformation curTransform;
 list<Triangle> triangles;
 list<Polygon> polygons;
+list<Sphere> spheres;
 Image image;
 Camera camera;
 
@@ -288,6 +289,8 @@ void handleCam(string camInfo){
 void handleSph(string sphInfo){
   float args[4];
   handleArgs(4, args, sphInfo);
+  Sphere sphere = Sphere(curMaterial, args[0], args[1], args[2], args[3]);
+  spheres.push_back(sphere);
 }
 void handleTri(string triInfo){
   float args[9];
