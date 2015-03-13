@@ -8,6 +8,9 @@
 
 #include <iostream>
 
+Image::Image(){
+	
+}
 
 Image::Image(int height, int width) {
 	h = height;

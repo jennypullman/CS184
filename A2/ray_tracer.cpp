@@ -39,6 +39,8 @@ Material curMaterial;
 Transformation curTransform;
 list<Triangle> triangles;
 list<Polygon> polygons;
+Image image;
+Camera camera;
 
 int numFailedTests = 0;
 
@@ -118,6 +120,10 @@ Polygon readObj(string fileName){
       obj += c;
       c = inbuf->sbumpc();
     }
+
+    /***************************************************/
+    /* Parsing arguments for vector and vector normals */
+    /***************************************************/    
     if (obj == "v" || obj == "vn"){
       string lastChar = " ";
       int numIndex = 0;
@@ -147,7 +153,11 @@ Polygon readObj(string fileName){
         normal = Vector3(nums[0], nums[1], nums[2]);
         normals.push_back(normal);
       }
-    } else if (obj == "f"){
+    } 
+    /*******************************/
+    /* Parsing arguments for faces */
+    /*******************************/ 
+    else if (obj == "f"){
       string temp = "";
       int nums[6];
       string arg = "";
@@ -188,6 +198,9 @@ Polygon readObj(string fileName){
     obj = "";
   };
   fs.close();
+  /***********************************************/
+  /* Putting vertex and normal lists into arrays */
+  /***********************************************/
   int vertSize = vertices.size();
   Vertex vertexArr [vertSize];
   for (int i = 0; i < vertSize; i++){
@@ -202,6 +215,9 @@ Polygon readObj(string fileName){
   };
   //TO DO
   //not doing anything with normals currently
+  /*************************************************/
+  /* Create trianles (and place them in a polygon) */
+  /*************************************************/
   Triangle curTri;
   int numFaces = faces.size();
   Triangle triangleArr [numFaces];
@@ -261,9 +277,11 @@ string handleStringArgs(int numArgs, string info){
   return arg;
 }
 void handleCam(string camInfo){
-  float ex, ey, ez, llx, lly, llz, lrx, lry, lrz, ulx, uly, ulz, urx, ury, yrz;
-  float args[14];
-  handleArgs(14, args, camInfo);
+  float ex, ey, ez, llx, lly, llz, lrx, lry, lrz, ulx, uly, ulz, urx, ury, urz;
+  float args[15];
+  handleArgs(15, args, camInfo);
+  //TO DO (image)
+  camera = Camera(args[0], args[1], args[2]);
 }
 void handleSph(string sphInfo){
   float args[4];
@@ -348,7 +366,7 @@ void handleXfs(string xfsInfo){
 }
 
 void handleXfz(){
-
+  //TO DO
 }
 
 // Color getColorFromRay(Ray ray, float startTime){
@@ -357,10 +375,6 @@ void handleXfz(){
 
 // };
 void processArgs(int argc, char *argv[]) {
-  // cout << "argc: " << argc << "\n";
-  // for (int i = argc - 1; i >= 0; i--) { 
-  //   cout << argv[i] << "\n";
-  // }
   string arg;
   string objectType = "";
   string args = "";
@@ -414,6 +428,7 @@ void processArgs(int argc, char *argv[]) {
       } else if (objectType == "xfz"){
         handleXfz();
       } else {
+        //TO DO
         //send warning message
       }
       args = "";

@@ -1,3 +1,5 @@
+#include "Ray.h"
+
 class Camera{
 public:
 	Camera();

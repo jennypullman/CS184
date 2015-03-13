@@ -1,5 +1,5 @@
 //#include "Color.h"
-#include "Ray.h"
+#include "Camera.h"
 #include "DirectedLight.h"
 #include "Material.h"
 

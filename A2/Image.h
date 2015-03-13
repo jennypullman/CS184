@@ -2,6 +2,8 @@
 
 class Image {
   public:
+    //TO DO
+    Image();
     Image(int height, int width);                         // constructor; initialize the height and width in pixels
 
     Color get_Color(int pixelNum);                            // get rgb object for position (x,y) in rgb array
