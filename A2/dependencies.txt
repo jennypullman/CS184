@@ -9,16 +9,19 @@ Vertex.h->Point.h
 Camera.h->Ray.h
 Transformation.h->Vector3.h
 
-ViewPlane.h->Vertex.h
-Light.h->Image.h, Transformation.h
+ViewPlane.h->Transformation.h
 
-PointLight.h->Light.h
+Light.h->Image.h, ViewPlane.h
+
+AmbientLight.h->Light.h
+
+PointLight.h->AmbientLight.h
 
 DirectedLight.h->PointLight.h
 
-Shape.h->Camera.h, DirectedLight.h, Material.h
+Shape.h->Camera.h, DirectedLight.h
 
-Triangle.h->Shape.h, Vertex.h
+Triangle.h->Shape.h
 
 Polygon.h->Triangle.h
 

@@ -1,6 +1,6 @@
 #include "Polygon.h"
 
-class Sphere : Shape {
+class Sphere : public Shape {
 public: 
 	Sphere();
 	Sphere(Material material, float cx, float cy, float cz, float rad);
@@ -12,6 +12,7 @@ public:
 	float getCenterY();
 	float getCenterZ();
 	float getRadius();
+	Point getMostRecentHitPoint();
 	void print();
 
 private:
@@ -20,5 +21,6 @@ private:
 	float cy;		// Center y
 	float cz;		// Center z
 	float rad;		// radius
+	Point mostRecentHitPoint();
 	
 };

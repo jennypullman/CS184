@@ -50,3 +50,8 @@ void PointLight::scaleLocation(float scalar){
 	y = y*scalar;
 	z = z*scalar;
 }
+
+Color PointLight::getShadingOnObject(Material shp_mat, Point pnt){
+	//TO DO lauren
+	return Color();
+}

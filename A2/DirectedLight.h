@@ -1,6 +1,6 @@
 #include "PointLight.h"
 
-class DirectedLight : Light {
+class DirectedLight : public Light {
 public:
 	DirectedLight();
 	DirectedLight(float x, float y, float z, float r, float g, float b);
@@ -10,6 +10,8 @@ public:
 	Vector3 getReflectionVector(Vector3 n);
 	bool IsActivated();
 	void scaleLocation(float scalar);
+	Color getShadingOnObject(Material shp_mat, Point pnt);
+	
 private:
 	float x;
 	float y;

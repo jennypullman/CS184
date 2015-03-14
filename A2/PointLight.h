@@ -1,6 +1,6 @@
-#include "Light.h"
+#include "AmbientLight.h"
 
-class PointLight : Light {
+class PointLight : public Light {
 public:
 	PointLight();
 	PointLight(float x, float y, float z, float r, float g, float b, float falloff);
@@ -10,6 +10,7 @@ public:
 	Vector3 getReflectionVector(Vector3 n);
 	bool IsActivated();
 	void scaleLocation(float scalar);
+	Color getShadingOnObject(Material shp_mat, Point pnt);
 private:
 	float x;
 	float y;

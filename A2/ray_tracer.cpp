@@ -34,12 +34,14 @@ struct Face {
 //variables of the entire world
 list<PointLight> pointLights;
 list<DirectedLight> directedLights;
-list<Color> ambientLights;
+list<AmbientLight> ambientLights;
+list<Light> lights;
 Material curMaterial;
 Transformation curTransform;
 list<Triangle> triangles;
 list<Polygon> polygons;
 list<Sphere> spheres;
+list<Shape> shapes;
 Image image;
 Camera camera;
 
@@ -314,6 +316,7 @@ void handleSph(string sphInfo){
   center = Transformation::transformVertex(curTransform, center);
   Sphere sphere = Sphere(curMaterial, center.getX(), center.getY(), center.getZ(), args[3]);
   spheres.push_back(sphere);
+  shapes.push_back(sphere);
 }
 
 /*
@@ -333,6 +336,7 @@ void handleTri(string triInfo){
   }
   Triangle tri = Triangle(curMaterial, vert1, vert2, vert3);
   triangles.push_back(tri);
+  shapes.push_back(tri);
 }
 
 /*
@@ -345,6 +349,7 @@ void handleObj(string objInfo){
   std::cout << "\n";
   Polygon polygon = readObj(arg);
   polygons.push_back(polygon);
+  shapes.push_back(polygon);
   //polygon.print();
 }
 
@@ -358,6 +363,7 @@ void handleLtp(string ltpInfo){
   handleArgs(7, args, ltpInfo);
   PointLight light = PointLight(args[0], args[1], args[2], args[3], args[4], args[5], args[6]);
   pointLights.push_back(light);
+  lights.push_back(light);
 }
 
 /*
@@ -369,6 +375,7 @@ void handleLtd(string ltdInfo){
   handleArgs(6, args, ltdInfo);
   DirectedLight light = DirectedLight(args[0], args[1], args[2], args[3], args[4], args[5]);
   directedLights.push_back(light);
+  lights.push_back(light);
 }
 
 /*
@@ -379,8 +386,9 @@ void handleLtd(string ltdInfo){
 void handleLta(string ltaInfo){
   float args[3];
   handleArgs(3, args, ltaInfo);
-  Color light = Color(args[0], args[1], args[2]);
+  AmbientLight light = AmbientLight(args[0], args[1], args[2]);
   ambientLights.push_back(light);
+  lights.push_back(light);
 }
 
 /*
@@ -527,6 +535,60 @@ void processArgs(int argc, char *argv[]) {
   }; 
 }
 
+void follow_ray(Ray start_ray, Color clr, int recursiveDepth){
+  // Ray curr_ray = start_ray
+  // initial total_dist
+  // initial alpha = 1, the reflection multiplier
+  // for recursion depth
+    //find hit
+    //update total dist (TODO double check)
+    //calculate shading for hit point
+    //add to clr, multiply by alpha
+    //update alpha
+    //determine reflecion ray (hit point in direction of reflection vector)
+    //store reflection ray as curr_ray
+  Ray curRay = start_ray;
+  float totalDist = 0.0;
+  float alpha = 1.0;
+  Shape curShape;
+  float minHit = -1.0;
+  Point hitPoint;
+  Shape hitShape;
+  Color curColor;
+  if (shapes.size() > 0){
+    for (int i = 0; i < recursiveDepth; i ++){
+      for (Shape shape : shapes) {
+        float hitTime = shape.hit(curRay);
+        if (minHit < 0.0 || (hitTime >= 0.0 && hitTime < minHit)){
+          hitTime = minHit;
+          hitShape = shape;
+        }
+      }
+      hitPoint = hitShape.mostRecentHitPoint();
+      totalDist += sqrt(pow(hitPoint.getX()-ray.getX(),2)+pow(hitPoint.getY()-ray.getY(),2)+
+        pow(hitPoint.getZ()-ray.getZ(),2));
+      Color lightColor;
+      for (Light light : lights) {
+        lightColor = light.getShadingOnObject(shape.getMaterial(),hitPoint);
+        curColor.update_r(alpha*(curColor.get_r()+lightColor.get_r()));
+        curColor.update_g(alpha*(curColor.get_g()+lightColor.get_g()));
+        curColor.update_b(alpha*(curColor.get_b()+lightColor.get_b()));        
+      }
+      //TO DO
+      curRay = Ray();
+    }
+  }
+}
+
+int do_ray_tracing() {
+  // for each pixel
+    // determine view ray
+    // initialize Color object
+    // call follow_ray()
+    // store color in image
+  // return 0 if loop finishes correctly
+}
+
 //****************************************************
 // the usual stuff, nothing exciting here
 //****************************************************
@@ -536,6 +598,8 @@ int main(int argc, char *argv[]) {
 
   std::cout << "Hello World!";
   processArgs(argc, argv);
+
+
   //handle input (making objects as we go)-->keep list of objects
   //create camera, viewplane, and image object
   //for each pixel on viewplane, make ray between camera and viewplane.

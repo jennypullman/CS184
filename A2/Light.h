@@ -1,17 +1,19 @@
 #include <iostream>
 using namespace std;
 //#include "Color.h"
-#include "Transformation.h"
 #include "Image.h"
+#include "Material.h"
+#include "ViewPlane.h"
 
 class Light {
 public:
 
-	virtual Color getColor() = 0;
-	virtual Vector3 getLightVector(float x, float y, float z) = 0;
-	virtual Vector3 getReflectionVector(Vector3 n) = 0;
-	virtual bool IsActivated() = 0;
-	virtual void scaleLocation(float scalar) = 0;
+	Light();
+	Color getColor();
+	Vector3 getLightVector(float x, float y, float z);
+	Vector3 getReflectionVector(Vector3 n);
+	bool IsActivated();
+	void scaleLocation(float scalar);
 	Color getShadingOnObject(Material shp_mat, Point pnt);
 private:
 	float x;

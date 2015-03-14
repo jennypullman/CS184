@@ -22,6 +22,7 @@ float Polygon::hit(Ray ray){
 		float triangleT = this->triangles[i].hit(ray);
 		if (t < 0.0 || (triangleT >= 0.0 && triangleT < t)){
 			t = triangleT;
+			this->mostRecentHitTriangle = this->triangles[i];
 		};
 	};
 	return t;
@@ -35,3 +36,7 @@ void Polygon::print(){
 		triangles[i].print();
 	}
 };
+
+Point Polygon::getMostRecentHitPoint(){
+	return this->mostRecentHitTriangle.getMostRecentHitPoint();
+}

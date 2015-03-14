@@ -49,3 +49,8 @@ void DirectedLight::scaleLocation(float scalar){
 	y = y*scalar;
 	z = z*scalar;
 }
+
+Color DirectedLight::getShadingOnObject(Material shp_mat, Point pnt){
+	//TO DO lauren
+	return Color();
+}
