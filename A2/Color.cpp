@@ -32,15 +32,15 @@ Color Color::scalar_div(Color color, float scalar){
 	return Color(color.get_r() / scalar, color.get_g() / scalar, color.get_b() / scalar);
 }
 
-void Color::udpate_r(float red){
+void Color::update_r(float red){
 	r = red;
 }
 
-void Color::udpate_g(float green){
+void Color::update_g(float green){
 	g = green;
 }
 
-void Color::udpate_b(float blue){
+void Color::update_b(float blue){
 	b = blue;
 }
 

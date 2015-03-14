@@ -28,6 +28,11 @@ float Polygon::hit(Ray ray){
 	return t;
 };
 
+
+Point Polygon::getMostRecentHitPoint(){
+	return this->mostRecentHitTriangle.getMostRecentHitPoint();
+}
+
 void Polygon::print(){
 	for (int i = 0; i < trianglesLength; i++) {
 		std::cout << "Triangle ";
@@ -36,7 +41,3 @@ void Polygon::print(){
 		triangles[i].print();
 	}
 };
-
-Point Polygon::getMostRecentHitPoint(){
-	return this->mostRecentHitTriangle.getMostRecentHitPoint();
-}

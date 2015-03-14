@@ -8,8 +8,8 @@ public:
 	//instance methods
 	Material getMaterial();
 	float hit(Ray ray);
-	void print();
 	Point getMostRecentHitPoint();
+	void print();
 
 private:
 	Material material;

@@ -66,8 +66,13 @@ float Triangle::hit(Ray ray){
 		std::cout << "\n";
 		return -1.0;
 	};
+	this->mostRecentHitPoint = Point(px, py, pz);
 	return t;
 };
+
+Point Triangle::getMostRecentHitPoint(){
+	return this->mostRecentHitPoint;
+}
 
 void Triangle::print(){
 	std::cout << "Vertices = (";

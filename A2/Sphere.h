@@ -21,6 +21,6 @@ private:
 	float cy;		// Center y
 	float cz;		// Center z
 	float rad;		// radius
-	Point mostRecentHitPoint();
+	Point mostRecentHitPoint;
 	
 };

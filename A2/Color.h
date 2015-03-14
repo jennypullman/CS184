@@ -8,9 +8,9 @@ class Color {
     static Color rgb_mult(Color color1, Color color2);             		// multiply color1 and color2
     static Color scalar_mult(Color color, float scalar);         		// multiply color1 by k
     static Color scalar_div(Color color, float scalar);					// divide color1 by k
-    void udpate_r(float red); 										// update r
-    void udpate_g(float green); 									// update g
-    void udpate_b(float blue); 										// update b
+    void update_r(float red); 										// update r
+    void update_g(float green); 									// update g
+    void update_b(float blue); 										// update b
     float get_r(); 													// return r
     float get_g(); 													// return g
     float get_b(); 													// return b

@@ -51,13 +51,30 @@ float Sphere::hit(Ray ray){
 	//will a ever be 0???
 	float t1 = (-b + dividend)/(2*a);
 	float t2 = (-b - dividend)/(2*a);
+	float hitx, hity,hitz;
 	if (t1 >= 0.0) {
 		if (t2 >= 0.0 && t2 < t1){
+			hitx = ray.getStartX() + t2*ray.getDirectionX();
+			hity = ray.getStartY() + t2*ray.getDirectionY();
+			hitz = ray.getStartZ() + t2*ray.getDirectionZ();
+			this->mostRecentHitPoint = Point(hitx, hity, hitz);
 			return t2;
 		}
+		hitx = ray.getStartX() + t1*ray.getDirectionX();
+		hity = ray.getStartY() + t1*ray.getDirectionY();
+		hitz = ray.getStartZ() + t1*ray.getDirectionZ();
+		this->mostRecentHitPoint = Point(hitx, hity, hitz);
 		return t1;
 	}
+	hitx = ray.getStartX() + t2*ray.getDirectionX();
+	hity = ray.getStartY() + t2*ray.getDirectionY();
+	hitz = ray.getStartZ() + t2*ray.getDirectionZ();
+	this->mostRecentHitPoint = Point(hitx, hity, hitz);
 	return t2;
+}
+
+Point Sphere::getMostRecentHitPoint(){
+	return this->mostRecentHitPoint;
 }
 
 void Sphere::print(){

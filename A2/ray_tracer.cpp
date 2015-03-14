@@ -564,12 +564,12 @@ void follow_ray(Ray start_ray, Color clr, int recursiveDepth){
           hitShape = shape;
         }
       }
-      hitPoint = hitShape.mostRecentHitPoint();
-      totalDist += sqrt(pow(hitPoint.getX()-ray.getX(),2)+pow(hitPoint.getY()-ray.getY(),2)+
-        pow(hitPoint.getZ()-ray.getZ(),2));
+      hitPoint = hitShape.getMostRecentHitPoint();
+      totalDist += sqrt(pow(hitPoint.getX()-curRay.getStartX(),2)+pow(hitPoint.getY()-curRay.getStartY(),2)+
+        pow(hitPoint.getZ()-curRay.getStartZ(),2));
       Color lightColor;
       for (Light light : lights) {
-        lightColor = light.getShadingOnObject(shape.getMaterial(),hitPoint);
+        lightColor = light.getShadingOnObject(hitShape.getMaterial(),hitPoint);
         curColor.update_r(alpha*(curColor.get_r()+lightColor.get_r()));
         curColor.update_g(alpha*(curColor.get_g()+lightColor.get_g()));
         curColor.update_b(alpha*(curColor.get_b()+lightColor.get_b()));        
