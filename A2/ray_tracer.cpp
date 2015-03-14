@@ -109,8 +109,51 @@ Color pointLightShadingTest() {
   // EXPECT R: 1.44444, G: 0, B: 0.5
 
   return clr;
+}
+
+Color dirLightShadingTest() {
+  Material mat = Material(1.0, 0.25, 0.5, 
+    1.0, 1.0, 0.0, 1.0, 1.0, 1.0, 2,
+    0.0, 0.0, 0.0);
+
+  Point pnt = Point(0.0, 1.0, 0.0);
+  Vector3 norm = Vector3(0.0, 1.0, 0.0);
+
+  DirectedLight light = DirectedLight(-2.0, -2.0, -2.0, 1.0, 1.0, 1.0);
+
+  Color clr = light.getShadingOnObject(mat, pnt, norm, norm);
+
+  // EXPECT R: 1.91068, G: 1.16068, B: 0.833333
 
 
+  // Material mat = Material(1.0, 0.25, 0.5, 
+  //   1.0, 1.0, 0.0, 1.0, 1.0, 1.0, 2,
+  //   0.0, 0.0, 0.0);
+
+  // Point pnt = Point(0.0, 1.0, 0.0);
+  // Vector3 norm = Vector3(0.0, 1.0, 0.0);
+
+  // DirectedLight light = DirectedLight(-2.0, -2.0, -2.0, 1.0, 0.0, 1.0);
+
+  // Color clr = light.getShadingOnObject(mat, pnt, norm, norm);
+
+  // EXPECT R: 1.91068, G: 0, B: 0.833333
+
+
+  // Material mat = Material(1.0, 0.25, 0.5, 
+  //   1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 2,
+  //   0.0, 0.0, 0.0);
+
+  // Point pnt = Point(0.0, 1.0, 0.0);
+  // Vector3 norm = Vector3(0.0, 1.0, 0.0);
+
+  // DirectedLight light = DirectedLight(-2.0, -2.0, -2.0, 1.0, 0.0, 1.0);
+
+  // Color clr = light.getShadingOnObject(mat, pnt, norm, norm);
+
+  // EXPECT R: 1.91068, G: 0, B: 0.5
+
+  return clr;
 }
 
 void runTests(){
@@ -154,6 +197,9 @@ void runTests(){
   Color clr = pointLightShadingTest();
   std::cout << "End Test 3:  R: "<< clr.get_r() << ", G: " << clr.get_g() << ", B: " << clr.get_b() << std::endl;
 
+  std::cout << "Running Test 4:  DirectedLight shading test" << std::endl;
+  clr = dirLightShadingTest();
+  std::cout << "End Test 4:  R: "<< clr.get_r() << ", G: " << clr.get_g() << ", B: " << clr.get_b() << std::endl;
 
 }
 

@@ -65,8 +65,10 @@ Color PointLight::getShadingOnObject(Material shp_mat, Point pnt, Vector3 normal
 	if (activated){
 		//calculate light vector
 		Vector3 lightVector = getLightVector(pnt.getX(), pnt.getY(), pnt.getZ());
+		lightVector.normalize();
 		//calculate reflection vector
 		Vector3 reflectVector = getReflectionVector(normal);
+		reflectVector.normalize();
 		
 		//for red:
 		//DIFFUSE COMPONENT
