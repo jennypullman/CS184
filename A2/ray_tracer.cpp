@@ -554,9 +554,10 @@ void follow_ray(Ray start_ray, Color clr, int recursiveDepth){
   float minHit = -1.0;
   Point hitPoint;
   Shape hitShape;
-  Color curColor;
+  Color curColor = clr;
   if (shapes.size() > 0){
     for (int i = 0; i < recursiveDepth; i ++){
+      //get hittime, shape, and point
       for (Shape shape : shapes) {
         float hitTime = shape.hit(curRay);
         if (minHit < 0.0 || (hitTime >= 0.0 && hitTime < minHit)){
@@ -565,8 +566,12 @@ void follow_ray(Ray start_ray, Color clr, int recursiveDepth){
         }
       }
       hitPoint = hitShape.getMostRecentHitPoint();
+
+      //update distance
       totalDist += sqrt(pow(hitPoint.getX()-curRay.getStartX(),2)+pow(hitPoint.getY()-curRay.getStartY(),2)+
         pow(hitPoint.getZ()-curRay.getStartZ(),2));
+
+      //get color of shape
       Color lightColor;
       for (Light light : lights) {
         lightColor = light.getShadingOnObject(hitShape.getMaterial(),hitPoint);
@@ -574,7 +579,7 @@ void follow_ray(Ray start_ray, Color clr, int recursiveDepth){
         curColor.update_g(alpha*(curColor.get_g()+lightColor.get_g()));
         curColor.update_b(alpha*(curColor.get_b()+lightColor.get_b()));        
       }
-      //TO DO
+      //TO DO (lauren?)-->need the reflection ray
       curRay = Ray();
     }
   }
@@ -587,6 +592,23 @@ int do_ray_tracing() {
     // call follow_ray()
     // store color in image
   // return 0 if loop finishes correctly
+  int numPixels = image.getNumPixels();
+  for (int i = 0; i < numPixels; i++){
+    //TO DO (lauren?)
+    //get correct point through viewplane
+    Ray viewRay = Ray();
+
+    //init Color
+    Color startColor = Color();
+
+    //call follow_ray with 5 as recursive depth
+    follow_ray(viewRay, startColor, 5);
+
+    //TO DO lauren
+    //add color to image object
+  }
+  char fileName[] = {'t','e','s','t','I','m','g','.','p','n','g', '\0'};
+  return image.printToFile(fileName);
 }
 
 //****************************************************
