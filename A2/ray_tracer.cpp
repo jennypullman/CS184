@@ -3,6 +3,7 @@
 #include <string>
 #include <math.h>
 #include <list>
+#include <vector>
 
 
 #define PI 3.14159265  // Should be used from mathlib
@@ -211,7 +212,8 @@ Polygon readObj(string fileName){
   /* Putting vertex and normal lists into arrays */
   /***********************************************/
   int vertSize = vertices.size();
-  Vertex vertexArr [vertSize];
+  vector<Vertex> vertexArr (vertSize);
+  // Vertex vertexArr [vertSize];
   for (int i = 0; i < vertSize; i++){
     if (!curTransform.isNull()){
       vertexArr[i] = Transformation::transformVertex(curTransform, vertices.front());
@@ -219,7 +221,8 @@ Polygon readObj(string fileName){
     vertices.pop_front();
   };
   int normalSize = normals.size();
-  Vector3 normalArr [normalSize];
+  vector<Vector3> normalArr (normalSize);
+  // Vector3 normalArr [normalSize];
   for (int i = 0; i < normalSize; i++){
     normalArr[i] = normals.front();
     normals.pop_front();
@@ -231,7 +234,8 @@ Polygon readObj(string fileName){
   /*************************************************/
   Triangle curTri;
   int numFaces = faces.size();
-  Triangle triangleArr [numFaces];
+  vector<Triangle> triangleArr (numFaces);
+  // Triangle triangleArr [numFaces];
   Face face;
   for (int i = 0; i < numFaces; i++){
     face = faces.front();
@@ -241,7 +245,9 @@ Polygon readObj(string fileName){
       normalArr[face.norm1-1], normalArr[face.norm2-1], normalArr[face.norm3-1]);    
     triangleArr[i] = curTri;
   };
-  return Polygon(curMaterial, triangleArr, numFaces);
+
+  return Polygon(curMaterial, triangleArr.data(), numFaces);
+  // return Polygon(curMaterial, triangleArr, numFaces);
 }
 
 
