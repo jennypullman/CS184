@@ -51,7 +51,56 @@ void PointLight::scaleLocation(float scalar){
 	z = z*scalar;
 }
 
-Color PointLight::getShadingOnObject(Material shp_mat, Point pnt){
+Color PointLight::getShadingOnObject(Material shp_mat, Point pnt, Vector3 normal, Vector3 view){
 	//TO DO lauren
-	return Color();
+	Color color = Color(0.0,0.0,0.0);
+
+	normal.normalize();
+	//find viewer vector
+	Vector3 viewVector = Vector3(view.getX(), view.getY(), view.getZ());
+	viewVector.normalize();
+
+	// TODO why were we doing this?
+    // light.scaleLocation(min(viewport.w, viewport.h)*0.9 / 2.0);
+	if (activated){
+		//calculate light vector
+		Vector3 lightVector = getLightVector(pnt.getX(), pnt.getY(), pnt.getZ());
+		//calculate reflection vector
+		Vector3 reflectVector = getReflectionVector(normal);
+		
+		//for red:
+		//DIFFUSE COMPONENT
+		//ASSUMPTION: i didn't normalize I
+		float diffuse = shp_mat.getKdr() * r * max(Vector3::dot(lightVector, normal), 0.f);
+		//SPECULAR COMPONENT
+		float specular = shp_mat.getKsr() * r * pow(max(Vector3::dot(reflectVector, viewVector), 0.f), shp_mat.getKsp());
+		//AMBIENT COMPONENT
+		float ambient = shp_mat.getKar() * r;
+		color.update_r(diffuse + specular + ambient);
+
+		//for green:
+		//DIFFUSE COMPONENT
+		//ASSUMPTION: i didn't normalize I
+		diffuse = shp_mat.getKdg() * g * max(Vector3::dot(lightVector, normal), 0.f);
+		//SPECULAR COMPONENT
+		specular = shp_mat.getKsg() * g * pow(max(Vector3::dot(reflectVector, viewVector), 0.f), shp_mat.getKsp());
+		//AMBIENT COMPONENT
+		ambient = shp_mat.getKag() * g;
+		color.update_g(diffuse + specular + ambient);
+
+		//for blue:
+		//DIFFUSE COMPONENT
+		//ASSUMPTION: i didn't normalize I
+		diffuse = shp_mat.getKdb() * b * max(Vector3::dot(lightVector, normal), 0.f);
+		//SPECULAR COMPONENT
+		specular = shp_mat.getKsb() * b * pow(max(Vector3::dot(reflectVector, viewVector), 0.f), shp_mat.getKsp());
+		//AMBIENT COMPONENT
+		ambient = shp_mat.getKab() * b;
+		color.update_b(diffuse + specular + ambient);
+		
+	}
+
+	// TODO ? light.scaleLocation(1/(min(viewport.w, viewport.h)*0.9 / 2.0));
+
+	return color;
 }

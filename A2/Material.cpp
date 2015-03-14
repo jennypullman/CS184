@@ -33,11 +33,17 @@ float Material::getKab(){
 float Material::getKdr(){
 	return kdr;
 }
+float Material::getKdg(){
+	return kdg;
+}
 float Material::getKdb(){
 	return kdb;
 }
 float Material::getKsr(){
 	return ksr;
+}
+float Material::getKsg(){
+	return ksg;
 }
 float Material::getKsb(){
 	return ksb;

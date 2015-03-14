@@ -35,7 +35,7 @@ void Light::scaleLocation(float scalar){
 
 }
 
-Color Light::getShadingOnObject(Material shp_mat, Point pnt){
+Color Light::getShadingOnObject(Material shp_mat, Point pnt, Vector3 normal, Vector3 view){
 	//TO DO lauren
 	return Color();
 }

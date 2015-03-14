@@ -66,6 +66,53 @@ void triangleHitTest(){
   }
 }
 
+Color pointLightShadingTest() {
+  // Material mat = Material(1.0, 0.25, 0.5, 
+  //   1.0, 1.0, 0.0, 1.0, 1.0, 1.0, 2,
+  //   0.0, 0.0, 0.0);
+
+  // Point pnt = Point(0.0, 1.0, 0.0);
+  // Vector3 norm = Vector3(0.0, 1.0, 0.0);
+
+  // PointLight light = PointLight(2.0, 2.0, 2.0, 1.0, 1.0, 1.0, 0.0);
+
+  // Color clr = light.getShadingOnObject(mat, pnt, norm, norm);
+
+  // EXPECT R: 1.44444, G: 0.694444, B: 0.611111
+
+
+  // Material mat = Material(1.0, 0.25, 0.5, 
+  //   1.0, 1.0, 0.0, 1.0, 1.0, 1.0, 2,
+  //   0.0, 0.0, 0.0);
+
+  // Point pnt = Point(0.0, 1.0, 0.0);
+  // Vector3 norm = Vector3(0.0, 1.0, 0.0);
+
+  // PointLight light = PointLight(2.0, 2.0, 2.0, 1.0, 0.0, 1.0, 0.0);
+
+  // Color clr = light.getShadingOnObject(mat, pnt, norm, norm);
+
+  // EXPECT R: 1.44444, G: 0, B: 0.611111
+
+
+  Material mat = Material(1.0, 0.25, 0.5, 
+    1.0, 1.0, 0.0, 1.0, 1.0, 0.0, 2,
+    0.0, 0.0, 0.0);
+
+  Point pnt = Point(0.0, 1.0, 0.0);
+  Vector3 norm = Vector3(0.0, 1.0, 0.0);
+
+  PointLight light = PointLight(2.0, 2.0, 2.0, 1.0, 0.0, 1.0, 0.0);
+
+  Color clr = light.getShadingOnObject(mat, pnt, norm, norm);
+
+  // EXPECT R: 1.44444, G: 0, B: 0.5
+
+  return clr;
+
+
+}
+
 void runTests(){
   std::cout << "Running Test 1:  printToFile test" << std::endl;
   Image testImg = Image(12,10);
@@ -97,10 +144,17 @@ void runTests(){
   char fileName[] = {'t','e','s','t','I','m','g','.','p','n','g', '\0'};
   int code = testImg.printToFile(fileName);
   std::cout << "End Test 1:  code = "<< code << std::endl;
+  
   triangleHitTest();
   std::cout << "Number of failed tests: ";
   std::cout << numFailedTests;
   std::cout << "\n";
+
+  std::cout << "Running Test 3:  PointLight shading test" << std::endl;
+  Color clr = pointLightShadingTest();
+  std::cout << "End Test 3:  R: "<< clr.get_r() << ", G: " << clr.get_g() << ", B: " << clr.get_b() << std::endl;
+
+
 }
 
 
@@ -580,7 +634,11 @@ void follow_ray(Ray start_ray, Color clr, int recursiveDepth){
       //get color of shape
       Color lightColor;
       for (Light light : lights) {
-        lightColor = light.getShadingOnObject(hitShape.getMaterial(),hitPoint);
+        // TODO calc normal and view vectors
+        Vector3 normal, view;
+        normal = Vector3(0.0, 0.0, 0.0);
+        view = Vector3(0.0, 0.0, 0.0);
+        lightColor = light.getShadingOnObject(hitShape.getMaterial(),hitPoint, normal, view);
         curColor.update_r(alpha*(curColor.get_r()+lightColor.get_r()));
         curColor.update_g(alpha*(curColor.get_g()+lightColor.get_g()));
         curColor.update_b(alpha*(curColor.get_b()+lightColor.get_b()));        

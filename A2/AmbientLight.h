@@ -11,7 +11,7 @@ class AmbientLight : public Light {
 		Vector3 getReflectionVector(Vector3 n);
 		bool IsActivated();
 		void scaleLocation(float scalar);
-		Color getShadingOnObject(Material shp_mat, Point pnt);
+		Color getShadingOnObject(Material shp_mat, Point pnt, Vector3 normal, Vector3 view);
 
 	private:
 		float x;
