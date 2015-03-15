@@ -41,3 +41,8 @@ void Polygon::print(){
 		triangles[i].print();
 	}
 };
+
+
+Vector3 Polygon::getNormalAtPoint(Point pnt){
+	return Vector3();
+}

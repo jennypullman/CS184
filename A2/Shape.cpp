@@ -18,3 +18,8 @@ Point Shape::getMostRecentHitPoint(){
 void Shape::print(){
 
 }
+
+
+Vector3 Shape::getNormalAtPoint(Point pnt){
+	return Vector3();
+}

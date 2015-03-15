@@ -88,3 +88,7 @@ void Sphere::print(){
 	std::cout << this->rad;
 	std::cout << "\n";
 }
+
+Vector3 Sphere::getNormalAtPoint(Point pnt){
+	return Vector3();
+}

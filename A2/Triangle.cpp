@@ -95,3 +95,6 @@ void Triangle::print(){
 	std::cout << this->vert3.getZ();
 	std::cout << ")\n";
 }
+Vector3 Triangle::getNormalAtPoint(Point pnt){
+	return Vector3();
+}

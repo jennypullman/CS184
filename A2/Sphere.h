@@ -14,6 +14,7 @@ public:
 	float getRadius();
 	Point getMostRecentHitPoint();
 	void print();
+	Vector3 getNormalAtPoint(Point pnt);
 
 private:
 	Material material;   // Material of sphere
