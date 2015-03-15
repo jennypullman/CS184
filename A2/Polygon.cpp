@@ -44,5 +44,5 @@ void Polygon::print(){
 
 
 Vector3 Polygon::getNormalAtPoint(Point pnt){
-	return Vector3();
+	return this->mostRecentHitTriangle.getNormalAtPoint(pnt);
 }

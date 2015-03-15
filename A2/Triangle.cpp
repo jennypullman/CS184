@@ -105,6 +105,6 @@ void Triangle::print(){
 	std::cout << ")\n";
 }
 Vector3 Triangle::getNormalAtPoint(Point pnt){
-
+	// TODO may want to get normal by interpolation of normal's at corners
 	return norm;
 }
