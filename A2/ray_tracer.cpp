@@ -707,7 +707,7 @@ void follow_ray(Ray start_ray, Color clr, int recursiveDepth){
       for (Shape shape : shapes) {
         float hitTime = shape.hit(curRay);
         if (minHit < 0.0 || (hitTime >= 0.0 && hitTime < minHit)){
-          hitTime = minHit;
+          minHit = hitTime;
           hitShape = shape;
         }
       }
@@ -723,7 +723,7 @@ void follow_ray(Ray start_ray, Color clr, int recursiveDepth){
         // TODO calc normal and view vectors
         Vector3 normal, view;
         normal = Vector3(0.0, 0.0, 0.0);
-        view = Vector3(0.0, 0.0, 0.0);
+        view = Vector3(curRay.getDirectionX(), curRay.getDirectionY(), curRay.getDirectionZ());
         lightColor = light.getShadingOnObject(hitShape.getMaterial(),hitPoint, normal, view);
         curColor.update_r(alpha*(curColor.get_r()+lightColor.get_r()));
         curColor.update_g(alpha*(curColor.get_g()+lightColor.get_g()));
@@ -746,7 +746,9 @@ int do_ray_tracing() {
   for (int i = 0; i < numPixels; i++){
     //TO DO (lauren?)
     //get correct point through viewplane
-    Ray viewRay = Ray();
+    Point viewPoint = viewplane.getPixelCoords(i);
+    // TODO semantics of ray definition
+    Ray viewRay = Ray(viewPoint.getX(), viewPoint.getY(), viewPoint.getZ(), viewPoint.getX()-camera.getX(), viewPoint.getY()-camera.getY(), viewPoint.getZ()-camera.getZ());
 
     //init Color
     Color startColor = Color();

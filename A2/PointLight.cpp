@@ -5,7 +5,7 @@ PointLight::PointLight(){
 	activated = false;
 }
 
-PointLight::PointLight(float x, float y, float z, float r, float g, float b, float falloff){
+PointLight::PointLight(float x, float y, float z, float r, float g, float b, int falloff){
 	this->x = x;
 	this->y = y;
 	this->z = z;
