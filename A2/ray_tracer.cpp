@@ -722,12 +722,13 @@ void follow_ray(Ray start_ray, Color clr, int recursiveDepth){
   Point hitPoint;
   Shape hitShape;
   Color curColor = clr;
+  float epsilon = 0.0001; // don't want to capture ray's intersection with it's starting point
   if (shapes.size() > 0){
     for (int i = 0; i < recursiveDepth; i ++){
       //get hittime, shape, and point
       for (Shape shape : shapes) {
         float hitTime = shape.hit(curRay);
-        if (minHit < 0.0 || (hitTime >= 0.0 && hitTime < minHit)){
+        if (minHit < epsilon || (hitTime >= 0.0 && hitTime < minHit)){
           minHit = hitTime;
           hitShape = shape;
         }
@@ -740,18 +741,20 @@ void follow_ray(Ray start_ray, Color clr, int recursiveDepth){
 
       //get color of shape
       Color lightColor;
+      Vector3 normal, view;
+      normal = hitShape.getNormalAtPoint(hitPoint);
+      view = Vector3(curRay.getDirectionX(), curRay.getDirectionY(), curRay.getDirectionZ());
       for (Light light : lights) {
-        // TODO calc normal and view vectors
-        Vector3 normal, view;
-        normal = Vector3(0.0, 0.0, 0.0);
-        view = Vector3(curRay.getDirectionX(), curRay.getDirectionY(), curRay.getDirectionZ());
+        // DONE calc normal and view vectors
         lightColor = light.getShadingOnObject(hitShape.getMaterial(),hitPoint, normal, view);
         curColor.update_r(alpha*(curColor.get_r()+lightColor.get_r()));
         curColor.update_g(alpha*(curColor.get_g()+lightColor.get_g()));
         curColor.update_b(alpha*(curColor.get_b()+lightColor.get_b()));        
       }
-      //TO DO (lauren?)-->need the reflection ray
-      curRay = Ray();
+      //DONE (lauren?)-->need the reflection ray
+      Vector3 dir = Vector3::subtract(Vector3::scalarMultiply(normal, 2.0), view);
+      dir.normalize();
+      curRay = Ray(hitPoint.getX(), hitPoint.getY(), hitPoint.getZ(), dir.getX(), dir.getY(), dir.getZ());
     }
   }
 }
@@ -764,6 +767,9 @@ int do_ray_tracing() {
     // store color in image
   // return 0 if loop finishes correctly
   int numPixels = image.getNumPixels();
+
+  std::cout << "START pixel loop" << std::endl;
+  std::cout << "num shapes: " << shapes.size() << std::endl;
   for (int i = 0; i < numPixels; i++){
     //TO DO (lauren?)
     //get correct point through viewplane
@@ -777,9 +783,13 @@ int do_ray_tracing() {
     //call follow_ray with 5 as recursive depth
     follow_ray(viewRay, startColor, 5);
 
-    //TO DO lauren
+    // DONE lauren
     //add color to image object
+    image.add_Color(i, startColor);
   }
+  std::cout << "END pixel loop" << std::endl;
+
+  std::cout << "START print to file" << std::endl;
   char fileName[] = {'t','e','s','t','I','m','g','.','p','n','g', '\0'};
   return image.printToFile(fileName);
 }
@@ -788,19 +798,16 @@ int do_ray_tracing() {
 // the usual stuff, nothing exciting here
 //****************************************************
 int main(int argc, char *argv[]) {
-  runTests();
+  // std::cout << "Hello World!";
+  // runTests();
 
-
-  std::cout << "Hello World!";
+  std::cout << "START processArgs" << std::endl;
   processArgs(argc, argv);
+  std::cout << "END processArgs" << std::endl;
 
-
-  //handle input (making objects as we go)-->keep list of objects
-  //create camera, viewplane, and image object
-  //for each pixel on viewplane, make ray between camera and viewplane.
-  //with above ray, call our "recursive" function-->returns color
-  //add color to image object
-  //finally, print image
+  std::cout << "START do_ray_tracing" << std::endl;
+  int success = do_ray_tracing();
+  std::cout << "END do_ray_tracing: " << success << std::endl;
 
   return 0;
 }
