@@ -156,6 +156,37 @@ Color dirLightShadingTest() {
   return clr;
 }
 
+Color ambLightShadingTest() {
+  // Material mat = Material(1.0, 0.25, 0.5, 
+  //   1.0, 1.0, 0.0, 1.0, 1.0, 1.0, 2,
+  //   0.0, 0.0, 0.0);
+
+  // Point pnt = Point(0.0, 1.0, 0.0);
+  // Vector3 norm = Vector3(0.0, 1.0, 0.0);
+
+  // AmbientLight light = AmbientLight(1.0, 1.0, 1.0);
+
+  // Color clr = light.getShadingOnObject(mat, pnt, norm, norm);
+
+  // EXPECT R: 1, G: 0.25, B: 0.5
+
+
+  Material mat = Material(1.0, 0.25, 0.5, 
+    1.0, 1.0, 0.0, 1.0, 1.0, 1.0, 2,
+    0.0, 0.0, 0.0);
+
+  Point pnt = Point(0.0, 1.0, 0.0);
+  Vector3 norm = Vector3(0.0, 1.0, 0.0);
+
+  AmbientLight light = AmbientLight(0.0, 1.0, 0.5);
+
+  Color clr = light.getShadingOnObject(mat, pnt, norm, norm);
+
+  // EXPECT R: 0, G: 0.25, B: 0.25
+
+  return clr;
+}
+
 void runTests(){
   std::cout << "Running Test 1:  printToFile test" << std::endl;
   Image testImg = Image(12,10);
@@ -200,6 +231,10 @@ void runTests(){
   std::cout << "Running Test 4:  DirectedLight shading test" << std::endl;
   clr = dirLightShadingTest();
   std::cout << "End Test 4:  R: "<< clr.get_r() << ", G: " << clr.get_g() << ", B: " << clr.get_b() << std::endl;
+
+  std::cout << "Running Test 5:  AmbientLight shading test" << std::endl;
+  clr = ambLightShadingTest();
+  std::cout << "End Test 5:  R: "<< clr.get_r() << ", G: " << clr.get_g() << ", B: " << clr.get_b() << std::endl;
 
 }
 
