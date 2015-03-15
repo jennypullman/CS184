@@ -190,8 +190,7 @@ Color ambLightShadingTest() {
   return clr;
 }
 
-void runTests(){
-  std::cout << "Running Test 1:  printToFile test" << std::endl;
+int printToFileTest() {
   Image testImg = Image(12,10);
   Color testR = Color(1.0,0.0,0.0);
   Color testY = Color(1.0,1.0,0.0);
@@ -220,12 +219,29 @@ void runTests(){
   }
   char fileName[] = {'t','e','s','t','I','m','g','.','p','n','g', '\0'};
   int code = testImg.printToFile(fileName);
+
+  return code;
+}
+
+Vector3 triangleNormTest() {
+  // Triangle tri = Triangle(Material(), Vertex(0.0, 1.0, 2.0), Vertex(1.0, 2.0, 3.0), Vertex(0.25, 0.5, 0.75));
+  // EXPECT X: -0.75, Y: 1.5, Z: -0.75
+
+  Triangle tri = Triangle(Material(), Vertex(0.0, 1.0, 2.0), Vertex(1.0, 2.0, 3.0), Vertex(0.25, 0.5, 0.75), Vector3(), Vector3(), Vector3());
+  // EXPECT X: -0.75, Y: 1.5, Z: -0.75
+
+  return tri.getNormalAtPoint(Point());
+
+}
+
+void runTests(){
+  std::cout << "Running Test 1:  printToFile test" << std::endl;
+  int code = printToFileTest();
   std::cout << "End Test 1:  code = "<< code << std::endl;
   
+  std::cout << "Running Test 2:  Triangle Hit test" << std::endl;
   triangleHitTest();
-  std::cout << "Number of failed tests: ";
-  std::cout << numFailedTests;
-  std::cout << "\n";
+  std::cout << "End Test 2:  Number of failed tests: " << numFailedTests << "\n";
 
   std::cout << "Running Test 3:  PointLight shading test" << std::endl;
   Color clr = pointLightShadingTest();
@@ -238,6 +254,11 @@ void runTests(){
   std::cout << "Running Test 5:  AmbientLight shading test" << std::endl;
   clr = ambLightShadingTest();
   std::cout << "End Test 5:  R: "<< clr.get_r() << ", G: " << clr.get_g() << ", B: " << clr.get_b() << std::endl;
+
+  std::cout << "Running Test 6:  Triangle Normal test" << std::endl;
+  Vector3 norm = triangleNormTest();
+  std::cout << "End Test 6:  X: "<< norm.getX() << ", Y: " << norm.getY() << ", Z: " << norm.getZ() << std::endl;
+
 
 }
 

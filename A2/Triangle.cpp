@@ -1,4 +1,5 @@
 #include "Triangle.h"
+#include <stdlib.h>
 
 Triangle::Triangle() {
 };
@@ -7,6 +8,10 @@ Triangle::Triangle(Material mat, Vertex vert1, Vertex vert2, Vertex vert3){
 	this->vert1 = vert1;
 	this->vert2 = vert2;
 	this->vert3 = vert3;
+
+	Vector3 vec1 = Vector3(vert2.getX()-vert1.getX(), vert2.getY()-vert1.getY(), vert2.getZ()-vert1.getZ());
+	Vector3 vec2 = Vector3(vert3.getX()-vert1.getX(), vert3.getY()-vert1.getY(), vert3.getZ()-vert1.getZ());
+	this->norm = Vector3::cross(vec1, vec2);
 };
 
 Triangle::Triangle(Material mat, Vertex vert1, Vertex vert2, Vertex vert3, Vector3 norm1, Vector3 norm2, Vector3 norm3){
@@ -17,6 +22,10 @@ Triangle::Triangle(Material mat, Vertex vert1, Vertex vert2, Vertex vert3, Vecto
 	this->norm1 = norm1;
 	this->norm2 = norm2;
 	this->norm3 = norm3;
+
+	Vector3 vec1 = Vector3(vert2.getX()-vert1.getX(), vert2.getY()-vert1.getY(), vert2.getZ()-vert1.getZ());
+	Vector3 vec2 = Vector3(vert3.getX()-vert1.getX(), vert3.getY()-vert1.getY(), vert3.getZ()-vert1.getZ());
+	this->norm = Vector3::cross(vec1, vec2);
 };
 //instance methods
 Material Triangle::getMaterial(){
@@ -96,5 +105,6 @@ void Triangle::print(){
 	std::cout << ")\n";
 }
 Vector3 Triangle::getNormalAtPoint(Point pnt){
-	return Vector3();
+
+	return norm;
 }

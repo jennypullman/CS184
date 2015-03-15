@@ -16,6 +16,6 @@ public:
 private:
 	Material material;
 	Vertex vert1, vert2, vert3;
-	Vector3 norm1, norm2, norm3;
+	Vector3 norm1, norm2, norm3, norm;
 	Point mostRecentHitPoint;
 };
