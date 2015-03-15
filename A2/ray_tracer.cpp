@@ -43,6 +43,9 @@ list<Triangle> triangles;
 list<Polygon> polygons;
 list<Sphere> spheres;
 list<Shape> shapes;
+int pixelsV = 100; // Default value, TODO allow to be overridden by arguments
+int pixelsH = 100; // Default value, TODO allow to be overridden by arguments
+ViewPlane viewplane;
 Image image;
 Camera camera;
 
@@ -441,8 +444,10 @@ void handleCam(string camInfo){
   float ex, ey, ez, llx, lly, llz, lrx, lry, lrz, ulx, uly, ulz, urx, ury, urz;
   float args[15];
   handleArgs(15, args, camInfo);
-  //TO DO Lauren (image and viewplane)
+  // DONE Lauren (image and viewplane)
   camera = Camera(args[0], args[1], args[2]);
+  image = Image(pixelsV, pixelsH);
+  viewplane = ViewPlane(llx, lly, llz, lrx, lry, lrz, ulx, uly, ulz, urx, ury, urz, pixelsH, pixelsV);
 }
 
 /*
