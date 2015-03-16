@@ -1,4 +1,5 @@
 #include "Shape.h"
+#include <stdlib.h>
 
 Shape::Shape(){
 
@@ -7,7 +8,9 @@ Shape::Shape(){
 Material Shape::getMaterial(){
 	return Material();
 }
+
 float Shape::hit(Ray ray){
+	// std::cout << "shape:hit" << std::endl;
 	return 0.0;
 }
 

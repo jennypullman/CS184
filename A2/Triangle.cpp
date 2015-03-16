@@ -9,8 +9,8 @@ Triangle::Triangle(Material mat, Vertex vert1, Vertex vert2, Vertex vert3){
 	this->vert2 = vert2;
 	this->vert3 = vert3;
 
-	Vector3 vec1 = Vector3(vert2.getX()-vert1.getX(), vert2.getY()-vert1.getY(), vert2.getZ()-vert1.getZ());
-	Vector3 vec2 = Vector3(vert3.getX()-vert1.getX(), vert3.getY()-vert1.getY(), vert3.getZ()-vert1.getZ());
+	Vector3 vec1 = Vector3(vert1.getX()-vert2.getX(), vert1.getY()-vert2.getY(), vert1.getZ()-vert2.getZ());
+	Vector3 vec2 = Vector3(vert3.getX()-vert2.getX(), vert3.getY()-vert2.getY(), vert3.getZ()-vert2.getZ());
 	this->norm = Vector3::cross(vec1, vec2);
 };
 
@@ -23,8 +23,8 @@ Triangle::Triangle(Material mat, Vertex vert1, Vertex vert2, Vertex vert3, Vecto
 	this->norm2 = norm2;
 	this->norm3 = norm3;
 
-	Vector3 vec1 = Vector3(vert2.getX()-vert1.getX(), vert2.getY()-vert1.getY(), vert2.getZ()-vert1.getZ());
-	Vector3 vec2 = Vector3(vert3.getX()-vert1.getX(), vert3.getY()-vert1.getY(), vert3.getZ()-vert1.getZ());
+	Vector3 vec1 = Vector3(vert1.getX()-vert2.getX(), vert1.getY()-vert2.getY(), vert1.getZ()-vert2.getZ());
+	Vector3 vec2 = Vector3(vert3.getX()-vert2.getX(), vert3.getY()-vert2.getY(), vert3.getZ()-vert2.getZ());
 	this->norm = Vector3::cross(vec1, vec2);
 };
 //instance methods
@@ -33,17 +33,26 @@ Material Triangle::getMaterial(){
 };
 float Triangle::hit(Ray ray){
 
-	Vector3 v1 = Vector3(vert1.getX() - vert2.getX(), vert1.getY() - vert2.getY(), vert1.getZ() - vert2.getZ());
-	Vector3 v2 = Vector3(vert3.getX() - vert2.getX(), vert3.getY() - vert2.getY(), vert3.getZ() - vert2.getZ());
-	Vector3 n = Vector3::cross(v1, v2);
+	// Vector3 v1 = Vector3(vert1.getX() - vert2.getX(), vert1.getY() - vert2.getY(), vert1.getZ() - vert2.getZ());
+	// Vector3 v2 = Vector3(vert3.getX() - vert2.getX(), vert3.getY() - vert2.getY(), vert3.getZ() - vert2.getZ());
+	// Vector3 v1 = Vector3(vert2.getX() - vert1.getX(), vert2.getY() - vert1.getY(), vert2.getZ() - vert1.getZ());
+	// Vector3 v2 = Vector3(vert3.getX() - vert1.getX(), vert3.getY() - vert1.getY(), vert3.getZ() - vert1.getZ());
+	// Vector3 n = Vector3::cross(v1, v2);
+	//Lauren add
+	
+	// std::cout << "Triangle::hit " << std::endl;
+	Vector3 n = norm;
+	n.normalize();
 	float denom = ray.getDirectionX()*n.getX() + ray.getDirectionY()*n.getY() + ray.getDirectionZ()*n.getZ();
-	if (denom == 0){
+	// std::cout << "denom: " << denom << std::endl;
+	if (denom == 0){ // ray parallel to surface. no hit.
 		std::cout << "denom was 0, first time";
 		return -1.0; //no hit
 	}
 	float t = (vert1.getX()*n.getX() + vert1.getY()*n.getY() + vert1.getZ()*n.getZ() - 
 		(ray.getStartX()*n.getX() + ray.getStartY()*n.getY() + ray.getStartZ()*n.getZ())) /
 		denom;
+	// std::cout << "t: " << t << std::endl;
 	if (t < 0){
 		return t; //no hit
 	}

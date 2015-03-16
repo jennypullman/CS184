@@ -1,4 +1,5 @@
 #include "Light.h"
+#include <stdlib.h>
 
 Light::Light(){
 
@@ -24,5 +25,6 @@ void Light::scaleLocation(float scalar){
 }
 
 Color Light::getShadingOnObject(Material shp_mat, Point pnt, Vector3 normal, Vector3 view){
+	// std::cout << "Light::getShadingOnObject" << std::endl;
 	return Color();
 }

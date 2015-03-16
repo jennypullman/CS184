@@ -1,4 +1,5 @@
 #include "ViewPlane.h"
+#include <iostream>
 
 ViewPlane::ViewPlane(){
 
@@ -17,6 +18,12 @@ ViewPlane::ViewPlane(float llx, float lly, float llz, float lrx, float lry, floa
 	this->urx = urx;
 	this->ury = ury;
 	this->urz = urz;
+
+	// std::cout << "llx: " << llx << ", lly: " << lly << ", llz: " << llz << std::endl;
+	// std::cout << "lrx: " << lrx << ", lry: " << lry << ", lrz: " << lrz << std::endl;
+	// std::cout << "ulx: " << ulx << ", uly: " << uly << ", ulz: " << ulz << std::endl;
+	// std::cout << "urx: " << urx << ", ury: " << ury << ", urz: " << urz << std::endl;
+
 	this->pixelsHoriz = pixelsHoriz;
 	this->pixelsVert = pixelsVert;
 	this->numPixels = pixelsVert*pixelsHoriz;
@@ -74,13 +81,16 @@ int ViewPlane::getNumPixels(){
 Point ViewPlane::getPixelCoords(int numPixel){
 	int pixY = (int) numPixel/pixelsHoriz;
 	int pixX = numPixel%pixelsHoriz;
+    // std::cout << "pixY: " << pixY << ", pixX: " << pixX << "\n";
 
-	float u = pixX/pixelsHoriz;
-	float v = pixY/pixelsVert;
+	float u = (float) pixX/pixelsHoriz;
+	float v = (float) pixY/pixelsVert;
+    // std::cout << "u: " << u << ", v: " << v << "\n";
 
 	float px = u*(v*llx+(1-v)*ulx) + (1-u)*(v*lrx+(1-v)*urx);
 	float py = u*(v*lly+(1-v)*uly) + (1-u)*(v*lry+(1-v)*ury);
 	float pz = u*(v*llz+(1-v)*ulz) + (1-u)*(v*lrz+(1-v)*urz);
+    // std::cout << "px: " << px << ", py: " << py << ", pz: " << pz << "\n";
 
 	return Point(px,py,pz);
 }

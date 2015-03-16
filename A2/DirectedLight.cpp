@@ -1,4 +1,5 @@
 #include "DirectedLight.h"
+#include <stdlib.h>
 
 DirectedLight::DirectedLight(){
 	x, y, z, r, g, b = 0.0;
@@ -65,9 +66,11 @@ Color DirectedLight::getShadingOnObject(Material shp_mat, Point pnt, Vector3 nor
 		//calculate light vector
 		Vector3 lightVector = getLightVector(pnt.getX(), pnt.getY(), pnt.getZ());
 		lightVector.normalize();
+      	// std::cout << "lightVector X: " << lightVector.getX() << ", Y: " << lightVector.getY() << ", Z:" << lightVector.getZ() << std::endl;
 		//calculate reflection vector
 		Vector3 reflectVector = getReflectionVector(normal);
 		reflectVector.normalize();
+      	// std::cout << "reflectVector X: " << reflectVector.getX() << ", Y: " << reflectVector.getY() << ", Z:" << reflectVector.getZ() << std::endl;
 		
 		//for red:
 		//DIFFUSE COMPONENT
@@ -77,6 +80,7 @@ Color DirectedLight::getShadingOnObject(Material shp_mat, Point pnt, Vector3 nor
 		float specular = shp_mat.getKsr() * r * pow(max(Vector3::dot(reflectVector, viewVector), 0.f), shp_mat.getKsp());
 		//AMBIENT COMPONENT
 		float ambient = shp_mat.getKar() * r;
+      	// std::cout << "R: diffuse: " << diffuse << ", specular: " << specular << ", ambient:" << ambient << std::endl;
 		color.update_r(diffuse + specular + ambient);
 
 		//for green:
@@ -87,6 +91,7 @@ Color DirectedLight::getShadingOnObject(Material shp_mat, Point pnt, Vector3 nor
 		specular = shp_mat.getKsg() * g * pow(max(Vector3::dot(reflectVector, viewVector), 0.f), shp_mat.getKsp());
 		//AMBIENT COMPONENT
 		ambient = shp_mat.getKag() * g;
+		// std::cout << "G: diffuse: " << diffuse << ", specular: " << specular << ", ambient:" << ambient << std::endl;
 		color.update_g(diffuse + specular + ambient);
 
 		//for blue:
@@ -97,6 +102,7 @@ Color DirectedLight::getShadingOnObject(Material shp_mat, Point pnt, Vector3 nor
 		specular = shp_mat.getKsb() * b * pow(max(Vector3::dot(reflectVector, viewVector), 0.f), shp_mat.getKsp());
 		//AMBIENT COMPONENT
 		ambient = shp_mat.getKab() * b;
+		// std::cout << "B: diffuse: " << diffuse << ", specular: " << specular << ", ambient:" << ambient << std::endl;
 		color.update_b(diffuse + specular + ambient);
 		
 	}
@@ -104,6 +110,4 @@ Color DirectedLight::getShadingOnObject(Material shp_mat, Point pnt, Vector3 nor
 	// TODO ? light.scaleLocation(1/(min(viewport.w, viewport.h)*0.9 / 2.0));
 
 	return color;
-
-	return Color();
 }

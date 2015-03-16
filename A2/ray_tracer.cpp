@@ -42,9 +42,11 @@ Transformation curTransform;
 list<Triangle> triangles;
 list<Polygon> polygons;
 list<Sphere> spheres;
-list<Shape> shapes;
+list<Shape*> shapes;
 int pixelsV = 100; // Default value, TODO allow to be overridden by arguments
 int pixelsH = 100; // Default value, TODO allow to be overridden by arguments
+// int pixelsV = 5; // Default value, TODO allow to be overridden by arguments
+// int pixelsH = 5; // Default value, TODO allow to be overridden by arguments
 ViewPlane viewplane;
 Image image;
 Camera camera;
@@ -466,6 +468,17 @@ void handleCam(string camInfo){
   float args[15];
   handleArgs(15, args, camInfo);
   // DONE Lauren (image and viewplane)
+  ex = args[0], ey = args[1], ez = args[2];
+  llx = args[3], lly = args[4], llz = args[5];
+  lrx = args[6], lry = args[7], lrz = args[8];
+  ulx = args[9], uly = args[10], ulz = args[11];
+  urx = args[12], ury = args[13], urz = args[14];
+
+  // std::cout << "llx: " << llx << ", lly: " << lly << ", llz: " << llz << std::endl;
+  // std::cout << "lrx: " << lrx << ", lry: " << lry << ", lrz: " << lrz << std::endl;
+  // std::cout << "ulx: " << ulx << ", uly: " << uly << ", ulz: " << ulz << std::endl;
+  // std::cout << "urx: " << urx << ", ury: " << ury << ", urz: " << urz << std::endl;
+
   camera = Camera(args[0], args[1], args[2]);
   image = Image(pixelsV, pixelsH);
   viewplane = ViewPlane(llx, lly, llz, lrx, lry, lrz, ulx, uly, ulz, urx, ury, urz, pixelsH, pixelsV);
@@ -483,7 +496,7 @@ void handleSph(string sphInfo){
   center = Transformation::transformVertex(curTransform, center);
   Sphere sphere = Sphere(curMaterial, center.getX(), center.getY(), center.getZ(), args[3]);
   spheres.push_back(sphere);
-  shapes.push_back(sphere);
+  shapes.push_back(&sphere);
 }
 
 /*
@@ -503,7 +516,7 @@ void handleTri(string triInfo){
   }
   Triangle tri = Triangle(curMaterial, vert1, vert2, vert3);
   triangles.push_back(tri);
-  shapes.push_back(tri);
+  shapes.push_back(&tri);
 }
 
 /*
@@ -516,7 +529,7 @@ void handleObj(string objInfo){
   std::cout << "\n";
   Polygon polygon = readObj(arg);
   polygons.push_back(polygon);
-  shapes.push_back(polygon);
+  shapes.push_back(&polygon);
   //polygon.print();
 }
 
@@ -702,7 +715,7 @@ void processArgs(int argc, char *argv[]) {
   }; 
 }
 
-void follow_ray(Ray start_ray, Color clr, int recursiveDepth){
+Color follow_ray(Ray start_ray, int recursiveDepth){
   // Ray curr_ray = start_ray
   // initial total_dist
   // initial alpha = 1, the reflection multiplier
@@ -715,25 +728,82 @@ void follow_ray(Ray start_ray, Color clr, int recursiveDepth){
     //determine reflecion ray (hit point in direction of reflection vector)
     //store reflection ray as curr_ray
   Ray curRay = start_ray;
+
   float totalDist = 0.0;
   float alpha = 1.0;
-  Shape curShape;
+
+  float epsilon = 0.0001; // don't want to capture ray's intersection with it's starting point
+
   float minHit = -1.0;
   Point hitPoint;
-  Shape hitShape;
-  Color curColor = clr;
-  float epsilon = 0.0001; // don't want to capture ray's intersection with it's starting point
+  Triangle hitTri;
+  Polygon hitPoly;
+  Sphere hitSphere;
+
+  Color curColor = Color();
+  bool use_tri, use_poly, use_sphere = false;
+
   if (shapes.size() > 0){
     for (int i = 0; i < recursiveDepth; i ++){
+      // std::cout << "\n follow i: " << i << '\n';
       //get hittime, shape, and point
-      for (Shape shape : shapes) {
-        float hitTime = shape.hit(curRay);
+      float hitTime = 0.0;
+      for (Triangle triangle : triangles) { // Check all triangles
+        // std::cout << "Shape type: " << typeid(triangle).name() << '\n';
+        hitTime = triangle.hit(curRay);
+        // std::cout << "hitTime: " << hitTime << std::endl;
         if (minHit < epsilon || (hitTime >= 0.0 && hitTime < minHit)){
           minHit = hitTime;
-          hitShape = shape;
+          hitTri = triangle;
+          use_tri = true;
         }
       }
-      hitPoint = hitShape.getMostRecentHitPoint();
+      for (Polygon poly : polygons) { // Check all polygons
+        // std::cout << "Shape type: " << typeid(poly).name() << '\n';
+        hitTime = poly.hit(curRay);
+        // std::cout << "hitTime: " << hitTime << std::endl;
+        if (minHit < epsilon || (hitTime >= 0.0 && hitTime < minHit)){
+          minHit = hitTime;
+          hitPoly = poly;
+          use_poly = true;
+        }
+      }
+      for (Sphere sphere : spheres) { // Check all spheres
+        // std::cout << "Shape type: " << typeid(sphere).name() << '\n';
+        hitTime = sphere.hit(curRay);
+        // std::cout << "hitTime: " << hitTime << std::endl;
+        if (minHit < epsilon || (hitTime >= 0.0 && hitTime < minHit)){
+          minHit = hitTime;
+          hitSphere = sphere;
+          use_sphere = true;
+        }
+      }
+
+      if (minHit < epsilon) {
+        break; // No real hit
+      }
+
+      // std::cout << "minHit: " << minHit << ", hitShape: " << &hitShape << std::endl;
+      Vector3 normal, view;
+      Material material;
+      if (use_tri){
+        hitPoint = hitTri.getMostRecentHitPoint();
+        normal = hitTri.getNormalAtPoint(hitPoint);
+        material = hitTri.getMaterial();
+
+      } else if (use_poly) {
+        hitPoint = hitPoly.getMostRecentHitPoint();
+        normal = hitPoly.getNormalAtPoint(hitPoint);
+        material = hitPoly.getMaterial();
+      } else if (use_sphere) {
+        hitPoint = hitSphere.getMostRecentHitPoint();
+        normal = hitSphere.getNormalAtPoint(hitPoint);
+        material = hitSphere.getMaterial();
+      }
+      view = Vector3(-curRay.getDirectionX(), -curRay.getDirectionY(), -curRay.getDirectionZ());
+
+      // std::cout << "hitPoint X: " << hitPoint.getX() << ", Y: " << hitPoint.getY() << ", Z:" << hitPoint.getZ() << std::endl;
+      // std::cout << "normal X: " << normal.getX() << ", Y: " << normal.getY() << ", Z:" << normal.getZ() << std::endl;
 
       //update distance
       totalDist += sqrt(pow(hitPoint.getX()-curRay.getStartX(),2)+pow(hitPoint.getY()-curRay.getStartY(),2)+
@@ -741,22 +811,48 @@ void follow_ray(Ray start_ray, Color clr, int recursiveDepth){
 
       //get color of shape
       Color lightColor;
-      Vector3 normal, view;
-      normal = hitShape.getNormalAtPoint(hitPoint);
-      view = Vector3(curRay.getDirectionX(), curRay.getDirectionY(), curRay.getDirectionZ());
-      for (Light light : lights) {
+      for (DirectedLight light : directedLights) {
         // DONE calc normal and view vectors
-        lightColor = light.getShadingOnObject(hitShape.getMaterial(),hitPoint, normal, view);
+        lightColor = light.getShadingOnObject(material,hitPoint, normal, view);
+        std::cout << "color R: " << lightColor.get_r() << ", G: " << lightColor.get_g() << ", G:" << lightColor.get_b() << std::endl;
+
+        // lightColor = light.getShadingOnObject(hitShape.getMaterial(),hitPoint, normal, view);
+        curColor.update_r(alpha*(curColor.get_r()+lightColor.get_r()));
+        curColor.update_g(alpha*(curColor.get_g()+lightColor.get_g()));
+        curColor.update_b(alpha*(curColor.get_b()+lightColor.get_b()));        
+      }
+
+      for (PointLight light : pointLights) {
+        // DONE calc normal and view vectors
+        lightColor = light.getShadingOnObject(material,hitPoint, normal, view);
+
+        // lightColor = light.getShadingOnObject(hitShape.getMaterial(),hitPoint, normal, view);
+        curColor.update_r(alpha*(curColor.get_r()+lightColor.get_r()));
+        curColor.update_g(alpha*(curColor.get_g()+lightColor.get_g()));
+        curColor.update_b(alpha*(curColor.get_b()+lightColor.get_b()));        
+      }
+
+      for (AmbientLight light : ambientLights) {
+        // DONE calc normal and view vectors
+        lightColor = light.getShadingOnObject(material,hitPoint, normal, view);
+
+        // lightColor = light.getShadingOnObject(hitShape.getMaterial(),hitPoint, normal, view);
         curColor.update_r(alpha*(curColor.get_r()+lightColor.get_r()));
         curColor.update_g(alpha*(curColor.get_g()+lightColor.get_g()));
         curColor.update_b(alpha*(curColor.get_b()+lightColor.get_b()));        
       }
       //DONE (lauren?)-->need the reflection ray
+      // get direction of reflection ray
       Vector3 dir = Vector3::subtract(Vector3::scalarMultiply(normal, 2.0), view);
       dir.normalize();
       curRay = Ray(hitPoint.getX(), hitPoint.getY(), hitPoint.getZ(), dir.getX(), dir.getY(), dir.getZ());
+
+      // TODO TO DO update alpha
+      // TODO TO DO use totalDist info and falloff
     }
   }
+  // std::cout << "cur_color R: " << curColor.get_r() << ", G: " << curColor.get_g() << ", G:" << curColor.get_b() << std::endl;
+  return curColor;
 }
 
 int do_ray_tracing() {
@@ -768,28 +864,35 @@ int do_ray_tracing() {
   // return 0 if loop finishes correctly
   int numPixels = image.getNumPixels();
 
-  std::cout << "START pixel loop" << std::endl;
-  std::cout << "num shapes: " << shapes.size() << std::endl;
+  // std::cout << "START pixel loop" << std::endl;
+  // std::cout << "num shapes: " << shapes.size() << std::endl;
+  // std::cout << "num lights: " << lights.size() << std::endl;
+  
+  // std::cout << "Shape: " << typeid(shape).name() << '\n';
+
   for (int i = 0; i < numPixels; i++){
+    // std::cout << "pixelnum: " << i << std::endl;
+
     //TO DO (lauren?)
     //get correct point through viewplane
     Point viewPoint = viewplane.getPixelCoords(i);
+    // std::cout << "viewPoint X: " << viewPoint.getX() << ", Y:" << viewPoint.getY() << ", Z:" << viewPoint.getZ() << std::endl;
+    
     // TODO semantics of ray definition
     Ray viewRay = Ray(viewPoint.getX(), viewPoint.getY(), viewPoint.getZ(), viewPoint.getX()-camera.getX(), viewPoint.getY()-camera.getY(), viewPoint.getZ()-camera.getZ());
-
-    //init Color
-    Color startColor = Color();
+    // std::cout << "viewRay X: " << viewRay.getDirectionX() << ", Y:" << viewRay.getDirectionY() << ", Z:" << viewRay.getDirectionZ() << std::endl;
 
     //call follow_ray with 5 as recursive depth
-    follow_ray(viewRay, startColor, 5);
-
+    Color pixelColor = follow_ray(viewRay, 5);
+    // std::cout << "startColor R: " << startColor.get_r() << ", G: " << startColor.get_g() << ", G:" << startColor.get_b() << std::endl;
+    
     // DONE lauren
     //add color to image object
-    image.add_Color(i, startColor);
+    image.add_Color(i, pixelColor);
   }
-  std::cout << "END pixel loop" << std::endl;
+  // std::cout << "END pixel loop" << std::endl;
 
-  std::cout << "START print to file" << std::endl;
+  // std::cout << "START print to file" << std::endl;
   char fileName[] = {'t','e','s','t','I','m','g','.','p','n','g', '\0'};
   return image.printToFile(fileName);
 }
