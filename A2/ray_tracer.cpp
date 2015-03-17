@@ -44,8 +44,8 @@ list<Polygon> polygons;
 //list<Sphere> spheres;
 list<Ellipsoid> ellipsoids;
 list<Shape*> shapes;
-int pixelsV = 1000; // Default value, TODO allow to be overridden by arguments
-int pixelsH = 1000; // Default value, TODO allow to be overridden by arguments
+int pixelsV = 10; // Default value, TODO allow to be overridden by arguments
+int pixelsH = 10; // Default value, TODO allow to be overridden by arguments
 // int pixelsV = 5; // Default value, TODO allow to be overridden by arguments
 // int pixelsH = 5; // Default value, TODO allow to be overridden by arguments
 ViewPlane viewplane;
@@ -807,7 +807,7 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
   float totalDist = 0.0;
   float alphaR = 1.0, alphaG = 1.0, alphaB = 1.0;
 
-  float epsilon = 0.0001; // don't want to capture ray's intersection with it's starting point
+  float epsilon = 0.00001; // don't want to capture ray's intersection with it's starting point
 
   float minHit = -1.0;
   Point hitPoint;
@@ -855,6 +855,7 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
       }
 
       if (minHit < epsilon) {
+        // std::cout<<"No real hit"<<std::endl;
         break; // No real hit
       }
 
@@ -893,12 +894,15 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
 
         lightDir = light.getLightVector(hitPoint.getX(), hitPoint.getY(), hitPoint.getZ());
         if (use_tri && Vector3::dot(lightDir, hitTri.getNormalAtPoint(Point(), view)) < 0) { // light behind surface
+          std::cout<<"Light behind surface tri"<<std::endl;
           continue;
         }
         if (use_poly && Vector3::dot(lightDir, hitPoly.getNormalAtPoint(Point(), view)) < 0) { // light behind surface
+          std::cout<<"Light behind surface poly"<<std::endl;
           continue;
         }
         if (use_ellipsoid && Vector3::dot(lightDir, hitEllipsoid.getNormalAtPoint(Point())) < 0) { // light behind surface
+          std::cout<<"Light behind surface ellipse"<<std::endl;
           continue;
         }
 
@@ -934,7 +938,10 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
 
         // std::cout << "hit time: " << minHit << std::endl;
         // END COPIED CODE FROM ABOVE
-        if (minHit > epsilon && minHit <= 1.0) {
+        if (minHit > epsilon) {
+          std::cout<<"Object between light and surface, min hit: " << minHit <<std::endl;
+          std::cout<<"Light Ray Start X: " << lightRay.getStartX() << ", Y:" << lightRay.getStartY() << ", Z: " << lightRay.getStartZ() <<std::endl;
+          std::cout<<"Light Ray Direction X: " << lightRay.getDirectionX() << ", Y:" << lightRay.getDirectionY() << ", Z: " << lightRay.getDirectionZ() <<std::endl;
           continue;
         }
 
@@ -1064,7 +1071,7 @@ int do_ray_tracing() {
   // std::cout << "Shape: " << typeid(shape).name() << '\n';
 
   for (int i = 0; i < numPixels; i++){
-    // std::cout << "pixelnum: " << i << std::endl;
+    std::cout << "pixelnum: " << i << ": ";
 
     //TO DO (lauren?)
     //get correct point through viewplane
