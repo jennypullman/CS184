@@ -11,7 +11,7 @@ Triangle::Triangle(Material mat, Vertex vert1, Vertex vert2, Vertex vert3){
 
 	Vector3 vec1 = Vector3(vert1.getX()-vert2.getX(), vert1.getY()-vert2.getY(), vert1.getZ()-vert2.getZ());
 	Vector3 vec2 = Vector3(vert3.getX()-vert2.getX(), vert3.getY()-vert2.getY(), vert3.getZ()-vert2.getZ());
-	this->norm = Vector3::cross(vec1, vec2);
+	
 };
 
 Triangle::Triangle(Material mat, Vertex vert1, Vertex vert2, Vertex vert3, Vector3 norm1, Vector3 norm2, Vector3 norm3){
@@ -113,7 +113,10 @@ void Triangle::print(){
 	std::cout << this->vert3.getZ();
 	std::cout << ")\n";
 }
-Vector3 Triangle::getNormalAtPoint(Point pnt){
+Vector3 Triangle::getNormalAtPoint(Point pnt, Vector3 viewVect){
 	// TODO may want to get normal by interpolation of normal's at corners
-	return norm;
+	if (Vector3::dot(this->norm, viewVect) < 0){
+		this->norm = Vector3(-this->norm.getX(), -this->norm.getY(), -this->norm.getZ());
+	}
+	return this->norm;
 }
