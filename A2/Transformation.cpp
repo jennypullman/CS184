@@ -114,11 +114,11 @@ Vector3 Transformation::vectorMultiply(Transformation trans, Vector3 vec){
 	x = matr[0]*vec.getX()+matr[1]*vec.getY()+matr[2]*vec.getZ();
 	y = matr[4]*vec.getX()+matr[5]*vec.getY()+matr[6]*vec.getZ();
 	z = matr[8]*vec.getX()+matr[9]*vec.getY()+matr[10]*vec.getZ();
-	d = matr[12]*vec.getX()+matr[13]*vec.getY()+matr[14]*vec.getZ();
+	//d = matr[12]*vec.getX()+matr[13]*vec.getY()+matr[14]*vec.getZ();
 
-	x = x/d;
-	y = y/d;
-	z = z/d;
+	x = x;
+	y = y;
+	z = z;
 	return Vector3(x, y, z);
 }
 
