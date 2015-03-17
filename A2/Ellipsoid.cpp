@@ -44,10 +44,10 @@ float Ellipsoid::hit(Ray ray){
 	vect = Transformation::vectorMultiply(this->inverseTransformation, vect);
 	Ray transformedRay = Ray(vert.getX(), vert.getY(), vert.getZ(), 
 			vect.getX(), vect.getY(), vect.getZ());
-	this->inverseTransformation.print();
-	ray.print();
+	//this->inverseTransformation.print();
+	//ray.print();
 
-	transformedRay.print();
+	//transformedRay.print();
 	//check if hits sphere
 	float a, b, c;
 	a = transformedRay.getDirectionX()*transformedRay.getDirectionX()+
@@ -62,7 +62,7 @@ float Ellipsoid::hit(Ray ray){
 		2*(transformedRay.getStartX()*this->cx + transformedRay.getStartY()*this->cy + 
 		transformedRay.getStartZ()*this->cz) -
 		this->radius*this->radius;
-		
+	/*	
 	std::cout << "a = ";
 	std::cout << a;
 	std::cout << "\nb = ";
@@ -70,7 +70,7 @@ float Ellipsoid::hit(Ray ray){
 	std::cout << "\nc = ";
 	std::cout << c;
 	std::cout << "\n";
-
+	*/
 	float dividend = b*b - 4*a*c;
 	if (dividend < 0.0){
 		return -1.0;
@@ -112,9 +112,9 @@ float Ellipsoid::hit(Ray ray){
 		this->mostRecentHitPoint = Transformation::transformPoint(this->transformation, Point(hitx, hity, hitz));
 		return t1;
 	}
-	std::cout << transformedRay.getStartZ();
-	std::cout << transformedRay.getDirectionZ();
-	std::cout << "here\n\n\n\n\n\n\n\n";
+	//std::cout << transformedRay.getStartZ();
+	//std::cout << transformedRay.getDirectionZ();
+	//std::cout << "here\n\n\n\n\n\n\n\n";
 	hitx = transformedRay.getStartX() + t2*transformedRay.getDirectionX();
 	hity = transformedRay.getStartY() + t2*transformedRay.getDirectionY();
 	hitz = transformedRay.getStartZ() + t2*transformedRay.getDirectionZ();

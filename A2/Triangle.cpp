@@ -46,7 +46,7 @@ float Triangle::hit(Ray ray){
 	float denom = ray.getDirectionX()*n.getX() + ray.getDirectionY()*n.getY() + ray.getDirectionZ()*n.getZ();
 	// std::cout << "denom: " << denom << std::endl;
 	if (denom == 0){ // ray parallel to surface. no hit.
-		std::cout << "denom was 0, first time";
+		// std::cout << "denom was 0, first time";
 		return -1.0; //no hit
 	}
 	float t = (vert1.getX()*n.getX() + vert1.getY()*n.getY() + vert1.getZ()*n.getZ() - 
@@ -70,18 +70,18 @@ float Triangle::hit(Ray ray){
 	denom = Vector3::dot(vec2, vec3)*Vector3::dot(vec2, vec3)-Vector3::dot(vec2,vec2)*Vector3::dot(vec3,vec3);
 	if (denom == 0){
 		//figure out when this is the case
-		std::cout << "denom was zero, second time";
+		// std::cout << "denom was zero, second time";
 		return -1.0;
 	};
 	float beta = (Vector3::dot(vec2, vec3)*Vector3::dot(vec1, vec3) - Vector3::dot(vec3, vec3)*Vector3::dot(vec1, vec2)) / (denom);
 	float gamma = (Vector3::dot(vec2, vec3)*Vector3::dot(vec1, vec2) - Vector3::dot(vec2, vec2)*Vector3::dot(vec1, vec3)) / (denom);
 
 	if (beta < 0 || gamma < 0 || beta + gamma > 1){
-		std::cout << "not inside triangle\n";
-		std::cout << beta;
-		std::cout << "\n";
-		std::cout << gamma;
-		std::cout << "\n";
+		// std::cout << "not inside triangle\n";
+		// std::cout << beta;
+		// std::cout << "\n";
+		// std::cout << gamma;
+		// std::cout << "\n";
 		return -1.0;
 	};
 	this->mostRecentHitPoint = Point(px, py, pz);
