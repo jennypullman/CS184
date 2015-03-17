@@ -37,8 +37,8 @@ list<PointLight> pointLights;
 list<DirectedLight> directedLights;
 list<AmbientLight> ambientLights;
 list<Light> lights;
-Material curMaterial;
-Transformation curTransform;
+Material curMaterial = Material();
+Transformation curTransform = Transformation();
 list<Triangle> triangles;
 list<Polygon> polygons;
 //list<Sphere> spheres;
@@ -492,8 +492,8 @@ void handleArgs(int numArgs, float args[], string info){
   int i = 0;
 
   while (i < info.length() && info[i] != '\n'){
-    if (info[i] == ' '){
-      while (info[i] == ' '){
+    if (isspace(info[i])){
+      while (isspace(info[i])){
         i++;
       };
       args[argIndex] = stof(arg);
@@ -625,6 +625,7 @@ void handleLtp(string ltpInfo){
 void handleLtd(string ltdInfo){
   float args[6];
   handleArgs(6, args, ltdInfo);
+
   DirectedLight light = DirectedLight(args[0], args[1], args[2], args[3], args[4], args[5]);
   directedLights.push_back(light);
   lights.push_back(light);
@@ -691,6 +692,7 @@ void handleXfr(string xfrInfo){
 void handleXfs(string xfsInfo){
   float args[3];
   handleArgs(3, args, xfsInfo);
+
   Transformation newTransform = Transformation(args[0], args[1], args[2], 's');
   if (curTransform.isNull()){
     curTransform = newTransform;
@@ -734,17 +736,17 @@ void processArgs(int argc, char *argv[]) {
     filebuf* inbuf = fs.rdbuf();
     char c = inbuf->sbumpc();
     while (c!=EOF){
-      while (c != ' ' && c != '\n' && c != EOF) {
+      while (!isspace(c) && c != EOF) {
         objectType += c;
         c = inbuf->sbumpc();
       };
-      if (c != '\n' && c != EOF) {
+      if (isspace(c) && c != EOF) {
         //get rid of whitespace
-        while (c == ' ' && c != EOF && c != '\n'){
+        while (isspace(c) && c != EOF && c != '\n' && c != '\r'){
           c = inbuf->sbumpc();
         }
 
-        while (c != '\n' && c != EOF){
+        while (c != '\n' && c != '\r' && c != EOF){
           args += c;
           c = inbuf->sbumpc();
         };
@@ -779,12 +781,13 @@ void processArgs(int argc, char *argv[]) {
       }
       args = "";
       objectType = "";
-      if (c == '\r' || c == '\n'){
+      while (isspace(c)){
         c = inbuf->sbumpc();
       }
     }
     fs.close();
   }; 
+
 }
 
 Color follow_ray(Ray start_ray, int recursiveDepth){
@@ -941,7 +944,13 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
         // if (i==0){
           // std::cout << "alpha R: " << alphaR << ", G: " << alphaG << ", B:" << alphaB << std::endl; 
         // }
-
+        /*std::cout << "Light Color: ";
+        std::cout << lightColor.get_r();
+        std::cout << ", ";
+        std::cout << lightColor.get_g();
+        std::cout << ", ";
+        std::cout << lightColor.get_b();
+        std::cout << "\n";*/
         // lightColor = light.getShadingOnObject(hitShape.getMaterial(),hitPoint, normal, view);
         curColor.update_r(curColor.get_r()+alphaR*lightColor.get_r());
         curColor.update_g(curColor.get_g()+alphaG*lightColor.get_g());
@@ -999,6 +1008,13 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
 
         // DONE calc normal and view vectors
         lightColor = light.getShadingOnObject(material,hitPoint, normal, view);
+        std::cout << "Light: ";
+        std::cout << lightColor.get_r();
+        std::cout << ", ";
+        std::cout << lightColor.get_g();
+        std::cout << ", ";
+        std::cout << lightColor.get_b();
+        std::cout << "\n";
 
         // lightColor = light.getShadingOnObject(hitShape.getMaterial(),hitPoint, normal, view);    
         curColor.update_r(curColor.get_r()+alphaR*lightColor.get_r());

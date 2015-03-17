@@ -18,6 +18,7 @@ class Transformation {
 		static Transformation transformMultiply(Transformation trans1, Transformation trans2);
 		static Vector3 vectorMultiply(Transformation trans, Vector3 vec);
 		static Transformation getInverse(Transformation trans);
+		static Transformation getTranspose(Transformation trans);
 
 	private:
 		float matrix[16];

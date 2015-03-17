@@ -38,7 +38,6 @@ Transformation::Transformation(float f1, float f2, float f3, char type){
 	this->matrix[13] = 0.0;
 	this->matrix[14] = 0.0;
 	this->matrix[15] = 1.0;
-
 	if (type == 't'){
 		this->matrix[0] = 1.0;
 		this->matrix[3] = f1;
@@ -210,6 +209,30 @@ Transformation Transformation::getInverse(Transformation trans){
 		b22/det, b23/det, b24/det, b31/det, b32/det, b33/det, b34/det, 
 		b41/det, b42/det, b43/det, b44/det};
 	return Transformation(transform);
+}
+
+Transformation Transformation::getTranspose(Transformation trans){
+	float transpose [16];
+	float *matr = trans.getMatrix();
+
+
+	transpose[0] = matr[0];
+	transpose[1] = matr[4];
+	transpose[2] = matr[8];
+	transpose[3] = matr[12];
+	transpose[4] = matr[1];
+	transpose[5] = matr[5];
+	transpose[6] = matr[9];
+	transpose[7] = matr[13];
+	transpose[8] = matr[2];
+	transpose[9] = matr[6];
+	transpose[10] = matr[10];
+	transpose[11] = matr[14];
+	transpose[12] = matr[3];
+	transpose[13] = matr[7];
+	transpose[14] = matr[11];
+	transpose[15] = matr[15];
+	return Transformation(transpose);
 }
 
 void Transformation::print(){
