@@ -948,6 +948,54 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
       }
 
       for (PointLight light : pointLights) {
+
+        lightDir = light.getLightVector(hitPoint.getX(), hitPoint.getY(), hitPoint.getZ());
+        if (use_tri && Vector3::dot(lightDir, hitTri.getNormalAtPoint(Point())) < 0) { // light behind surface
+          continue;
+        }
+        if (use_poly && Vector3::dot(lightDir, hitPoly.getNormalAtPoint(Point())) < 0) { // light behind surface
+          continue;
+        }
+        if (use_ellipsoid && Vector3::dot(lightDir, hitEllipsoid.getNormalAtPoint(Point())) < 0) { // light behind surface
+          continue;
+        }
+
+        lightRay = Ray(hitPoint.getX(), hitPoint.getY(), hitPoint.getZ(), lightDir.getX(), lightDir.getY(), lightDir.getZ());
+
+        // COPIED CODE FROM ABOVE
+        hitTime = 0.0;
+        minHit = -1.0;
+        for (Triangle triangle : triangles) { // Check all triangles
+          // std::cout << "Shape type: " << typeid(triangle).name() << '\n';
+          hitTime = triangle.hit(lightRay);
+          // std::cout << "hitTime: " << hitTime << std::endl;
+          if (minHit < epsilon || (hitTime >= 0.0 && hitTime < minHit)){
+            minHit = hitTime;
+          }
+        }
+        for (Polygon poly : polygons) { // Check all polygons
+          // std::cout << "Shape type: " << typeid(poly).name() << '\n';
+          hitTime = poly.hit(lightRay);
+          // std::cout << "hitTime: " << hitTime << std::endl;
+          if (minHit < epsilon || (hitTime >= 0.0 && hitTime < minHit)){
+            minHit = hitTime;
+          }
+        }
+        for (Ellipsoid ellipsoid : ellipsoids) { // Check all spheres
+          // std::cout << "Shape type: " << typeid(sphere).name() << '\n';
+          hitTime = ellipsoid.hit(lightRay);
+          // std::cout << "hitTime: " << hitTime << std::endl;
+          if (minHit < epsilon || (hitTime >= 0.0 && hitTime < minHit)){
+            minHit = hitTime;
+          }
+        }
+
+        // std::cout << "hit time: " << minHit << std::endl;
+        // END COPIED CODE FROM ABOVE
+        if (minHit > epsilon && minHit <= 1.0) {
+          continue;
+        }
+
         // DONE calc normal and view vectors
         lightColor = light.getShadingOnObject(material,hitPoint, normal, view);
 
