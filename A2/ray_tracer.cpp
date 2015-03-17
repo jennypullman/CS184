@@ -81,6 +81,16 @@ void inverseTransformTest(){
   transform.print();
 }
 
+void transformMultiplyTest(){
+  std::cout << "Running transformMultiplyTest...\n";
+  float matrix [16] = {1, 2, 5, 0, 1, 3, 5, 6, 2, 2, 1, 4, 0, 0, 0, 1};
+  float matrix2 [16] = {3, 1, 6, 4, 3, 2, 8, 0, 0, 2, 1, 0, 3, 1, 9, 1};
+  Transformation t1 = Transformation(matrix);
+  Transformation t2 = Transformation(matrix2);
+  Transformation transform = Transformation::transformMultiply(t1, t2);
+  transform.print();
+}
+
 void triangleHitTest(){
   std::cout << "Running triangleHitTest...\n";
   Vertex vert1 = Vertex(0,0,0);
@@ -330,6 +340,10 @@ void runTests(){
   std::cout << "Running Test 8: Inverse Transform Test: " << std::endl;
   inverseTransformTest();
   std::cout << "End Test 8: " << "\n";
+
+  std::cout << "Running Test 9: Transform Multiply Test: " << std::endl;
+  transformMultiplyTest();
+  std::cout << "End Test 9: " << "\n";
 
 }
 
@@ -853,6 +867,8 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
           use_ellipsoid = true;
         }
       }
+      //std::cout << minHit;
+      //std::cout << "\n";
 
       if (minHit < epsilon) {
         // std::cout<<"No real hit"<<std::endl;
@@ -891,7 +907,7 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
       Ray lightRay;
       Vector3 lightDir;
       for (DirectedLight light : directedLights) {
-
+        //std::cout << "here\n";
         lightDir = light.getLightVector(hitPoint.getX(), hitPoint.getY(), hitPoint.getZ());
         if (use_tri && Vector3::dot(lightDir, hitTri.getNormalAtPoint(Point(), view)) < 0) { // light behind surface
           std::cout<<"Light behind surface tri"<<std::endl;
@@ -935,7 +951,8 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
             minHit = hitTime;
           }
         }
-
+        std::cout << minHit;
+        std::cout << "\n";
         // std::cout << "hit time: " << minHit << std::endl;
         // END COPIED CODE FROM ABOVE
         if (minHit > epsilon) {
@@ -1050,6 +1067,15 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
       // TODO TO DO update alpha
       // TODO TO DO use totalDist info and falloff
     }
+  }
+  if (curColor.get_r() != 0 || curColor.get_g() != 0 || curColor.get_b() != 0){
+    //std::cout << "Final Color: ";
+     //   std::cout << curColor.get_r();
+      //  std::cout << ", ";
+      //  std::cout << curColor.get_g();
+      //  std::cout << ", ";
+      //  std::cout << curColor.get_b();
+      //  std::cout << "\n";
   }
   // std::cout << "cur_color R: " << curColor.get_r() << ", G: " << curColor.get_g() << ", G:" << curColor.get_b() << std::endl;
   return curColor;

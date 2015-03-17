@@ -39,6 +39,7 @@ Transformation::Transformation(float f1, float f2, float f3, char type){
 	this->matrix[14] = 0.0;
 	this->matrix[15] = 1.0;
 	if (type == 't'){
+		std::cout << "translate\n";
 		this->matrix[0] = 1.0;
 		this->matrix[3] = f1;
 		this->matrix[5] = 1.0;
@@ -95,9 +96,9 @@ Transformation Transformation::transformMultiply(Transformation trans1, Transfor
 	float *matr2 = trans2.getMatrix();
 	int curIndex = 0;
 	int startMat1;
-	for (int i = 0; i < 4; i++){
-		for (int j = 0; j < 4; j++){
-			startMat1 = j*4;
+	for (int j = 0; j < 4; j++){
+		startMat1 = j*4;
+		for (int i = 0; i < 4; i++){
 			matrix[curIndex] = matr1[startMat1]*matr2[i]+matr1[startMat1+1]*matr2[i+4]+
 				matr1[startMat1+2]*matr2[i+8]+matr1[startMat1+3]*matr2[i+12];
 			curIndex++;
@@ -110,14 +111,14 @@ Vector3 Transformation::vectorMultiply(Transformation trans, Vector3 vec){
 	float x,y,z,d;
 	float *matr = trans.getMatrix();
 
-	x = matr[0]*vec.getX()+matr[1]*vec.getY()+matr[2]*vec.getZ()+matr[3];
-	y = matr[4]*vec.getX()+matr[5]*vec.getY()+matr[6]*vec.getZ()+matr[7];
-	z = matr[8]*vec.getX()+matr[9]*vec.getY()+matr[10]*vec.getZ()+matr[11];
-	d = matr[12]*vec.getX()+matr[13]*vec.getY()+matr[14]*vec.getZ()+matr[15];
+	x = matr[0]*vec.getX()+matr[1]*vec.getY()+matr[2]*vec.getZ();
+	y = matr[4]*vec.getX()+matr[5]*vec.getY()+matr[6]*vec.getZ();
+	z = matr[8]*vec.getX()+matr[9]*vec.getY()+matr[10]*vec.getZ();
+	//d = matr[12]*vec.getX()+matr[13]*vec.getY()+matr[14]*vec.getZ();
 
-	x = x/d;
-	y = y/d;
-	z = z/d;
+	x = x;
+	y = y;
+	z = z;
 	return Vector3(x, y, z);
 }
 
