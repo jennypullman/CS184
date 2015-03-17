@@ -10,8 +10,8 @@ endif
 	
 RM = /bin/rm -f 
 all: main 
-main: Color.o Point.o Vertex.o ViewPlane.o Material.o Ray.o Camera.o Vector3.o Transformation.o Image.o AmbientLight.o PointLight.o DirectedLight.o Shape.o Triangle.o Polygon.o Sphere.o ray_tracer.o 
-	$(CC) $(CFLAGS) -o as1 Color.o Point.o Vertex.o ViewPlane.o Vector3.o Ray.o Camera.o Transformation.o Material.o Image.o AmbientLight.o PointLight.o DirectedLight.o Shape.o Triangle.o Polygon.o Sphere.o ray_tracer.o $(LDFLAGS)
+main: Color.o Point.o Vertex.o ViewPlane.o Material.o Ray.o Camera.o Vector3.o Transformation.o Image.o Light.o AmbientLight.o PointLight.o DirectedLight.o Shape.o Triangle.o Polygon.o Ellipsoid.o ray_tracer.o 
+	$(CC) $(CFLAGS) -o as1 Color.o Point.o Vertex.o ViewPlane.o Vector3.o Ray.o Camera.o Transformation.o Material.o Image.o Light.o AmbientLight.o PointLight.o DirectedLight.o Shape.o Triangle.o Polygon.o Ellipsoid.o ray_tracer.o $(LDFLAGS)
 Image.o: Image.cpp
 	$(CC) $(CFLAGS) -c Image.cpp -o Image.o
 Color.o: Color.cpp
@@ -36,8 +36,8 @@ Triangle.o: Triangle.cpp Shape.h Triangle.h
 	$(CC) $(CFLAGS) -c Triangle.cpp -o Triangle.o
 Polygon.o: Polygon.cpp
 	$(CC) $(CFLAGS) -c Polygon.cpp -o Polygon.o
-Sphere.o: Sphere.cpp
-	$(CC) $(CFLAGS) -c Sphere.cpp -o Sphere.o
+Ellipsoid.o: Ellipsoid.cpp
+	$(CC) $(CFLAGS) -c Ellipsoid.cpp -o Ellipsoid.o
 Light.o: Light.cpp
 	$(CC) $(CFLAGS) -c Light.cpp -o Light.o
 AmbientLight.o: AmbientLight.cpp

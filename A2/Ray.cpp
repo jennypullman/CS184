@@ -35,3 +35,20 @@ float Ray::getDirectionY(){
 float Ray::getDirectionZ(){
 	return this->dirz;
 }
+
+void Ray::print(){
+	std::cout << "Printing Ray...\n(";
+	std::cout << this->startx;
+	std::cout << ", ";
+	std::cout << this->starty;
+	std::cout << ", ";
+	std::cout << this->startz;
+	std::cout << ") + (";
+	std::cout << this->dirx;
+	std::cout << ", ";
+	std::cout << this->diry;
+	std::cout << ", ";
+	std::cout << this->dirz;
+	std::cout << ")t\n";
+
+}

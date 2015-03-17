@@ -1,5 +1,3 @@
-#include <iostream>
-using namespace std;
 //#include "Color.h"
 #include "Image.h"
 #include "Material.h"

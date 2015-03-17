@@ -20,7 +20,7 @@ using namespace std;
 //#include "DirectedLight.h"
 //#include "Sphere.h";
 //#include "Ray.h";
-#include "Sphere.h"
+#include "Ellipsoid.h"
 
 
 struct Face {
@@ -41,7 +41,8 @@ Material curMaterial;
 Transformation curTransform;
 list<Triangle> triangles;
 list<Polygon> polygons;
-list<Sphere> spheres;
+//list<Sphere> spheres;
+list<Ellipsoid> ellipsoids;
 list<Shape*> shapes;
 int pixelsV = 100; // Default value, TODO allow to be overridden by arguments
 int pixelsH = 100; // Default value, TODO allow to be overridden by arguments
@@ -53,6 +54,32 @@ Camera camera;
 
 int numFailedTests = 0;
 
+
+void inverseTransformTest(){
+  std::cout << "Running inverseTransformTest...\n";
+  float matrix [16] = {1, 2, 5, 0, 1, 3, 5, 6, 2, 2, 1, 4, 0, 0, 0, 1};
+  Transformation transform = Transformation(matrix);
+  transform.print();
+  transform = Transformation::getInverse(transform);
+  std::cout << "Inverse: \n";
+  transform.print();
+
+  std::cout << "Running inverseTransformTest second time...\n";
+  float matrix2 [16] = {3, 1, 6, 4, 3, 2, 8, 0, 0, 2, 1, 0, 3, 1, 9, 1};
+  transform = Transformation(matrix2);
+  transform.print();
+  transform = Transformation::getInverse(transform);
+  std::cout << "Inverse: \n";
+  transform.print();
+
+  std::cout << "Running inverseTransformTest third time...\n";
+  float matrix3 [16] = {4, 5, 7, 1, 0, 3, 2, 8, 9, 1, 0, 9, 0, 1, 5, 3};
+  transform = Transformation(matrix3);
+  transform.print();
+  transform = Transformation::getInverse(transform);
+  std::cout << "Inverse: \n";
+  transform.print();
+}
 
 void triangleHitTest(){
   std::cout << "Running triangleHitTest...\n";
@@ -67,6 +94,40 @@ void triangleHitTest(){
   std::cout << hit;
   std::cout << "\n";
   if (hit != 1.0){
+    numFailedTests += 1;
+  }
+}
+
+void ellipsoidHitTest(){
+  std::cout << "Running ellipsoidHitTest...\n";
+  Material material = Material(1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 2.0, 1.0, 1.0, 1.0);
+  float transform [16] = {1.0/4, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1};
+  Transformation transformation = Transformation(transform);
+  std::cout << "Transformation in ellipse test: ";
+  transformation.print();
+  Ellipsoid ellipsoid = Ellipsoid(material, transformation, 0, 0, 0, 3);
+  Ray ray = Ray(0, 0, -1, 1, 1, 1);
+  float hit = ellipsoid.hit(ray);
+  std::cout << "Should be 4: ";
+  std::cout << hit;
+  std::cout << "\n";
+  std::cout << "Point: (";
+  Point hitPoint = ellipsoid.getMostRecentHitPoint();
+  std::cout << hitPoint.getX();
+  std::cout << ", ";
+  std::cout << hitPoint.getY();
+  std::cout << ", ";
+  std::cout << hitPoint.getZ();
+  std::cout << ") \n";
+  if (hit != 4.0) {
+    numFailedTests += 1;
+  }
+  ray = Ray(5, 0, -1, 0, 0, 1);
+  hit = ellipsoid.hit(ray);
+  std::cout << "Should be -1: ";
+  std::cout << hit;
+  std::cout << "\n";
+  if (hit != -1.0) {
     numFailedTests += 1;
   }
 }
@@ -261,6 +322,13 @@ void runTests(){
   Vector3 norm = triangleNormTest();
   std::cout << "End Test 6:  X: "<< norm.getX() << ", Y: " << norm.getY() << ", Z: " << norm.getZ() << std::endl;
 
+  std::cout << "Running Test 7: Ellipsoid Hit Test: " << std::endl;
+  ellipsoidHitTest();
+  std::cout << "End Test 7: Number of failed tests: " << numFailedTests << "\n";
+
+  std::cout << "Running Test 8: Inverse Transform Test: " << std::endl;
+  inverseTransformTest();
+  std::cout << "End Test 8: " << "\n";
 
 }
 
@@ -493,10 +561,13 @@ void handleSph(string sphInfo){
   float args[4];
   handleArgs(4, args, sphInfo);
   Vertex center = Vertex(args[0], args[1], args[2]);
-  center = Transformation::transformVertex(curTransform, center);
-  Sphere sphere = Sphere(curMaterial, center.getX(), center.getY(), center.getZ(), args[3]);
-  spheres.push_back(sphere);
-  shapes.push_back(&sphere);
+  //center = Transformation::transformVertex(curTransform, center);
+  //Sphere sphere = Sphere(curMaterial, center.getX(), center.getY(), center.getZ(), args[3]);
+  //spheres.push_back(sphere);
+  //shapes.push_back(&sphere);
+  Ellipsoid ellipsoid = Ellipsoid(curMaterial, curTransform, center.getX(), center.getY(), center.getZ(), args[3]);
+  ellipsoids.push_back(ellipsoid);
+  shapes.push_back(&ellipsoid);
 }
 
 /*
@@ -738,10 +809,10 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
   Point hitPoint;
   Triangle hitTri;
   Polygon hitPoly;
-  Sphere hitSphere;
+  Ellipsoid hitEllipsoid;
 
   Color curColor = Color();
-  bool use_tri, use_poly, use_sphere = false;
+  bool use_tri, use_poly, use_ellipsoid = false;
 
   if (shapes.size() > 0){
     for (int i = 0; i < recursiveDepth; i ++){
@@ -768,14 +839,14 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
           use_poly = true;
         }
       }
-      for (Sphere sphere : spheres) { // Check all spheres
+      for (Ellipsoid ellipsoid : ellipsoids) { // Check all spheres
         // std::cout << "Shape type: " << typeid(sphere).name() << '\n';
-        hitTime = sphere.hit(curRay);
+        hitTime = ellipsoid.hit(curRay);
         // std::cout << "hitTime: " << hitTime << std::endl;
         if (minHit < epsilon || (hitTime >= 0.0 && hitTime < minHit)){
           minHit = hitTime;
-          hitSphere = sphere;
-          use_sphere = true;
+          hitEllipsoid = ellipsoid;
+          use_ellipsoid = true;
         }
       }
 
@@ -795,10 +866,10 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
         hitPoint = hitPoly.getMostRecentHitPoint();
         normal = hitPoly.getNormalAtPoint(hitPoint);
         material = hitPoly.getMaterial();
-      } else if (use_sphere) {
-        hitPoint = hitSphere.getMostRecentHitPoint();
-        normal = hitSphere.getNormalAtPoint(hitPoint);
-        material = hitSphere.getMaterial();
+      } else if (use_ellipsoid) {
+        hitPoint = hitEllipsoid.getMostRecentHitPoint();
+        normal = hitEllipsoid.getNormalAtPoint(hitPoint);
+        material = hitEllipsoid.getMaterial();
       }
       view = Vector3(-curRay.getDirectionX(), -curRay.getDirectionY(), -curRay.getDirectionZ());
 
@@ -903,14 +974,18 @@ int do_ray_tracing() {
 int main(int argc, char *argv[]) {
   // std::cout << "Hello World!";
   // runTests();
+  if (argc == 1){
+    runTests();
+  } else {
 
-  std::cout << "START processArgs" << std::endl;
-  processArgs(argc, argv);
-  std::cout << "END processArgs" << std::endl;
+    std::cout << "START processArgs" << std::endl;
+    processArgs(argc, argv);
+    std::cout << "END processArgs" << std::endl;
 
-  std::cout << "START do_ray_tracing" << std::endl;
-  int success = do_ray_tracing();
-  std::cout << "END do_ray_tracing: " << success << std::endl;
+    std::cout << "START do_ray_tracing" << std::endl;
+    int success = do_ray_tracing();
+    std::cout << "END do_ray_tracing: " << success << std::endl;
+  }
 
   return 0;
 }

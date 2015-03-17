@@ -1,3 +1,5 @@
+#include <iostream>
+
 class Ray {
 public:
 	Ray();
@@ -11,6 +13,7 @@ public:
 	float getDirectionX();
 	float getDirectionY();
 	float getDirectionZ();
+	void print();
 
 
 private:

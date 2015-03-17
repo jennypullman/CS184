@@ -10,11 +10,14 @@ class Transformation {
 		//instance methods
 		float* getMatrix();
 		bool isNull();
+		void print();
 
 		//static methods
 		static Vertex transformVertex(Transformation trans, Vertex vert);
+		static Point transformPoint(Transformation trans, Point point);
 		static Transformation transformMultiply(Transformation trans1, Transformation trans2);
 		static Vector3 vectorMultiply(Transformation trans, Vector3 vec);
+		static Transformation getInverse(Transformation trans);
 
 	private:
 		float matrix[16];

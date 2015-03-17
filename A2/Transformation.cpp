@@ -72,7 +72,7 @@ Transformation::Transformation(float f[]){
 	this->matrix[6] = f[6];
 	this->matrix[7] = f[7];
 	this->matrix[8] = f[8];
-	this->matrix[8] = f[9];
+	this->matrix[9] = f[9];
 	this->matrix[10] = f[10];
 	this->matrix[11] = f[11];
 	this->matrix[12] = f[12];
@@ -135,4 +135,118 @@ Vertex Transformation::transformVertex(Transformation trans, Vertex vert){
 	y = y/d;
 	z = z/d;
 	return Vertex(x, y, z);
+}
+
+Point Transformation::transformPoint(Transformation trans, Point point){
+	float x,y,z,d;
+	float *matr = trans.getMatrix();
+
+	x = matr[0]*point.getX()+matr[1]*point.getY()+matr[2]*point.getZ()+matr[3];
+	y = matr[4]*point.getX()+matr[5]*point.getY()+matr[6]*point.getZ()+matr[7];
+	z = matr[8]*point.getX()+matr[9]*point.getY()+matr[10]*point.getZ()+matr[11];
+	d = matr[12]*point.getX()+matr[13]*point.getY()+matr[14]*point.getZ()+matr[15];
+
+	x = x/d;
+	y = y/d;
+	z = z/d;
+	return Point(x, y, z);
+}
+
+Transformation Transformation::getInverse(Transformation trans){
+	float *tempMatr = trans.getMatrix();
+	float b11 = (tempMatr[5]*tempMatr[10]*tempMatr[15]+tempMatr[6]*tempMatr[11]*tempMatr[13]+
+		tempMatr[7]*tempMatr[9]*tempMatr[14])-(tempMatr[5]*tempMatr[11]*tempMatr[14]+
+		tempMatr[6]*tempMatr[9]*tempMatr[15]+tempMatr[7]*tempMatr[10]*tempMatr[13]);
+	float b21 = (tempMatr[4]*tempMatr[11]*tempMatr[14]+tempMatr[6]*tempMatr[8]*tempMatr[15]+
+		tempMatr[7]*tempMatr[10]*tempMatr[12])-(tempMatr[4]*tempMatr[10]*tempMatr[15]+
+		tempMatr[6]*tempMatr[11]*tempMatr[12]+tempMatr[7]*tempMatr[8]*tempMatr[14]);
+	float b31 = (tempMatr[4]*tempMatr[9]*tempMatr[15]+tempMatr[5]*tempMatr[11]*tempMatr[12]+
+		tempMatr[7]*tempMatr[8]*tempMatr[13])-(tempMatr[4]*tempMatr[11]*tempMatr[13]+
+		tempMatr[5]*tempMatr[8]*tempMatr[15]+tempMatr[7]*tempMatr[9]*tempMatr[12]);
+	float b41 = (tempMatr[4]*tempMatr[10]*tempMatr[13]+tempMatr[5]*tempMatr[8]*tempMatr[14]+
+		tempMatr[6]*tempMatr[9]*tempMatr[12])-(tempMatr[4]*tempMatr[9]*tempMatr[14]+
+		tempMatr[5]*tempMatr[10]*tempMatr[12]+tempMatr[6]*tempMatr[8]*tempMatr[13]);
+	float det = tempMatr[0]*b11 + tempMatr[1]*b21 + tempMatr[2]*b31 + tempMatr[3]*b41;
+	if (det == 0){
+		return Transformation();
+	}
+	float b12 = (tempMatr[1]*tempMatr[11]*tempMatr[14]+tempMatr[2]*tempMatr[9]*tempMatr[15]+
+		tempMatr[3]*tempMatr[10]*tempMatr[13])-(tempMatr[1]*tempMatr[10]*tempMatr[15]+
+		tempMatr[2]*tempMatr[11]*tempMatr[13]+tempMatr[3]*tempMatr[9]*tempMatr[14]);
+	float b13 = (tempMatr[1]*tempMatr[6]*tempMatr[15]+tempMatr[2]*tempMatr[7]*tempMatr[13]+
+		tempMatr[3]*tempMatr[5]*tempMatr[14])-(tempMatr[1]*tempMatr[7]*tempMatr[14]+
+		tempMatr[2]*tempMatr[5]*tempMatr[15]+tempMatr[3]*tempMatr[6]*tempMatr[13]);
+	float b14 = (tempMatr[1]*tempMatr[7]*tempMatr[10]+tempMatr[2]*tempMatr[5]*tempMatr[11]+
+		tempMatr[3]*tempMatr[6]*tempMatr[9])-(tempMatr[1]*tempMatr[6]*tempMatr[11]+
+		tempMatr[2]*tempMatr[7]*tempMatr[9]+tempMatr[3]*tempMatr[5]*tempMatr[10]);
+	float b22 = (tempMatr[0]*tempMatr[10]*tempMatr[15]+tempMatr[2]*tempMatr[11]*tempMatr[12]+
+		tempMatr[3]*tempMatr[8]*tempMatr[14])-(tempMatr[0]*tempMatr[11]*tempMatr[14]+
+		tempMatr[2]*tempMatr[8]*tempMatr[15]+tempMatr[3]*tempMatr[10]*tempMatr[12]);
+	float b23 = (tempMatr[0]*tempMatr[7]*tempMatr[14]+tempMatr[2]*tempMatr[4]*tempMatr[15]+
+		tempMatr[3]*tempMatr[6]*tempMatr[12])-(tempMatr[0]*tempMatr[6]*tempMatr[15]+
+		tempMatr[2]*tempMatr[7]*tempMatr[12]+tempMatr[3]*tempMatr[4]*tempMatr[14]);
+	float b24 = (tempMatr[0]*tempMatr[6]*tempMatr[11]+tempMatr[2]*tempMatr[7]*tempMatr[8]+
+		tempMatr[3]*tempMatr[4]*tempMatr[10])-(tempMatr[0]*tempMatr[7]*tempMatr[10]+
+		tempMatr[2]*tempMatr[4]*tempMatr[11]+tempMatr[3]*tempMatr[6]*tempMatr[8]);			
+	float b32 = (tempMatr[0]*tempMatr[11]*tempMatr[13]+tempMatr[1]*tempMatr[8]*tempMatr[15]+
+		tempMatr[3]*tempMatr[9]*tempMatr[12])-(tempMatr[0]*tempMatr[9]*tempMatr[15]+
+		tempMatr[1]*tempMatr[11]*tempMatr[12]+tempMatr[3]*tempMatr[8]*tempMatr[13]);
+	float b33 = (tempMatr[0]*tempMatr[5]*tempMatr[15]+tempMatr[1]*tempMatr[7]*tempMatr[12]+
+		tempMatr[3]*tempMatr[4]*tempMatr[13])-(tempMatr[0]*tempMatr[7]*tempMatr[13]+
+		tempMatr[1]*tempMatr[4]*tempMatr[15]+tempMatr[3]*tempMatr[5]*tempMatr[12]);
+	float b34 = (tempMatr[0]*tempMatr[7]*tempMatr[9]+tempMatr[1]*tempMatr[4]*tempMatr[11]+
+		tempMatr[3]*tempMatr[5]*tempMatr[8])-(tempMatr[0]*tempMatr[5]*tempMatr[11]+
+		tempMatr[1]*tempMatr[7]*tempMatr[8]+tempMatr[3]*tempMatr[4]*tempMatr[9]);
+	float b42 = (tempMatr[0]*tempMatr[9]*tempMatr[14]+tempMatr[1]*tempMatr[10]*tempMatr[12]+
+		tempMatr[2]*tempMatr[8]*tempMatr[13])-(tempMatr[0]*tempMatr[10]*tempMatr[13]+
+		tempMatr[1]*tempMatr[8]*tempMatr[14]+tempMatr[2]*tempMatr[9]*tempMatr[12]);
+	float b43 = (tempMatr[0]*tempMatr[6]*tempMatr[13]+tempMatr[1]*tempMatr[4]*tempMatr[14]+
+		tempMatr[2]*tempMatr[5]*tempMatr[12])-(tempMatr[0]*tempMatr[5]*tempMatr[14]+
+		tempMatr[1]*tempMatr[6]*tempMatr[12]+tempMatr[2]*tempMatr[4]*tempMatr[13]);
+	float b44 = (tempMatr[0]*tempMatr[5]*tempMatr[10]+tempMatr[1]*tempMatr[6]*tempMatr[8]+
+		tempMatr[2]*tempMatr[4]*tempMatr[9])-(tempMatr[0]*tempMatr[6]*tempMatr[9]+
+		tempMatr[1]*tempMatr[4]*tempMatr[10]+tempMatr[2]*tempMatr[5]*tempMatr[8]);
+	float transform [16] = {b11/det, b12/det, b13/det, b14/det, b21/det, 
+		b22/det, b23/det, b24/det, b31/det, b32/det, b33/det, b34/det, 
+		b41/det, b42/det, b43/det, b44/det};
+	return Transformation(transform);
+}
+
+void Transformation::print(){
+	std::cout << "Printing transformation: [\nFirst row: ";
+	std::cout << this->matrix[0];
+	std::cout << ", "; 
+	std::cout << this->matrix[1];
+	std::cout << ", "; 
+	std::cout << this->matrix[2];
+	std::cout << ", "; 
+	std::cout << this->matrix[3];
+	std::cout << ", "; 
+	std::cout << "Second row: ";
+	std::cout << this->matrix[4];
+	std::cout << ", "; 
+	std::cout << this->matrix[5];
+	std::cout << ", "; 
+	std::cout << this->matrix[6];
+	std::cout << ", "; 
+	std::cout << this->matrix[7];
+	std::cout << ", "; 
+	std::cout << "Third row: ";
+	std::cout << this->matrix[8];
+	std::cout << ", "; 
+	std::cout << this->matrix[9];
+	std::cout << ", "; 
+	std::cout << this->matrix[10];
+	std::cout << ", "; 
+	std::cout << this->matrix[11];
+	std::cout << ", "; 
+	std::cout << "Fourth row: ";
+	std::cout << this->matrix[12];
+	std::cout << ", "; 
+	std::cout << this->matrix[13];
+	std::cout << ", "; 
+	std::cout << this->matrix[14];
+	std::cout << ", "; 
+	std::cout << this->matrix[15];
+	std::cout << "] \n"; 
 }

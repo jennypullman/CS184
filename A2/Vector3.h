@@ -1,5 +1,7 @@
 #include <stdexcept>
 #include <math.h>
+#include <iostream>
+using namespace std;
 
 class Vector3{
 public:
