@@ -43,6 +43,6 @@ void Polygon::print(){
 };
 
 
-Vector3 Polygon::getNormalAtPoint(Point pnt){
-	return this->mostRecentHitTriangle.getNormalAtPoint(pnt);
+Vector3 Polygon::getNormalAtPoint(Point pnt, Vector3 viewVect){
+	return this->mostRecentHitTriangle.getNormalAtPoint(pnt, viewVect);
 }

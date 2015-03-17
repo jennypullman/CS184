@@ -11,7 +11,7 @@ public:
 	float hit(Ray ray);
 	void print();
 	Point getMostRecentHitPoint();
-	Vector3 getNormalAtPoint(Point pnt);
+	Vector3 getNormalAtPoint(Point pnt, Vector3 viewVect);
 
 private:
 	Material material;

@@ -292,8 +292,9 @@ Vector3 triangleNormTest() {
 
   Triangle tri = Triangle(Material(), Vertex(0.0, 1.0, 2.0), Vertex(1.0, 2.0, 3.0), Vertex(0.25, 0.5, 0.75), Vector3(), Vector3(), Vector3());
   // EXPECT X: -0.75, Y: 1.5, Z: -0.75
+  Vector3 view = Vector3(0,0,1);
 
-  return tri.getNormalAtPoint(Point());
+  return tri.getNormalAtPoint(Point(), view);
 
 }
 
@@ -857,21 +858,21 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
       // std::cout << "minHit: " << minHit << ", hitShape: " << &hitShape << std::endl;
       Vector3 normal, view;
       Material material;
+      view = Vector3(-curRay.getDirectionX(), -curRay.getDirectionY(), -curRay.getDirectionZ());
       if (use_tri){
         hitPoint = hitTri.getMostRecentHitPoint();
-        normal = hitTri.getNormalAtPoint(hitPoint);
+        normal = hitTri.getNormalAtPoint(hitPoint, view);
         material = hitTri.getMaterial();
 
       } else if (use_poly) {
         hitPoint = hitPoly.getMostRecentHitPoint();
-        normal = hitPoly.getNormalAtPoint(hitPoint);
+        normal = hitPoly.getNormalAtPoint(hitPoint, view);
         material = hitPoly.getMaterial();
       } else if (use_ellipsoid) {
         hitPoint = hitEllipsoid.getMostRecentHitPoint();
         normal = hitEllipsoid.getNormalAtPoint(hitPoint);
         material = hitEllipsoid.getMaterial();
       }
-      view = Vector3(-curRay.getDirectionX(), -curRay.getDirectionY(), -curRay.getDirectionZ());
 
       // std::cout << "hitPoint X: " << hitPoint.getX() << ", Y: " << hitPoint.getY() << ", Z:" << hitPoint.getZ() << std::endl;
       // std::cout << "normal X: " << normal.getX() << ", Y: " << normal.getY() << ", Z:" << normal.getZ() << std::endl;
@@ -888,10 +889,10 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
       for (DirectedLight light : directedLights) {
 
         lightDir = light.getLightVector(hitPoint.getX(), hitPoint.getY(), hitPoint.getZ());
-        if (use_tri && Vector3::dot(lightDir, hitTri.getNormalAtPoint(Point())) < 0) { // light behind surface
+        if (use_tri && Vector3::dot(lightDir, hitTri.getNormalAtPoint(Point(), view)) < 0) { // light behind surface
           continue;
         }
-        if (use_poly && Vector3::dot(lightDir, hitPoly.getNormalAtPoint(Point())) < 0) { // light behind surface
+        if (use_poly && Vector3::dot(lightDir, hitPoly.getNormalAtPoint(Point(), view)) < 0) { // light behind surface
           continue;
         }
         if (use_ellipsoid && Vector3::dot(lightDir, hitEllipsoid.getNormalAtPoint(Point())) < 0) { // light behind surface
@@ -950,10 +951,10 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
       for (PointLight light : pointLights) {
 
         lightDir = light.getLightVector(hitPoint.getX(), hitPoint.getY(), hitPoint.getZ());
-        if (use_tri && Vector3::dot(lightDir, hitTri.getNormalAtPoint(Point())) < 0) { // light behind surface
+        if (use_tri && Vector3::dot(lightDir, hitTri.getNormalAtPoint(Point(), view)) < 0) { // light behind surface
           continue;
         }
-        if (use_poly && Vector3::dot(lightDir, hitPoly.getNormalAtPoint(Point())) < 0) { // light behind surface
+        if (use_poly && Vector3::dot(lightDir, hitPoly.getNormalAtPoint(Point(), view)) < 0) { // light behind surface
           continue;
         }
         if (use_ellipsoid && Vector3::dot(lightDir, hitEllipsoid.getNormalAtPoint(Point())) < 0) { // light behind surface
