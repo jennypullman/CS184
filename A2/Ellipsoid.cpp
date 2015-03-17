@@ -30,6 +30,7 @@ Ellipsoid::Ellipsoid(Material material, Transformation trans, float cx, float cy
 	this->radius = r;
 	this->transformation = trans;
 	this->inverseTransformation = Transformation::getInverse(transformation);
+	transformation.print();
 }
 
 Material Ellipsoid::getMaterial(){
@@ -96,7 +97,14 @@ float Ellipsoid::hit(Ray ray){
 	std::cout << ", ";
 	std::cout << transformedRay.getDirectionZ();
 	std::cout << ")\n";*/
+	if (t1 >= 0.0 || t2 >= 0.0){
+		std::cout << t1;
+		std::cout << "\n";
+		std::cout << t2;
+		std::cout << "yay\n";
 
+	}
+	//transformedRay.print();
 
 	if (t1 >= 0.0) {
 		if (t2 >= 0.0 && t2 < t1){
