@@ -43,8 +43,8 @@ list<Triangle> triangles;
 list<Polygon> polygons;
 list<Sphere> spheres;
 list<Shape*> shapes;
-int pixelsV = 100; // Default value, TODO allow to be overridden by arguments
-int pixelsH = 100; // Default value, TODO allow to be overridden by arguments
+int pixelsV = 1000; // Default value, TODO allow to be overridden by arguments
+int pixelsH = 1000; // Default value, TODO allow to be overridden by arguments
 // int pixelsV = 5; // Default value, TODO allow to be overridden by arguments
 // int pixelsH = 5; // Default value, TODO allow to be overridden by arguments
 ViewPlane viewplane;
@@ -730,7 +730,7 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
   Ray curRay = start_ray;
 
   float totalDist = 0.0;
-  float alpha = 1.0;
+  float alphaR = 1.0, alphaG = 1.0, alphaB = 1.0;
 
   float epsilon = 0.0001; // don't want to capture ray's intersection with it's starting point
 
@@ -811,25 +811,79 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
 
       //get color of shape
       Color lightColor;
+      float lightHitTime;
+      Ray lightRay;
+      Vector3 lightDir;
       for (DirectedLight light : directedLights) {
+
+        lightDir = light.getLightVector(hitPoint.getX(), hitPoint.getY(), hitPoint.getZ());
+        if (use_tri && Vector3::dot(lightDir, hitTri.getNormalAtPoint(Point())) < 0) { // light behind surface
+          continue;
+        }
+        if (use_poly && Vector3::dot(lightDir, hitPoly.getNormalAtPoint(Point())) < 0) { // light behind surface
+          continue;
+        }
+        if (use_sphere && Vector3::dot(lightDir, hitSphere.getNormalAtPoint(Point())) < 0) { // light behind surface
+          continue;
+        }
+
+        lightRay = Ray(hitPoint.getX(), hitPoint.getY(), hitPoint.getZ(), lightDir.getX(), lightDir.getY(), lightDir.getZ());
+
+        // COPIED CODE FROM ABOVE
+        hitTime = 0.0;
+        minHit = -1.0;
+        for (Triangle triangle : triangles) { // Check all triangles
+          // std::cout << "Shape type: " << typeid(triangle).name() << '\n';
+          hitTime = triangle.hit(lightRay);
+          // std::cout << "hitTime: " << hitTime << std::endl;
+          if (minHit < epsilon || (hitTime >= 0.0 && hitTime < minHit)){
+            minHit = hitTime;
+          }
+        }
+        for (Polygon poly : polygons) { // Check all polygons
+          // std::cout << "Shape type: " << typeid(poly).name() << '\n';
+          hitTime = poly.hit(lightRay);
+          // std::cout << "hitTime: " << hitTime << std::endl;
+          if (minHit < epsilon || (hitTime >= 0.0 && hitTime < minHit)){
+            minHit = hitTime;
+          }
+        }
+        for (Sphere sphere : spheres) { // Check all spheres
+          // std::cout << "Shape type: " << typeid(sphere).name() << '\n';
+          hitTime = sphere.hit(lightRay);
+          // std::cout << "hitTime: " << hitTime << std::endl;
+          if (minHit < epsilon || (hitTime >= 0.0 && hitTime < minHit)){
+            minHit = hitTime;
+          }
+        }
+
+        // std::cout << "hit time: " << minHit << std::endl;
+        // END COPIED CODE FROM ABOVE
+        if (minHit > epsilon && minHit <= 1.0) {
+          continue;
+        }
+
         // DONE calc normal and view vectors
         lightColor = light.getShadingOnObject(material,hitPoint, normal, view);
-        std::cout << "color R: " << lightColor.get_r() << ", G: " << lightColor.get_g() << ", G:" << lightColor.get_b() << std::endl;
+        // std::cout << "color R: " << lightColor.get_r() << ", G: " << lightColor.get_g() << ", G:" << lightColor.get_b() << std::endl;
+        // if (i==0){
+          // std::cout << "alpha R: " << alphaR << ", G: " << alphaG << ", B:" << alphaB << std::endl; 
+        // }
 
         // lightColor = light.getShadingOnObject(hitShape.getMaterial(),hitPoint, normal, view);
-        curColor.update_r(alpha*(curColor.get_r()+lightColor.get_r()));
-        curColor.update_g(alpha*(curColor.get_g()+lightColor.get_g()));
-        curColor.update_b(alpha*(curColor.get_b()+lightColor.get_b()));        
+        curColor.update_r(curColor.get_r()+alphaR*lightColor.get_r());
+        curColor.update_g(curColor.get_g()+alphaG*lightColor.get_g());
+        curColor.update_b(curColor.get_b()+alphaB*lightColor.get_b());        
       }
 
       for (PointLight light : pointLights) {
         // DONE calc normal and view vectors
         lightColor = light.getShadingOnObject(material,hitPoint, normal, view);
 
-        // lightColor = light.getShadingOnObject(hitShape.getMaterial(),hitPoint, normal, view);
-        curColor.update_r(alpha*(curColor.get_r()+lightColor.get_r()));
-        curColor.update_g(alpha*(curColor.get_g()+lightColor.get_g()));
-        curColor.update_b(alpha*(curColor.get_b()+lightColor.get_b()));        
+        // lightColor = light.getShadingOnObject(hitShape.getMaterial(),hitPoint, normal, view);    
+        curColor.update_r(curColor.get_r()+alphaR*lightColor.get_r());
+        curColor.update_g(curColor.get_g()+alphaG*lightColor.get_g());
+        curColor.update_b(curColor.get_b()+alphaB*lightColor.get_b());        
       }
 
       for (AmbientLight light : ambientLights) {
@@ -837,9 +891,9 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
         lightColor = light.getShadingOnObject(material,hitPoint, normal, view);
 
         // lightColor = light.getShadingOnObject(hitShape.getMaterial(),hitPoint, normal, view);
-        curColor.update_r(alpha*(curColor.get_r()+lightColor.get_r()));
-        curColor.update_g(alpha*(curColor.get_g()+lightColor.get_g()));
-        curColor.update_b(alpha*(curColor.get_b()+lightColor.get_b()));        
+        curColor.update_r(curColor.get_r()+alphaR*lightColor.get_r());
+        curColor.update_g(curColor.get_g()+alphaG*lightColor.get_g());
+        curColor.update_b(curColor.get_b()+alphaB*lightColor.get_b());           
       }
       //DONE (lauren?)-->need the reflection ray
       // get direction of reflection ray
@@ -847,6 +901,9 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
       dir.normalize();
       curRay = Ray(hitPoint.getX(), hitPoint.getY(), hitPoint.getZ(), dir.getX(), dir.getY(), dir.getZ());
 
+      alphaR = alphaR*material.getKrr();
+      alphaG = alphaG*material.getKrg();
+      alphaB = alphaB*material.getKrb();
       // TODO TO DO update alpha
       // TODO TO DO use totalDist info and falloff
     }

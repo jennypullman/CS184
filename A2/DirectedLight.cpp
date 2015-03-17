@@ -23,7 +23,7 @@ Color DirectedLight::getColor(){
 
 Vector3 DirectedLight::getLightVector(float x, float y, float z){
 	this->lightVector = new Vector3(-1*this->x, -1*this->y, -1*this->z);
-	(*this->lightVector).normalize();
+	// (*this->lightVector).normalize();
 	return *this->lightVector;
 }
 	

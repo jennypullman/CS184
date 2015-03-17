@@ -23,7 +23,7 @@ Color PointLight::getColor(){
 
 Vector3 PointLight::getLightVector(float x, float y, float z){
 	this->lightVector = new Vector3(this->x - x, this->y - y, this->z - z);
-	(*this->lightVector).normalize();
+	// (*this->lightVector).normalize();
 	return *this->lightVector;
 }
 
