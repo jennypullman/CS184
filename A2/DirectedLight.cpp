@@ -76,6 +76,8 @@ Color DirectedLight::getShadingOnObject(Material shp_mat, Point pnt, Vector3 nor
 		reflectVector.normalize();
       	std::cout << "reflectVector X: " << reflectVector.getX() << ", Y: " << reflectVector.getY() << ", Z:" << reflectVector.getZ() << std::endl;
 		
+      	float ambient = 0.0;
+
 		//for red:
 		//DIFFUSE COMPONENT
 		//ASSUMPTION: i didn't normalize I
@@ -83,7 +85,7 @@ Color DirectedLight::getShadingOnObject(Material shp_mat, Point pnt, Vector3 nor
 		//SPECULAR COMPONENT
 		float specular = shp_mat.getKsr() * r * pow(max(Vector3::dot(reflectVector, viewVector), 0.f), shp_mat.getKsp());
 		//AMBIENT COMPONENT
-		float ambient = shp_mat.getKar() * r;
+		// float ambient = shp_mat.getKar() * r;
       	std::cout << "R: kd: " << shp_mat.getKdr() << ", kd: " << shp_mat.getKsr() << ", ka:" << shp_mat.getKar() << std::endl;
       	std::cout << "R: diffuse: " << diffuse << ", specular: " << specular << ", ambient:" << ambient << std::endl;
 		color.update_r(diffuse + specular + ambient);
@@ -95,7 +97,7 @@ Color DirectedLight::getShadingOnObject(Material shp_mat, Point pnt, Vector3 nor
 		//SPECULAR COMPONENT
 		specular = shp_mat.getKsg() * g * pow(max(Vector3::dot(reflectVector, viewVector), 0.f), shp_mat.getKsp());
 		//AMBIENT COMPONENT
-		ambient = shp_mat.getKag() * g;
+		// ambient = shp_mat.getKag() * g;
       	std::cout << "G: kd: " << shp_mat.getKdg() << ", kd: " << shp_mat.getKsg() << ", ka:" << shp_mat.getKag() << std::endl;
 		std::cout << "G: diffuse: " << diffuse << ", specular: " << specular << ", ambient:" << ambient << std::endl;
 		color.update_g(diffuse + specular + ambient);
@@ -107,7 +109,7 @@ Color DirectedLight::getShadingOnObject(Material shp_mat, Point pnt, Vector3 nor
 		//SPECULAR COMPONENT
 		specular = shp_mat.getKsb() * b * pow(max(Vector3::dot(reflectVector, viewVector), 0.f), shp_mat.getKsp());
 		//AMBIENT COMPONENT
-		ambient = shp_mat.getKab() * b;
+		// ambient = shp_mat.getKab() * b;
       	std::cout << "B: kd: " << shp_mat.getKdb() << ", kd: " << shp_mat.getKsb() << ", ka:" << shp_mat.getKab() << std::endl;
 		std::cout << "B: diffuse: " << diffuse << ", specular: " << specular << ", ambient:" << ambient << std::endl;
 		color.update_b(diffuse + specular + ambient);

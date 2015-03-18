@@ -45,8 +45,8 @@ list<Polygon> polygons;
 //list<Sphere> spheres;
 list<Ellipsoid> ellipsoids;
 list<Shape*> shapes;
-int pixelsV = 1000; // Default value, TODO allow to be overridden by arguments
-int pixelsH = 1000; // Default value, TODO allow to be overridden by arguments
+int pixelsV = 100; // Default value, TODO allow to be overridden by arguments
+int pixelsH = 100; // Default value, TODO allow to be overridden by arguments
 // int pixelsV = 5; // Default value, TODO allow to be overridden by arguments
 // int pixelsH = 5; // Default value, TODO allow to be overridden by arguments
 ViewPlane viewplane;
@@ -1139,13 +1139,16 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
       for (PointLight light : pointLights) {
 
         lightDir = light.getLightVector(hitPoint.getX(), hitPoint.getY(), hitPoint.getZ());
-        if (use_tri && Vector3::dot(lightDir, hitTri.getNormalAtPoint(Point(), view)) < 0) { // light behind surface
+        if (use_tri && Vector3::dot(lightDir, hitTri.getNormalAtPoint(hitPoint, view)) < 0) { // light behind surface
+          std::cout<<"Light behind surface tri"<<std::endl;
           continue;
         }
-        if (use_poly && Vector3::dot(lightDir, hitPoly.getNormalAtPoint(Point(), view)) < 0) { // light behind surface
+        if (use_poly && Vector3::dot(lightDir, hitPoly.getNormalAtPoint(hitPoint, view)) < 0) { // light behind surface
+          std::cout<<"Light behind surface poly"<<std::endl;
           continue;
         }
-        if (use_ellipsoid && Vector3::dot(lightDir, hitEllipsoid.getNormalAtPoint(Point())) < 0) { // light behind surface
+        if (use_ellipsoid && Vector3::dot(lightDir, hitEllipsoid.getNormalAtPoint(hitPoint)) < 0) { // light behind surface
+          std::cout<<"Light behind surface ellipse"<<std::endl;
           continue;
         }
 
@@ -1182,6 +1185,7 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
         // std::cout << "hit time: " << minHit << std::endl;
         // END COPIED CODE FROM ABOVE
         if (minHit > epsilon && minHit <= 1.0) {
+          // std::cout << "AHHHHHHH" << std::e;ndl
           continue;
         }
 

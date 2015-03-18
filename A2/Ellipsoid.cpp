@@ -72,16 +72,15 @@ float Ellipsoid::hit(Ray ray){
 	c = 0.0 + transformedRay.getStartX()*transformedRay.getStartX()+transformedRay.getStartY()*
 		transformedRay.getStartY()+transformedRay.getStartZ()*transformedRay.getStartZ()-
 		1;
-
-	/*	
-	std::cout << "a = ";
-	std::cout << a;
-	std::cout << "\nb = ";
-	std::cout << b;
-	std::cout << "\nc = ";
-	std::cout << c;
-	std::cout << "\n";
-	*/
+		
+	// std::cout << "a = ";
+	// std::cout << a;
+	// std::cout << "\nb = ";
+	// std::cout << b;
+	// std::cout << "\nc = ";
+	// std::cout << c;
+	// std::cout << "\n";
+	
 	float dividend = b*b - 4*a*c;
 	if (dividend < 0.0 || a == 0.0){
 			

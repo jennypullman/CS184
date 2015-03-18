@@ -9,8 +9,10 @@ Triangle::Triangle(Material mat, Transformation trans, Vertex vert1, Vertex vert
 	this->vert2 = vert2;
 	this->vert3 = vert3;
 
-	Vector3 vec1 = Vector3(vert1.getX()-vert2.getX(), vert1.getY()-vert2.getY(), vert1.getZ()-vert2.getZ());
-	Vector3 vec2 = Vector3(vert3.getX()-vert2.getX(), vert3.getY()-vert2.getY(), vert3.getZ()-vert2.getZ());
+	// Vector3 vec1 = Vector3(vert1.getX()-vert2.getX(), vert1.getY()-vert2.getY(), vert1.getZ()-vert2.getZ());
+	// Vector3 vec2 = Vector3(vert3.getX()-vert2.getX(), vert3.getY()-vert2.getY(), vert3.getZ()-vert2.getZ());
+	Vector3 vec1 = Vector3(vert2.getX()-vert1.getX(), vert2.getY()-vert1.getY(), vert2.getZ()-vert1.getZ());
+	Vector3 vec2 = Vector3(vert3.getX()-vert1.getX(), vert3.getY()-vert1.getY(), vert3.getZ()-vert1.getZ());
 	Transformation normalTransformation = Transformation::getTranspose(Transformation::getInverse(trans));
 	this->norm = Transformation::vectorMultiply(normalTransformation, Vector3::cross(vec1, vec2));
 };
@@ -118,8 +120,8 @@ void Triangle::print(){
 Vector3 Triangle::getNormalAtPoint(Point pnt, Vector3 viewVect){
 	// TODO may want to get normal by interpolation of normal's at corners
 	Vector3 normal = this->norm;
-	if (Vector3::dot(this->norm, viewVect) < 0){
-		normal = Vector3(-this->norm.getX(), -this->norm.getY(), -this->norm.getZ());
-	}
+	// if (Vector3::dot(this->norm, viewVect) < 0){
+	// 	normal = Vector3(-this->norm.getX(), -this->norm.getY(), -this->norm.getZ());
+	// }
 	return normal;
 }
