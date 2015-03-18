@@ -3,7 +3,7 @@
 
 Triangle::Triangle() {
 };
-Triangle::Triangle(Material mat, Vertex vert1, Vertex vert2, Vertex vert3){
+Triangle::Triangle(Material mat, Transformation trans, Vertex vert1, Vertex vert2, Vertex vert3){
 	this->material = mat;
 	this->vert1 = vert1;
 	this->vert2 = vert2;
@@ -11,10 +11,11 @@ Triangle::Triangle(Material mat, Vertex vert1, Vertex vert2, Vertex vert3){
 
 	Vector3 vec1 = Vector3(vert1.getX()-vert2.getX(), vert1.getY()-vert2.getY(), vert1.getZ()-vert2.getZ());
 	Vector3 vec2 = Vector3(vert3.getX()-vert2.getX(), vert3.getY()-vert2.getY(), vert3.getZ()-vert2.getZ());
-	this->norm = Vector3::cross(vec1, vec2);
+	Transformation normalTransformation = Transformation::getTranspose(Transformation::getInverse(trans));
+	this->norm = Transformation::vectorMultiply(normalTransformation, Vector3::cross(vec1, vec2));
 };
 
-Triangle::Triangle(Material mat, Vertex vert1, Vertex vert2, Vertex vert3, Vector3 norm1, Vector3 norm2, Vector3 norm3){
+Triangle::Triangle(Material mat, Transformation trans, Vertex vert1, Vertex vert2, Vertex vert3, Vector3 norm1, Vector3 norm2, Vector3 norm3){
 	this->material = mat;
 	this->vert1 = vert1;
 	this->vert2 = vert2;
@@ -25,7 +26,8 @@ Triangle::Triangle(Material mat, Vertex vert1, Vertex vert2, Vertex vert3, Vecto
 
 	Vector3 vec1 = Vector3(vert1.getX()-vert2.getX(), vert1.getY()-vert2.getY(), vert1.getZ()-vert2.getZ());
 	Vector3 vec2 = Vector3(vert3.getX()-vert2.getX(), vert3.getY()-vert2.getY(), vert3.getZ()-vert2.getZ());
-	this->norm = Vector3::cross(vec1, vec2);
+	Transformation normalTransformation = Transformation::getTranspose(Transformation::getInverse(trans));
+	this->norm = Transformation::vectorMultiply(normalTransformation, Vector3::cross(vec1, vec2));
 };
 //instance methods
 Material Triangle::getMaterial(){
@@ -115,8 +117,9 @@ void Triangle::print(){
 }
 Vector3 Triangle::getNormalAtPoint(Point pnt, Vector3 viewVect){
 	// TODO may want to get normal by interpolation of normal's at corners
+	Vector3 normal = this->norm;
 	if (Vector3::dot(this->norm, viewVect) < 0){
-		this->norm = Vector3(-this->norm.getX(), -this->norm.getY(), -this->norm.getZ());
+		normal = Vector3(-this->norm.getX(), -this->norm.getY(), -this->norm.getZ());
 	}
-	return this->norm;
+	return normal;
 }
