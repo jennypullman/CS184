@@ -45,8 +45,8 @@ list<Polygon> polygons;
 //list<Sphere> spheres;
 list<Ellipsoid> ellipsoids;
 list<Shape*> shapes;
-int pixelsV = 100; // Default value, TODO allow to be overridden by arguments
-int pixelsH = 100; // Default value, TODO allow to be overridden by arguments
+int pixelsV = 1000; // Default value, TODO allow to be overridden by arguments
+int pixelsH = 1000; // Default value, TODO allow to be overridden by arguments
 // int pixelsV = 5; // Default value, TODO allow to be overridden by arguments
 // int pixelsH = 5; // Default value, TODO allow to be overridden by arguments
 ViewPlane viewplane;
@@ -976,7 +976,7 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
         // std::cout << "Shape type: " << typeid(triangle).name() << '\n';
         hitTime = triangle.hit(curRay);
         // std::cout << "hitTime: " << hitTime << std::endl;
-        if (minHit < epsilon || (hitTime >= 0.0 && hitTime < minHit)){
+        if (minHit < epsilon || (hitTime >= epsilon && hitTime < minHit)){
           minHit = hitTime;
           hitTri = triangle;
           use_tri = true;
@@ -986,9 +986,10 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
         // std::cout << "Shape type: " << typeid(poly).name() << '\n';
         hitTime = poly.hit(curRay);
         // std::cout << "hitTime: " << hitTime << std::endl;
-        if (minHit < epsilon || (hitTime >= 0.0 && hitTime < minHit)){
+        if (minHit < epsilon || (hitTime >= epsilon && hitTime < minHit)){
           minHit = hitTime;
           hitPoly = poly;
+          use_tri = false;
           use_poly = true;
         }
       }
@@ -998,14 +999,19 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
         hitTime = ellipsoid.hit(curRay);
          //std::cout << "hitTime: " << hitTime << std::endl;
 
-        if (minHit < epsilon || (hitTime >= 0.0 && hitTime < minHit)){
+        if (minHit < epsilon || (hitTime >= epsilon && hitTime < minHit)){
           minHit = hitTime;
           hitEllipsoid = ellipsoid;
+          use_tri = false;
+          use_poly = false;
           use_ellipsoid = true;
         }
       }
       //std::cout << minHit;
       //std::cout << "\n";
+
+      // std::cout << "use_tri: " << use_tri << ", use_poly: " << use_poly << ", use_ellipsoid: " << use_ellipsoid << std::endl;
+
 
       if (minHit < epsilon) {
         // std::cout<<"No real hit"<<std::endl;
@@ -1068,7 +1074,7 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
           // std::cout << "Shape type: " << typeid(triangle).name() << '\n';
           hitTime = triangle.hit(lightRay);
           // std::cout << "hitTime: " << hitTime << std::endl;
-          if (minHit < epsilon || (hitTime >= 0.0 && hitTime < minHit)){
+          if (minHit < epsilon || (hitTime >= epsilon && hitTime < minHit)){
             minHit = hitTime;
           }
         }
@@ -1076,7 +1082,7 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
           // std::cout << "Shape type: " << typeid(poly).name() << '\n';
           hitTime = poly.hit(lightRay);
           // std::cout << "hitTime: " << hitTime << std::endl;
-          if (minHit < epsilon || (hitTime >= 0.0 && hitTime < minHit)){
+          if (minHit < epsilon || (hitTime >= epsilon && hitTime < minHit)){
             minHit = hitTime;
           }
         }
@@ -1084,7 +1090,7 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
           // std::cout << "Shape type: " << typeid(sphere).name() << '\n';
           hitTime = ellipsoid.hit(lightRay);
           // std::cout << "hitTime: " << hitTime << std::endl;
-          if (minHit < epsilon || (hitTime >= 0.0 && hitTime < minHit)){
+          if (minHit < epsilon || (hitTime >= epsilon && hitTime < minHit)){
             minHit = hitTime;
           }
         }
@@ -1093,9 +1099,9 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
         // std::cout << "hit time: " << minHit << std::endl;
         // END COPIED CODE FROM ABOVE
         if (minHit > epsilon) {
-          std::cout<<"Object between light and surface, min hit: " << minHit <<std::endl;
-          std::cout<<"Light Ray Start X: " << lightRay.getStartX() << ", Y:" << lightRay.getStartY() << ", Z: " << lightRay.getStartZ() <<std::endl;
-          std::cout<<"Light Ray Direction X: " << lightRay.getDirectionX() << ", Y:" << lightRay.getDirectionY() << ", Z: " << lightRay.getDirectionZ() <<std::endl;
+          // std::cout<<"Object between light and surface, min hit: " << minHit <<std::endl;
+          // std::cout<<"Light Ray Start X: " << lightRay.getStartX() << ", Y:" << lightRay.getStartY() << ", Z: " << lightRay.getStartZ() <<std::endl;
+          // std::cout<<"Light Ray Direction X: " << lightRay.getDirectionX() << ", Y:" << lightRay.getDirectionY() << ", Z: " << lightRay.getDirectionZ() <<std::endl;
           continue;
         }
 
@@ -1140,15 +1146,15 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
 
         lightDir = light.getLightVector(hitPoint.getX(), hitPoint.getY(), hitPoint.getZ());
         if (use_tri && Vector3::dot(lightDir, hitTri.getNormalAtPoint(hitPoint, view)) < 0) { // light behind surface
-          std::cout<<"Light behind surface tri"<<std::endl;
+          // std::cout<<"Light behind surface tri"<<std::endl;
           continue;
         }
         if (use_poly && Vector3::dot(lightDir, hitPoly.getNormalAtPoint(hitPoint, view)) < 0) { // light behind surface
-          std::cout<<"Light behind surface poly"<<std::endl;
+          // std::cout<<"Light behind surface poly"<<std::endl;
           continue;
         }
         if (use_ellipsoid && Vector3::dot(lightDir, hitEllipsoid.getNormalAtPoint(hitPoint)) < 0) { // light behind surface
-          std::cout<<"Light behind surface ellipse"<<std::endl;
+          // std::cout<<"Light behind surface ellipse"<<std::endl;
           continue;
         }
 
@@ -1161,7 +1167,7 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
           // std::cout << "Shape type: " << typeid(triangle).name() << '\n';
           hitTime = triangle.hit(lightRay);
           // std::cout << "hitTime: " << hitTime << std::endl;
-          if (minHit < epsilon || (hitTime >= 0.0 && hitTime < minHit)){
+          if (minHit < epsilon || (hitTime >= epsilon && hitTime < minHit)){
             minHit = hitTime;
           }
         }
@@ -1169,7 +1175,7 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
           // std::cout << "Shape type: " << typeid(poly).name() << '\n';
           hitTime = poly.hit(lightRay);
           // std::cout << "hitTime: " << hitTime << std::endl;
-          if (minHit < epsilon || (hitTime >= 0.0 && hitTime < minHit)){
+          if (minHit < epsilon || (hitTime >= epsilon && hitTime < minHit)){
             minHit = hitTime;
           }
         }
@@ -1177,7 +1183,7 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
           // std::cout << "Shape type: " << typeid(sphere).name() << '\n';
           hitTime = ellipsoid.hit(lightRay);
           // std::cout << "hitTime: " << hitTime << std::endl;
-          if (minHit < epsilon || (hitTime >= 0.0 && hitTime < minHit)){
+          if (minHit < epsilon || (hitTime >= epsilon && hitTime < minHit)){
             minHit = hitTime;
           }
         }
@@ -1191,13 +1197,13 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
 
         // DONE calc normal and view vectors
         lightColor = light.getShadingOnObject(material,hitPoint, normal, view);
-        std::cout << "Light: ";
-        std::cout << lightColor.get_r();
-        std::cout << ", ";
-        std::cout << lightColor.get_g();
-        std::cout << ", ";
-        std::cout << lightColor.get_b();
-        std::cout << "\n";
+        // std::cout << "Light: ";
+        // std::cout << lightColor.get_r();
+        // std::cout << ", ";
+        // std::cout << lightColor.get_g();
+        // std::cout << ", ";
+        // std::cout << lightColor.get_b();
+        // std::cout << "\n";
 
         // lightColor = light.getShadingOnObject(hitShape.getMaterial(),hitPoint, normal, view);    
         curColor.update_r(curColor.get_r()+alphaR*lightColor.get_r());
@@ -1230,8 +1236,8 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
       // curRay = Ray(hitPoint.getX(), hitPoint.getY(), hitPoint.getZ(), dir.getX(), dir.getY(), dir.getZ());
 
 
-      float tmpScalar = 2*Vector3::dot(normal, lightDir);
-      Vector3 reflect = Vector3::add(Vector3::scalarMultiply(lightDir,-1.0), Vector3::scalarMultiply(normal, tmpScalar));
+      float tmpScalar = 2*Vector3::dot(normal, view);
+      Vector3 reflect = Vector3::add(Vector3::scalarMultiply(view, -1), Vector3::scalarMultiply(normal, tmpScalar));
       reflect.normalize();
       curRay = Ray(hitPoint.getX(), hitPoint.getY(), hitPoint.getZ(), reflect.getX(), reflect.getY(), reflect.getZ());
 
@@ -1243,15 +1249,15 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
       // TODO TO DO use totalDist info and falloff
     }
   }
-  if (curColor.get_r() != 0 || curColor.get_g() != 0 || curColor.get_b() != 0){
-    std::cout << "Final Color: ";
-        std::cout << curColor.get_r();
-        std::cout << ", ";
-        std::cout << curColor.get_g();
-        std::cout << ", ";
-        std::cout << curColor.get_b();
-        std::cout << "\n";
-  }
+  // if (curColor.get_r() != 0 || curColor.get_g() != 0 || curColor.get_b() != 0){
+    // std::cout << "Final Color: ";
+    //     std::cout << curColor.get_r();
+    //     std::cout << ", ";
+    //     std::cout << curColor.get_g();
+    //     std::cout << ", ";
+    //     std::cout << curColor.get_b();
+    //     std::cout << "\n";
+  // }
   // std::cout << "cur_color R: " << curColor.get_r() << ", G: " << curColor.get_g() << ", G:" << curColor.get_b() << std::endl;
   return curColor;
 }
@@ -1284,7 +1290,7 @@ int do_ray_tracing() {
     // std::cout << "viewRay X: " << viewRay.getDirectionX() << ", Y:" << viewRay.getDirectionY() << ", Z:" << viewRay.getDirectionZ() << std::endl;
 
     //call follow_ray with 5 as recursive depth
-    Color pixelColor = follow_ray(viewRay, 2);
+    Color pixelColor = follow_ray(viewRay, 10);
     // std::cout << "startColor R: " << startColor.get_r() << ", G: " << startColor.get_g() << ", G:" << startColor.get_b() << std::endl;
     
     // DONE lauren
