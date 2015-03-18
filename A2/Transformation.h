@@ -13,6 +13,8 @@ class Transformation {
 		void print();
 
 		//static methods
+		static Transformation scaleTransformation(Transformation trans, float scalar);
+		static Transformation addTransformation(Transformation trans1, Transformation trans2);
 		static Vertex transformVertex(Transformation trans, Vertex vert);
 		static Point transformPoint(Transformation trans, Point point);
 		static Transformation transformMultiply(Transformation trans1, Transformation trans2);
