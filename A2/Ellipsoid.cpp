@@ -23,11 +23,14 @@ float cx, float cy, float cz, float pxx,
 	this->pzz = pzz;*/
 
 Ellipsoid::Ellipsoid(Material material, Transformation trans, float cx, float cy, float cz, float r){
-	Transformation transformToUnit = Transformation(cx, cy, cz, 't');
-  	transformToUnit = Transformation::transformMultiply(transformToUnit, trans);
-  	transformToUnit = Transformation::transformMultiply(transformToUnit, Transformation(r, r, r, 's'));
-	this->transformation = transformToUnit;
-	Point center = Transformation::transformPoint(transformToUnit, Point(cx, cy, cz));
+	Transformation transformFromUnit = Transformation(cx, cy, cz, 't');
+	Point center = Point(0,0,0);
+	center = Transformation::transformPoint(trans, center);
+	center = Transformation::transformPoint(transformFromUnit, center);
+  	transformFromUnit = Transformation::transformMultiply(transformFromUnit,trans);
+  	transformFromUnit = Transformation::transformMultiply(transformFromUnit, Transformation(r, r, r, 's'));
+	this->transformation = transformFromUnit;
+	// Point center = Transformation::transformPoint(transformFromUnit, Point(0, 0, 0));
 	this->material = material;
 	this->cx = center.getX();
 	this->cy = center.getY();
