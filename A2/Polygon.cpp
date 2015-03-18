@@ -20,7 +20,8 @@ float Polygon::hit(Ray ray){
 	float t = -1.0;
 	for (int i = 0; i < this->trianglesLength; i++){
 		float triangleT = this->triangles[i].hit(ray);
-		if (t < 0.0 || (triangleT >= 0.0 && triangleT < t)){
+		float epsilon = 0.0001;
+		if (t < epsilon || (triangleT >= epsilon && triangleT < t)){
 			t = triangleT;
 			this->mostRecentHitTriangle = this->triangles[i];
 		};

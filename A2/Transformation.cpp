@@ -38,6 +38,7 @@ Transformation::Transformation(float f1, float f2, float f3, char type){
 	this->matrix[13] = 0.0;
 	this->matrix[14] = 0.0;
 	this->matrix[15] = 1.0;
+	float thetaEpisilon = 0.000000000001;
 	if (type == 't'){
 		std::cout << "translate\n";
 		this->matrix[0] = 1.0;
@@ -49,11 +50,20 @@ Transformation::Transformation(float f1, float f2, float f3, char type){
 		this->matrix[15] = 1.0;
 	} else if (type == 'r'){
 		Vector3 rhat = Vector3(f1, f2, f3);
-		// std::cout << "f1 = " << f1 << "\n";
-		// std::cout << "f2 = " << f2 << "\n";
-		// std::cout << "f3 = " << f3 << "\n";
+		std::cout << "f1 = " << f1 << "\n";
+		std::cout << "f2 = " << f2 << "\n";
+		std::cout << "f3 = " << f3 << "\n";
 		float theta = rhat.getMagnitude();
-		// std::cout << "theta = " << theta << "\n";
+		float sinTheta = sin(theta*M_PI/180);
+		float cosTheta = cos(theta*M_PI/180);
+		/*if ((sinTheta > 0.0 && sinTheta < thetaEpisilon) || (sinTheta < 0.0 || sinTheta > -thetaEpisilon)){
+			sinTheta = 0.0;
+		}
+		if ((cosTheta > 0.0 && cosTheta < thetaEpisilon) || (cosTheta < 0.0 || cosTheta > -thetaEpisilon)){
+			cosTheta = 0.0;
+		}*/
+		std::cout << "theta = " << theta << "\n";
+
 		rhat.normalize();
 		float rhatMatr[16] = {rhat.getX()*rhat.getX(), rhat.getX()*rhat.getY(), 
 			rhat.getX()*rhat.getZ(), 0.0, rhat.getX()*rhat.getY(), 
@@ -67,13 +77,13 @@ Transformation::Transformation(float f1, float f2, float f3, char type){
 		// rhatTransform.print();
 		Transformation rCross = Transformation(rCrossMatr);
 		// rCross.print();
-		Transformation finalTransform = Transformation::scaleTransformation(rCross, sin(theta*M_PI/180));
+		Transformation finalTransform = Transformation::scaleTransformation(rCross, sinTheta);
 		// finalTransform.print();
 		// std::cout << "pi " << M_PI << "\n";
 		// std::cout << "sin: " << sin(theta*M_PI/180) << " cos: " << cos(theta*M_PI/180) << "\n";
 		finalTransform = Transformation::addTransformation(rhatTransform, finalTransform);
 		Transformation rCrossSquared = Transformation::transformMultiply(rCross, rCross);
-		rCrossSquared = Transformation::scaleTransformation(rCrossSquared, -cos(theta*M_PI/180));
+		rCrossSquared = Transformation::scaleTransformation(rCrossSquared, -cosTheta);
 		finalTransform = Transformation::addTransformation(finalTransform, rCrossSquared);
 
 		float *finalTransformMatrix = finalTransform.getMatrix();
@@ -86,6 +96,7 @@ Transformation::Transformation(float f1, float f2, float f3, char type){
 		this->matrix[8] = finalTransformMatrix[8];
 		this->matrix[9] = finalTransformMatrix[9];
 		this->matrix[10] = finalTransformMatrix[10];
+		print();
 
 	} else if (type == 's'){
 		this->matrix[0] = f1;

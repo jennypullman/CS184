@@ -585,9 +585,11 @@ Polygon readObj(string fileName){
   int vertSize = vertices.size();
   vector<Vertex> vertexArr (vertSize);
   // Vertex vertexArr [vertSize];
+  std::cout << "curtransform: ";
+  curTransform.print();
   for (int i = 0; i < vertSize; i++){
     vertexArr[i] = Transformation::transformVertex(curTransform, vertices.front());
-
+    //vertexArr[i] = vertices.front();
     vertices.pop_front();
   };
   int normalSize = normals.size();
@@ -614,7 +616,7 @@ Polygon readObj(string fileName){
     faces.pop_front();
     if (face.numVerts < 6){
       curTri = Triangle(curMaterial, curTransform, vertexArr[face.vert1-1], vertexArr[face.vert2-1], vertexArr[face.vert3-1]);   
-      //curTri.print();
+      curTri.print();
     } else {
       curTri = Triangle(curMaterial, curTransform, vertexArr[face.vert1-1], vertexArr[face.vert2-1], vertexArr[face.vert3-1],
         normalArr[face.norm1-1], normalArr[face.norm2-1], normalArr[face.norm3-1]);
@@ -966,7 +968,6 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
 
   Color curColor = Color();
   bool use_tri, use_poly, use_ellipsoid;
-  float tmpScalar;
 
   if (shapes.size() > 0){
     for (int i = 0; i < recursiveDepth; i ++){
@@ -1241,7 +1242,7 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
       // curRay = Ray(hitPoint.getX(), hitPoint.getY(), hitPoint.getZ(), dir.getX(), dir.getY(), dir.getZ());
 
 
-      tmpScalar = 2*Vector3::dot(normal, view);
+      float tmpScalar = 2*Vector3::dot(normal, view);
       Vector3 reflect = Vector3::add(Vector3::scalarMultiply(view, -1), Vector3::scalarMultiply(normal, tmpScalar));
       reflect.normalize();
       curRay = Ray(hitPoint.getX(), hitPoint.getY(), hitPoint.getZ(), reflect.getX(), reflect.getY(), reflect.getZ());
