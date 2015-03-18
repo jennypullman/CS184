@@ -1154,7 +1154,7 @@ int do_ray_tracing() {
     //std::cout << "viewRay X: " << viewRay.getDirectionX() << ", Y:" << viewRay.getDirectionY() << ", Z:" << viewRay.getDirectionZ() << std::endl;
 
     //call follow_ray with 5 as recursive depth
-    Color pixelColor = follow_ray(viewRay, 5);
+    Color pixelColor = follow_ray(viewRay, 2);
     // std::cout << "startColor R: " << startColor.get_r() << ", G: " << startColor.get_g() << ", G:" << startColor.get_b() << std::endl;
     
     // DONE lauren
