@@ -27,11 +27,11 @@ Ellipsoid::Ellipsoid(Material material, Transformation trans, float cx, float cy
 	Point center = Point(0,0,0);
 	center = Transformation::transformPoint(trans, center);
 	center = Transformation::transformPoint(transformFromUnit, center);
-  	//transformFromUnit = Transformation::transformMultiply(transformFromUnit,Transformation(r, r, r, 's'));
-  	//transformFromUnit = Transformation::transformMultiply(transformFromUnit, trans);
+  	transformFromUnit = Transformation::transformMultiply(transformFromUnit,trans);
+  	transformFromUnit = Transformation::transformMultiply(transformFromUnit, Transformation(r, r, r, 's'));
   	//transformFromUnit = Transformation::transformMultiply(transformFromUnit, Transformation(r, r, r, 's'));
-  	Transformation tmp = Transformation::transformMultiply(trans, Transformation(r, r, r, 's'));
-  	transformFromUnit = Transformation::transformMultiply(tmp, transformFromUnit);
+  	//Transformation tmp = Transformation::transformMultiply(trans, Transformation(r, r, r, 's'));
+  	//transformFromUnit = Transformation::transformMultiply(tmp, transformFromUnit);
 	this->transformation = transformFromUnit;
 	// Point center = Transformation::transformPoint(transformFromUnit, Point(0, 0, 0));
 	this->material = material;
@@ -219,7 +219,7 @@ Point Ellipsoid::getMostRecentHitPoint(){
 
 Vector3 Ellipsoid::getNormalAtPoint(Point pnt){
 	pnt = Transformation::transformPoint(inverseTransformation, pnt);
-	// Vector3 normal = Vector3(pnt.getX()-this->cx, pnt.getY()-this->cy, pnt.getZ()-this->cz);
+	//Vector3 normal = Vector3(pnt.getX()-this->cx, pnt.getY()-this->cy, pnt.getZ()-this->cz);
 	Vector3 normal = Vector3(pnt.getX(), pnt.getY(), pnt.getZ());
 		
 	//normal = Transformation::vectorMultiply(this->transformation, normal);
