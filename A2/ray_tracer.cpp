@@ -30,6 +30,7 @@ struct Face {
   int norm1;
   int norm2;
   int norm3;
+  int numVerts;
 };
 
 //variables of the entire world
@@ -505,6 +506,7 @@ Polygon readObj(string fileName){
         nums[numIndex] = stof(arg);
         numIndex++;
       }
+      
       if (obj == "v"){
         vert = Vertex(nums[0], nums[1], nums[2]);
         vertices.push_back(vert);
@@ -522,6 +524,7 @@ Polygon readObj(string fileName){
       string arg = "";
       int numIndex = 0;
       string lastChar = " ";
+      bool hasNormals = false;
       while (c != EOF && c != '\n'){
         if (c == ' ' || c == '/'){
           if (lastChar != "/" && lastChar != " "){
@@ -537,17 +540,35 @@ Polygon readObj(string fileName){
       };
       if (arg != ""){
         nums[numIndex] = stoi(arg);
-        numIndex++;
+          numIndex++;
+        }
+      if (numIndex < 6){
+        std::cout << "should be here \n";
+        Face face = Face();
+        face.vert1 = nums[0];
+        std::cout << nums[0];
+        face.vert2 = nums[1];
+        std::cout << ", ";
+        std::cout << nums[1];
+        face.vert3 = nums[2];
+        std::cout << ", ";
+        std::cout << nums[2];
+        std::cout << "\n";
+        face.numVerts = numIndex;
+        faces.push_back(face);
+      } else {
+        Face face = Face();
+        face.vert1 = nums[0];
+        face.vert2 = nums[2];
+        face.vert3 = nums[4];
+        face.norm1 = nums[1];
+        face.norm2 = nums[3];
+        face.norm3 = nums[5];
+        face.numVerts = numIndex;
+        faces.push_back(face);
       }
-      Face face = Face();
-      face.vert1 = nums[0];
-      face.vert2 = nums[2];
-      face.vert3 = nums[4];
-      face.norm1 = nums[1];
-      face.norm2 = nums[3];
-      face.norm3 = nums[5];
-      faces.push_back(face);
-    } //else {
+    }
+     //else {
       //std::cout << "obj file incorrectly written";
     //};
 
@@ -560,13 +581,13 @@ Polygon readObj(string fileName){
   /***********************************************/
   /* Putting vertex and normal lists into arrays */
   /***********************************************/
+
   int vertSize = vertices.size();
   vector<Vertex> vertexArr (vertSize);
   // Vertex vertexArr [vertSize];
   for (int i = 0; i < vertSize; i++){
-    if (!curTransform.isNull()){
-      vertexArr[i] = Transformation::transformVertex(curTransform, vertices.front());
-    }
+    vertexArr[i] = Transformation::transformVertex(curTransform, vertices.front());
+
     vertices.pop_front();
   };
   int normalSize = normals.size();
@@ -585,13 +606,19 @@ Polygon readObj(string fileName){
   int numFaces = faces.size();
   vector<Triangle> triangleArr (numFaces);
   // Triangle triangleArr [numFaces];
+
   Face face;
   for (int i = 0; i < numFaces; i++){
     face = faces.front();
     //make sure this doesn't give errors
     faces.pop_front();
-    curTri = Triangle(curMaterial, curTransform, vertexArr[face.vert1-1], vertexArr[face.vert2-1], vertexArr[face.vert3-1],
-      normalArr[face.norm1-1], normalArr[face.norm2-1], normalArr[face.norm3-1]);    
+    if (face.numVerts < 6){
+      curTri = Triangle(curMaterial, curTransform, vertexArr[face.vert1-1], vertexArr[face.vert2-1], vertexArr[face.vert3-1]);   
+      curTri.print();
+    } else {
+      curTri = Triangle(curMaterial, curTransform, vertexArr[face.vert1-1], vertexArr[face.vert2-1], vertexArr[face.vert3-1],
+        normalArr[face.norm1-1], normalArr[face.norm2-1], normalArr[face.norm3-1]);
+    }    
     triangleArr[i] = curTri;
   };
 
@@ -981,7 +1008,7 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
       //std::cout << "\n";
 
       if (minHit < epsilon) {
-        std::cout<<"No real hit"<<std::endl;
+        // std::cout<<"No real hit"<<std::endl;
         break; // No real hit
       }
 
@@ -1241,7 +1268,7 @@ int do_ray_tracing() {
   // std::cout << "Shape: " << typeid(shape).name() << '\n';
 
   for (int i = 0; i < numPixels; i++){
-    std::cout << "pixelnum: " << i << ": ";
+    // std::cout << "pixelnum: " << i << ": ";
 
     //TO DO (lauren?)
     //get correct point through viewplane

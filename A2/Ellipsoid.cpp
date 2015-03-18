@@ -59,8 +59,8 @@ float Ellipsoid::hit(Ray ray){
 			vect.getX(), vect.getY(), vect.getZ());
 
 	//this->inverseTransformation.print();
-	inverseTransformation.print();
-	transformedRay.print();
+	// inverseTransformation.print();
+	// transformedRay.print();
 	//check if hits sphere
 	float a, b, c;
 	a = 0.0 + transformedRay.getDirectionX()*transformedRay.getDirectionX()+
@@ -73,7 +73,7 @@ float Ellipsoid::hit(Ray ray){
 		transformedRay.getStartY()+transformedRay.getStartZ()*transformedRay.getStartZ()-
 		1;
 
-		
+	/*	
 	std::cout << "a = ";
 	std::cout << a;
 	std::cout << "\nb = ";
@@ -81,7 +81,7 @@ float Ellipsoid::hit(Ray ray){
 	std::cout << "\nc = ";
 	std::cout << c;
 	std::cout << "\n";
-	
+	*/
 	float dividend = b*b - 4*a*c;
 	if (dividend < 0.0 || a == 0.0){
 			
