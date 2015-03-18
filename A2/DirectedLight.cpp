@@ -56,6 +56,8 @@ Color DirectedLight::getShadingOnObject(Material shp_mat, Point pnt, Vector3 nor
 	Color color = Color(0.0,0.0,0.0);
 
 	normal.normalize();
+	std::cout << "normal X: " << normal.getX() << ", Y: " << normal.getY() << ", Z:" << normal.getZ() << std::endl;
+
 	//find viewer vector
 	Vector3 viewVector = Vector3(view.getX(), view.getY(), view.getZ());
 	viewVector.normalize();
