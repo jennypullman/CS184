@@ -1102,9 +1102,16 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
       }
       //DONE (lauren?)-->need the reflection ray
       // get direction of reflection ray
-      Vector3 dir = Vector3::subtract(Vector3::scalarMultiply(normal, 2.0), view);
-      dir.normalize();
-      curRay = Ray(hitPoint.getX(), hitPoint.getY(), hitPoint.getZ(), dir.getX(), dir.getY(), dir.getZ());
+      // Vector3 dir = Vector3::subtract(Vector3::scalarMultiply(normal, 2.0), view);
+      // dir.normalize();
+      // curRay = Ray(hitPoint.getX(), hitPoint.getY(), hitPoint.getZ(), dir.getX(), dir.getY(), dir.getZ());
+
+
+      float tmpScalar = 2*Vector3::dot(normal, lightDir);
+      Vector3 reflect = Vector3::add(Vector3::scalarMultiply(lightDir,-1.0), Vector3::scalarMultiply(normal, tmpScalar));
+      reflect.normalize();
+      curRay = Ray(hitPoint.getX(), hitPoint.getY(), hitPoint.getZ(), reflect.getX(), reflect.getY(), reflect.getZ());
+
 
       alphaR = alphaR*material.getKrr();
       alphaG = alphaG*material.getKrg();
