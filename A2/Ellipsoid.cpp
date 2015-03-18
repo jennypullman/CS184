@@ -80,6 +80,13 @@ float Ellipsoid::hit(Ray ray){
 	*/
 	float dividend = b*b - 4*a*c;
 	if (dividend < 0.0 || a == 0.0){
+			
+		// std::cout << "a = ";
+		// std::cout << a;
+		// std::cout << "\ndividend = ";
+		// std::cout << dividend;
+		// std::cout << "\n";
+		
 		return -1.0;
 	}
 	dividend = sqrt(dividend);
@@ -105,19 +112,24 @@ float Ellipsoid::hit(Ray ray){
 	std::cout << ")\n";*/
 	//transformedRay.print();
 
-	if (t1 < 0.0 && t2 < 0.0){
+	float epsilon = 0.0001;
+
+	if (t1 < epsilon && t2 < epsilon){
+
+		// std::cout << t1;
+		// std::cout << "\n";
+		// std::cout << t2;
+		// std::cout << "yay\n";
+		
 		return -1.0;
-		/*
-		std::cout << t1;
-		std::cout << "\n";
-		std::cout << t2;
-		std::cout << "yay\n";
-		*/
+		
 	}
 	//transformedRay.print();
 
-	if (t1 >= 0.0) {
-		if (t2 >= 0.0 && t2 < t1){
+	// std::cout << "t1: " << t1 << ", t2: " << t2 << std::endl;
+
+	if (t1 >= epsilon) {
+		if (t2 >= epsilon && t2 < t1){
 			hitx = ray.getStartX() + t2*ray.getDirectionX();
 			hity = ray.getStartY() + t2*ray.getDirectionY();
 			hitz = ray.getStartZ() + t2*ray.getDirectionZ();
