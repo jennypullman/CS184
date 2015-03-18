@@ -56,12 +56,12 @@ Color DirectedLight::getShadingOnObject(Material shp_mat, Point pnt, Vector3 nor
 	Color color = Color(0.0,0.0,0.0);
 
 	normal.normalize();
-	std::cout << "normal X: " << normal.getX() << ", Y: " << normal.getY() << ", Z:" << normal.getZ() << std::endl;
+	// std::cout << "normal X: " << normal.getX() << ", Y: " << normal.getY() << ", Z:" << normal.getZ() << std::endl;
 
 	//find viewer vector
 	Vector3 viewVector = Vector3(view.getX(), view.getY(), view.getZ());
 	viewVector.normalize();
-    std::cout << "viewVector X: " << viewVector.getX() << ", Y: " << viewVector.getY() << ", Z:" << viewVector.getZ() << std::endl;
+    // std::cout << "viewVector X: " << viewVector.getX() << ", Y: " << viewVector.getY() << ", Z:" << viewVector.getZ() << std::endl;
 
 
 	// TODO why were we doing this?
@@ -70,11 +70,11 @@ Color DirectedLight::getShadingOnObject(Material shp_mat, Point pnt, Vector3 nor
 		//calculate light vector
 		Vector3 lightVector = getLightVector(pnt.getX(), pnt.getY(), pnt.getZ());
 		lightVector.normalize();
-      	std::cout << "lightVector X: " << lightVector.getX() << ", Y: " << lightVector.getY() << ", Z:" << lightVector.getZ() << std::endl;
+      	// std::cout << "lightVector X: " << lightVector.getX() << ", Y: " << lightVector.getY() << ", Z:" << lightVector.getZ() << std::endl;
 		//calculate reflection vector
 		Vector3 reflectVector = getReflectionVector(normal);
 		reflectVector.normalize();
-      	std::cout << "reflectVector X: " << reflectVector.getX() << ", Y: " << reflectVector.getY() << ", Z:" << reflectVector.getZ() << std::endl;
+      	// std::cout << "reflectVector X: " << reflectVector.getX() << ", Y: " << reflectVector.getY() << ", Z:" << reflectVector.getZ() << std::endl;
 		
       	float ambient = 0.0;
 
@@ -86,8 +86,8 @@ Color DirectedLight::getShadingOnObject(Material shp_mat, Point pnt, Vector3 nor
 		float specular = shp_mat.getKsr() * r * pow(max(Vector3::dot(reflectVector, viewVector), 0.f), shp_mat.getKsp());
 		//AMBIENT COMPONENT
 		// float ambient = shp_mat.getKar() * r;
-      	std::cout << "R: kd: " << shp_mat.getKdr() << ", kd: " << shp_mat.getKsr() << ", ka:" << shp_mat.getKar() << std::endl;
-      	std::cout << "R: diffuse: " << diffuse << ", specular: " << specular << ", ambient:" << ambient << std::endl;
+      	// std::cout << "R: kd: " << shp_mat.getKdr() << ", kd: " << shp_mat.getKsr() << ", ka:" << shp_mat.getKar() << std::endl;
+      	// std::cout << "R: diffuse: " << diffuse << ", specular: " << specular << ", ambient:" << ambient << std::endl;
 		color.update_r(diffuse + specular + ambient);
 
 		//for green:
@@ -98,8 +98,8 @@ Color DirectedLight::getShadingOnObject(Material shp_mat, Point pnt, Vector3 nor
 		specular = shp_mat.getKsg() * g * pow(max(Vector3::dot(reflectVector, viewVector), 0.f), shp_mat.getKsp());
 		//AMBIENT COMPONENT
 		// ambient = shp_mat.getKag() * g;
-      	std::cout << "G: kd: " << shp_mat.getKdg() << ", kd: " << shp_mat.getKsg() << ", ka:" << shp_mat.getKag() << std::endl;
-		std::cout << "G: diffuse: " << diffuse << ", specular: " << specular << ", ambient:" << ambient << std::endl;
+      	// std::cout << "G: kd: " << shp_mat.getKdg() << ", kd: " << shp_mat.getKsg() << ", ka:" << shp_mat.getKag() << std::endl;
+		// std::cout << "G: diffuse: " << diffuse << ", specular: " << specular << ", ambient:" << ambient << std::endl;
 		color.update_g(diffuse + specular + ambient);
 
 		//for blue:
@@ -110,8 +110,8 @@ Color DirectedLight::getShadingOnObject(Material shp_mat, Point pnt, Vector3 nor
 		specular = shp_mat.getKsb() * b * pow(max(Vector3::dot(reflectVector, viewVector), 0.f), shp_mat.getKsp());
 		//AMBIENT COMPONENT
 		// ambient = shp_mat.getKab() * b;
-      	std::cout << "B: kd: " << shp_mat.getKdb() << ", kd: " << shp_mat.getKsb() << ", ka:" << shp_mat.getKab() << std::endl;
-		std::cout << "B: diffuse: " << diffuse << ", specular: " << specular << ", ambient:" << ambient << std::endl;
+      	// std::cout << "B: kd: " << shp_mat.getKdb() << ", kd: " << shp_mat.getKsb() << ", ka:" << shp_mat.getKab() << std::endl;
+		// std::cout << "B: diffuse: " << diffuse << ", specular: " << specular << ", ambient:" << ambient << std::endl;
 		color.update_b(diffuse + specular + ambient);
 		
 	}
