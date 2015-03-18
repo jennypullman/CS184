@@ -33,9 +33,8 @@ Ellipsoid::Ellipsoid(Material material, Transformation trans, float cx, float cy
 	this->cy = center.getY();
 	this->cz = center.getZ();
 	this->radius = r;
-	//this->transformation = trans;
 	this->inverseTransformation = Transformation::getInverse(transformation);
-	transformation.print();
+	//inverseTransformation.print();
 }
 
 Material Ellipsoid::getMaterial(){
@@ -43,15 +42,20 @@ Material Ellipsoid::getMaterial(){
 }
 
 float Ellipsoid::hit(Ray ray){
+	//inverseTransformation.print();
+
 	//transform ray
 	Vertex vert = Vertex(ray.getStartX(), ray.getStartY(), ray.getStartZ());
 	Vector3 vect = Vector3(ray.getDirectionX(), ray.getDirectionY(), ray.getDirectionZ());
+	// std::cout << "start of hit: \n";
+	//ray.print();
 	vert = Transformation::transformVertex(this->inverseTransformation, vert);
 	vect = Transformation::vectorMultiply(this->inverseTransformation, vect);
 	Ray transformedRay = Ray(vert.getX(), vert.getY(), vert.getZ(), 
 			vect.getX(), vect.getY(), vect.getZ());
 	//this->inverseTransformation.print();
-	//ray.print();
+
+	//transformedRay.print();
 
 	//transformedRay.print();
 	//check if hits sphere
@@ -75,7 +79,7 @@ float Ellipsoid::hit(Ray ray){
 	std::cout << "\n";
 	*/
 	float dividend = b*b - 4*a*c;
-	if (dividend < 0.0){
+	if (dividend < 0.0 || a == 0.0){
 		return -1.0;
 	}
 	dividend = sqrt(dividend);
@@ -99,7 +103,9 @@ float Ellipsoid::hit(Ray ray){
 	std::cout << ", ";
 	std::cout << transformedRay.getDirectionZ();
 	std::cout << ")\n";*/
-	if (t1 < 0.0 || t2 < 0.0){
+	//transformedRay.print();
+
+	if (t1 < 0.0 && t2 < 0.0){
 		return -1.0;
 		/*
 		std::cout << t1;

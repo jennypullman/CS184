@@ -79,6 +79,11 @@ int ViewPlane::getNumPixels(){
 }
 
 Point ViewPlane::getPixelCoords(int numPixel){
+	
+	std::cout << "llx: " << llx << ", lly: " << lly << ", llz: " << llz << std::endl;
+	std::cout << "lrx: " << lrx << ", lry: " << lry << ", lrz: " << lrz << std::endl;
+	std::cout << "ulx: " << ulx << ", uly: " << uly << ", ulz: " << ulz << std::endl;
+	std::cout << "urx: " << urx << ", ury: " << ury << ", urz: " << urz << std::endl;
 	int pixY = (int) numPixel/pixelsHoriz;
 	int pixX = numPixel%pixelsHoriz;
     // std::cout << "pixY: " << pixY << ", pixX: " << pixX << "\n";
@@ -90,7 +95,7 @@ Point ViewPlane::getPixelCoords(int numPixel){
 	float px = u*(v*llx+(1-v)*ulx) + (1-u)*(v*lrx+(1-v)*urx);
 	float py = u*(v*lly+(1-v)*uly) + (1-u)*(v*lry+(1-v)*ury);
 	float pz = u*(v*llz+(1-v)*ulz) + (1-u)*(v*lrz+(1-v)*urz);
-    // std::cout << "px: " << px << ", py: " << py << ", pz: " << pz << "\n";
+    std::cout << "px: " << px << ", py: " << py << ", pz: " << pz << "\n";
 
 	return Point(px,py,pz);
 }

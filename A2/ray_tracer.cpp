@@ -564,16 +564,17 @@ void handleCam(string camInfo){
   float args[15];
   handleArgs(15, args, camInfo);
   // DONE Lauren (image and viewplane)
+  std::cout << camInfo;
   ex = args[0], ey = args[1], ez = args[2];
   llx = args[3], lly = args[4], llz = args[5];
   lrx = args[6], lry = args[7], lrz = args[8];
   ulx = args[9], uly = args[10], ulz = args[11];
   urx = args[12], ury = args[13], urz = args[14];
 
-  // std::cout << "llx: " << llx << ", lly: " << lly << ", llz: " << llz << std::endl;
-  // std::cout << "lrx: " << lrx << ", lry: " << lry << ", lrz: " << lrz << std::endl;
-  // std::cout << "ulx: " << ulx << ", uly: " << uly << ", ulz: " << ulz << std::endl;
-  // std::cout << "urx: " << urx << ", ury: " << ury << ", urz: " << urz << std::endl;
+  std::cout << "llx: " << llx << ", lly: " << lly << ", llz: " << llz << std::endl;
+  std::cout << "lrx: " << lrx << ", lry: " << lry << ", lrz: " << lrz << std::endl;
+  std::cout << "ulx: " << ulx << ", uly: " << uly << ", ulz: " << ulz << std::endl;
+  std::cout << "urx: " << urx << ", ury: " << ury << ", urz: " << urz << std::endl;
 
   camera = Camera(args[0], args[1], args[2]);
   image = Image(pixelsV, pixelsH);
@@ -836,7 +837,7 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
   float totalDist = 0.0;
   float alphaR = 1.0, alphaG = 1.0, alphaB = 1.0;
 
-  float epsilon = 0.0001; // don't want to capture ray's intersection with it's starting point
+  float epsilon = 0.00001; // don't want to capture ray's intersection with it's starting point
 
   float minHit = -1.0;
   Point hitPoint;
@@ -888,6 +889,7 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
       //std::cout << "\n";
 
       if (minHit < epsilon) {
+        // std::cout<<"No real hit"<<std::endl;
         break; // No real hit
       }
 
@@ -926,12 +928,15 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
         //std::cout << "here\n";
         lightDir = light.getLightVector(hitPoint.getX(), hitPoint.getY(), hitPoint.getZ());
         if (use_tri && Vector3::dot(lightDir, hitTri.getNormalAtPoint(Point(), view)) < 0) { // light behind surface
+          std::cout<<"Light behind surface tri"<<std::endl;
           continue;
         }
         if (use_poly && Vector3::dot(lightDir, hitPoly.getNormalAtPoint(Point(), view)) < 0) { // light behind surface
+          std::cout<<"Light behind surface poly"<<std::endl;
           continue;
         }
         if (use_ellipsoid && Vector3::dot(lightDir, hitEllipsoid.getNormalAtPoint(Point())) < 0) { // light behind surface
+          std::cout<<"Light behind surface ellipse"<<std::endl;
           continue;
         }
 
@@ -968,7 +973,10 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
         //std::cout << "\n";
         // std::cout << "hit time: " << minHit << std::endl;
         // END COPIED CODE FROM ABOVE
-        if (minHit > epsilon && minHit <= 1.0) {
+        if (minHit > epsilon) {
+          std::cout<<"Object between light and surface, min hit: " << minHit <<std::endl;
+          std::cout<<"Light Ray Start X: " << lightRay.getStartX() << ", Y:" << lightRay.getStartY() << ", Z: " << lightRay.getStartZ() <<std::endl;
+          std::cout<<"Light Ray Direction X: " << lightRay.getDirectionX() << ", Y:" << lightRay.getDirectionY() << ", Z: " << lightRay.getDirectionZ() <<std::endl;
           continue;
         }
 
@@ -1134,16 +1142,16 @@ int do_ray_tracing() {
   // std::cout << "Shape: " << typeid(shape).name() << '\n';
 
   for (int i = 0; i < numPixels; i++){
-    // std::cout << "pixelnum: " << i << std::endl;
+    std::cout << "pixelnum: " << i << ": ";
 
     //TO DO (lauren?)
     //get correct point through viewplane
     Point viewPoint = viewplane.getPixelCoords(i);
-    // std::cout << "viewPoint X: " << viewPoint.getX() << ", Y:" << viewPoint.getY() << ", Z:" << viewPoint.getZ() << std::endl;
+    std::cout << "viewPoint X: " << viewPoint.getX() << ", Y:" << viewPoint.getY() << ", Z:" << viewPoint.getZ() << std::endl;
     
     // TODO semantics of ray definition
     Ray viewRay = Ray(viewPoint.getX(), viewPoint.getY(), viewPoint.getZ(), viewPoint.getX()-camera.getX(), viewPoint.getY()-camera.getY(), viewPoint.getZ()-camera.getZ());
-    // std::cout << "viewRay X: " << viewRay.getDirectionX() << ", Y:" << viewRay.getDirectionY() << ", Z:" << viewRay.getDirectionZ() << std::endl;
+    std::cout << "viewRay X: " << viewRay.getDirectionX() << ", Y:" << viewRay.getDirectionY() << ", Z:" << viewRay.getDirectionZ() << std::endl;
 
     //call follow_ray with 5 as recursive depth
     Color pixelColor = follow_ray(viewRay, 5);
