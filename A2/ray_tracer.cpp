@@ -958,17 +958,21 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
 
   float epsilon = 0.00001; // don't want to capture ray's intersection with it's starting point
 
-  float minHit = -1.0;
+  float minHit;
   Point hitPoint;
   Triangle hitTri;
   Polygon hitPoly;
   Ellipsoid hitEllipsoid;
 
   Color curColor = Color();
-  bool use_tri, use_poly, use_ellipsoid = false;
+  bool use_tri, use_poly, use_ellipsoid;
 
   if (shapes.size() > 0){
     for (int i = 0; i < recursiveDepth; i ++){
+      // Initialize
+      minHit = -1.0;
+      use_tri = false, use_poly = false, use_ellipsoid = false;
+
       // std::cout << "\n follow i: " << i << '\n';
       //get hittime, shape, and point
       float hitTime = 0.0;
@@ -1290,7 +1294,7 @@ int do_ray_tracing() {
     // std::cout << "viewRay X: " << viewRay.getDirectionX() << ", Y:" << viewRay.getDirectionY() << ", Z:" << viewRay.getDirectionZ() << std::endl;
 
     //call follow_ray with 5 as recursive depth
-    Color pixelColor = follow_ray(viewRay, 10);
+    Color pixelColor = follow_ray(viewRay, 5);
     // std::cout << "startColor R: " << startColor.get_r() << ", G: " << startColor.get_g() << ", G:" << startColor.get_b() << std::endl;
     
     // DONE lauren
