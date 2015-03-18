@@ -27,8 +27,11 @@ Ellipsoid::Ellipsoid(Material material, Transformation trans, float cx, float cy
 	Point center = Point(0,0,0);
 	center = Transformation::transformPoint(trans, center);
 	center = Transformation::transformPoint(transformFromUnit, center);
-  	transformFromUnit = Transformation::transformMultiply(transformFromUnit,trans);
-  	transformFromUnit = Transformation::transformMultiply(transformFromUnit, Transformation(r, r, r, 's'));
+  	//transformFromUnit = Transformation::transformMultiply(transformFromUnit,Transformation(r, r, r, 's'));
+  	//transformFromUnit = Transformation::transformMultiply(transformFromUnit, trans);
+  	//transformFromUnit = Transformation::transformMultiply(transformFromUnit, Transformation(r, r, r, 's'));
+  	Transformation tmp = Transformation::transformMultiply(trans, Transformation(r, r, r, 's'));
+  	transformFromUnit = Transformation::transformMultiply(tmp, transformFromUnit);
 	this->transformation = transformFromUnit;
 	// Point center = Transformation::transformPoint(transformFromUnit, Point(0, 0, 0));
 	this->material = material;
@@ -137,26 +140,26 @@ float Ellipsoid::hit(Ray ray){
 			hity = ray.getStartY() + t2*ray.getDirectionY();
 			hitz = ray.getStartZ() + t2*ray.getDirectionZ();
 			//this->mostRecentHitPoint = Transformation::transformPoint(this->transformation, Point(hitx, hity, hitz));
-			std::cout << "Printing point: ";
+			/*std::cout << "Printing point: ";
 			std::cout << hitx;
 			std::cout << ", ";
 			std::cout << hity;
 			std::cout << ", ";
 			std::cout << hitz;
-			std::cout << "\n";
+			std::cout << "\n";*/
 			this->mostRecentHitPoint = Point(hitx, hity, hitz);
 			return t2;
 		}
 		hitx = ray.getStartX() + t1*ray.getDirectionX();
 		hity = ray.getStartY() + t1*ray.getDirectionY();
 		hitz = ray.getStartZ() + t1*ray.getDirectionZ();
-		std::cout << "Printing point: ";
+		/*std::cout << "Printing point: ";
 		std::cout << hitx;
 		std::cout << ", ";
 		std::cout << hity;
 		std::cout << ", ";
 		std::cout << hitz;
-		std::cout << "\n";
+		std::cout << "\n";*/
 		///this->mostRecentHitPoint = Transformation::transformPoint(this->transformation, Point(hitx, hity, hitz));
 		this->mostRecentHitPoint = Point(hitx, hity, hitz);
 		return t1;
@@ -167,13 +170,13 @@ float Ellipsoid::hit(Ray ray){
 	hitx = ray.getStartX() + t2*ray.getDirectionX();
 	hity = ray.getStartY() + t2*ray.getDirectionY();
 	hitz = ray.getStartZ() + t2*ray.getDirectionZ();
-	std::cout << "Printing point: ";
-		std::cout << hitx;
-		std::cout << ", ";
-		std::cout << hity;
-		std::cout << ", ";
-		std::cout << hitz;
-		std::cout << "\n";
+	/*std::cout << "Printing point: ";
+	std::cout << hitx;
+	std::cout << ", ";
+	std::cout << hity;
+	std::cout << ", ";
+	std::cout << hitz;
+	std::cout << "\n";*/
 	//this->mostRecentHitPoint = Transformation::transformPoint(this->transformation, Point(hitx, hity, hitz));
 	//this->mostRecentHitPoint = Point(transformedRay.getDirectionX(), transformedRay.getDirectionY(), transformedRay.getDirectionZ());
 	//this->mostRecentHitPoint = Point(1,1,3);
@@ -215,8 +218,10 @@ Point Ellipsoid::getMostRecentHitPoint(){
 }
 
 Vector3 Ellipsoid::getNormalAtPoint(Point pnt){
-	Vector3 normal = Vector3(pnt.getX()-this->cx, pnt.getY()-this->cy, pnt.getZ()-this->cz);
-	
+	pnt = Transformation::transformPoint(inverseTransformation, pnt);
+	// Vector3 normal = Vector3(pnt.getX()-this->cx, pnt.getY()-this->cy, pnt.getZ()-this->cz);
+	Vector3 normal = Vector3(pnt.getX(), pnt.getY(), pnt.getZ());
+		
 	//normal = Transformation::vectorMultiply(this->transformation, normal);
 	normal = Transformation::vectorMultiply(Transformation::getTranspose(this->inverseTransformation), normal);
 	

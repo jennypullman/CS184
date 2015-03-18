@@ -89,9 +89,9 @@ int Image::printToFile(char* filename){
 	int x, y;
 	for (y=0 ; y<h ; y++) {
 		for (x=0 ; x<w ; x++) {
-			row[x*3] = (int) fmin(255*rgb[y*w+x].get_r(),255);
-			row[x*3+1] = (int) fmin(255*rgb[y*w+x].get_g(),255);
-			row[x*3+2] = (int) fmin(255*rgb[y*w+x].get_b(),255);
+			row[x*3] = (int) fmin(255*rgb[y*w+(w-x)].get_r(),255);
+			row[x*3+1] = (int) fmin(255*rgb[y*w+(w-x)].get_g(),255);
+			row[x*3+2] = (int) fmin(255*rgb[y*w+(w-x)].get_b(),255);
 			// std::cout << "Color r = "<< rgb[y*w+x].get_r() << std::endl;
 			// std::cout << "Color r in row = "<< row[x*3] << std::endl;
 		}
