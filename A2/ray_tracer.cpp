@@ -966,6 +966,7 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
 
   Color curColor = Color();
   bool use_tri, use_poly, use_ellipsoid;
+  float tmpScalar;
 
   if (shapes.size() > 0){
     for (int i = 0; i < recursiveDepth; i ++){
@@ -1240,7 +1241,7 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
       // curRay = Ray(hitPoint.getX(), hitPoint.getY(), hitPoint.getZ(), dir.getX(), dir.getY(), dir.getZ());
 
 
-      float tmpScalar = 2*Vector3::dot(normal, view);
+      tmpScalar = 2*Vector3::dot(normal, view);
       Vector3 reflect = Vector3::add(Vector3::scalarMultiply(view, -1), Vector3::scalarMultiply(normal, tmpScalar));
       reflect.normalize();
       curRay = Ray(hitPoint.getX(), hitPoint.getY(), hitPoint.getZ(), reflect.getX(), reflect.getY(), reflect.getZ());
