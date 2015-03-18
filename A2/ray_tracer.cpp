@@ -44,8 +44,8 @@ list<Polygon> polygons;
 //list<Sphere> spheres;
 list<Ellipsoid> ellipsoids;
 list<Shape*> shapes;
-int pixelsV = 10; // Default value, TODO allow to be overridden by arguments
-int pixelsH = 10; // Default value, TODO allow to be overridden by arguments
+int pixelsV = 100; // Default value, TODO allow to be overridden by arguments
+int pixelsH = 100; // Default value, TODO allow to be overridden by arguments
 // int pixelsV = 5; // Default value, TODO allow to be overridden by arguments
 // int pixelsH = 5; // Default value, TODO allow to be overridden by arguments
 ViewPlane viewplane;
@@ -97,7 +97,8 @@ void triangleHitTest(){
   Vertex vert2 = Vertex(3,0,0);
   Vertex vert3 = Vertex(0,3,0);
   Material mat = Material(0,0,0,0,0,0,0,0,0,0,0,0,0);
-  Triangle tri = Triangle(mat, vert1, vert2, vert3);
+  Transformation trans = Transformation();
+  Triangle tri = Triangle(mat, trans, vert1, vert2, vert3);
   Ray ray = Ray(1,1,-1,0,0,1);
   float hit = tri.hit(ray);
   std::cout << "Should be 1: ";
@@ -111,16 +112,26 @@ void triangleHitTest(){
 void ellipsoidHitTest(){
   std::cout << "Running ellipsoidHitTest...\n";
   Material material = Material(1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 0.0, 0.0, 2.0, 1.0, 1.0, 1.0);
-  float transform [16] = {1.0/4, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1};
+  float transform [16] = {1.0/2, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1};
   Transformation transformation = Transformation(transform);
   std::cout << "Transformation in ellipse test: ";
   transformation.print();
   Ellipsoid ellipsoid = Ellipsoid(material, transformation, 0, 0, 0, 3);
   Ray ray = Ray(0, 0, -1, 1, 1, 1);
   float hit = ellipsoid.hit(ray);
-  std::cout << "Should be 4: ";
+  std::cout << "Should be -1: ";
   std::cout << hit;
   std::cout << "\n";
+  
+  if (hit != 4.0) {
+    numFailedTests += 1;
+  }
+  ray = Ray(0, 0, 5, 0, 0, -1);
+  hit = ellipsoid.hit(ray);
+  std::cout << "Should be 4.666667: ";
+  std::cout << hit;
+  std::cout << "\n";
+  std::cout << "Point should be (0, 0, .333333): \n";
   std::cout << "Point: (";
   Point hitPoint = ellipsoid.getMostRecentHitPoint();
   std::cout << hitPoint.getX();
@@ -129,17 +140,19 @@ void ellipsoidHitTest(){
   std::cout << ", ";
   std::cout << hitPoint.getZ();
   std::cout << ") \n";
-  if (hit != 4.0) {
-    numFailedTests += 1;
-  }
-  ray = Ray(5, 0, -1, 0, 0, 1);
-  hit = ellipsoid.hit(ray);
-  std::cout << "Should be -1: ";
-  std::cout << hit;
-  std::cout << "\n";
-  if (hit != -1.0) {
-    numFailedTests += 1;
-  }
+
+  //hitting ellipsoid with light
+  DirectedLight dirLight = DirectedLight(-1, -1, -1, 1.0, 1.0, 1.0);
+  Vector3 view = Vector3(0, 0, -1);
+  Color clr = dirLight.getShadingOnObject(material, Point(0,0,1), ellipsoid.getNormalAtPoint(Point(0,0,1)),view);
+  std::cout << "Color at point: (";
+  std::cout << clr.get_r();
+  std::cout << ", ";
+  std::cout << clr.get_g();
+  std::cout << ", ";
+  std::cout << clr.get_b();
+  std::cout << ")\n";
+  
 }
 
 Color pointLightShadingTest() {
@@ -300,7 +313,7 @@ Vector3 triangleNormTest() {
   // Triangle tri = Triangle(Material(), Vertex(0.0, 1.0, 2.0), Vertex(1.0, 2.0, 3.0), Vertex(0.25, 0.5, 0.75));
   // EXPECT X: -0.75, Y: 1.5, Z: -0.75
 
-  Triangle tri = Triangle(Material(), Vertex(0.0, 1.0, 2.0), Vertex(1.0, 2.0, 3.0), Vertex(0.25, 0.5, 0.75), Vector3(), Vector3(), Vector3());
+  Triangle tri = Triangle(Material(), Transformation(), Vertex(0.0, 1.0, 2.0), Vertex(1.0, 2.0, 3.0), Vertex(0.25, 0.5, 0.75), Vector3(), Vector3(), Vector3());
   // EXPECT X: -0.75, Y: 1.5, Z: -0.75
   Vector3 view = Vector3(0,0,1);
 
@@ -485,7 +498,7 @@ Polygon readObj(string fileName){
     face = faces.front();
     //make sure this doesn't give errors
     faces.pop_front();
-    curTri = Triangle(curMaterial, vertexArr[face.vert1-1], vertexArr[face.vert2-1], vertexArr[face.vert3-1],
+    curTri = Triangle(curMaterial, curTransform, vertexArr[face.vert1-1], vertexArr[face.vert2-1], vertexArr[face.vert3-1],
       normalArr[face.norm1-1], normalArr[face.norm2-1], normalArr[face.norm3-1]);    
     triangleArr[i] = curTri;
   };
@@ -551,16 +564,17 @@ void handleCam(string camInfo){
   float args[15];
   handleArgs(15, args, camInfo);
   // DONE Lauren (image and viewplane)
+  std::cout << camInfo;
   ex = args[0], ey = args[1], ez = args[2];
   llx = args[3], lly = args[4], llz = args[5];
   lrx = args[6], lry = args[7], lrz = args[8];
   ulx = args[9], uly = args[10], ulz = args[11];
   urx = args[12], ury = args[13], urz = args[14];
 
-  // std::cout << "llx: " << llx << ", lly: " << lly << ", llz: " << llz << std::endl;
-  // std::cout << "lrx: " << lrx << ", lry: " << lry << ", lrz: " << lrz << std::endl;
-  // std::cout << "ulx: " << ulx << ", uly: " << uly << ", ulz: " << ulz << std::endl;
-  // std::cout << "urx: " << urx << ", ury: " << ury << ", urz: " << urz << std::endl;
+  std::cout << "llx: " << llx << ", lly: " << lly << ", llz: " << llz << std::endl;
+  std::cout << "lrx: " << lrx << ", lry: " << lry << ", lrz: " << lrz << std::endl;
+  std::cout << "ulx: " << ulx << ", uly: " << uly << ", ulz: " << ulz << std::endl;
+  std::cout << "urx: " << urx << ", ury: " << ury << ", urz: " << urz << std::endl;
 
   camera = Camera(args[0], args[1], args[2]);
   image = Image(pixelsV, pixelsH);
@@ -580,7 +594,8 @@ void handleSph(string sphInfo){
   //Sphere sphere = Sphere(curMaterial, center.getX(), center.getY(), center.getZ(), args[3]);
   //spheres.push_back(sphere);
   //shapes.push_back(&sphere);
-  Ellipsoid ellipsoid = Ellipsoid(curMaterial, curTransform, center.getX(), center.getY(), center.getZ(), args[3]);
+  //center = Transformation::transformVertex(curTransform, center);
+  Ellipsoid ellipsoid = Ellipsoid(curMaterial, curTransform, args[0], args[1], args[2], args[3]);
   ellipsoids.push_back(ellipsoid);
   shapes.push_back(&ellipsoid);
 }
@@ -600,7 +615,7 @@ void handleTri(string triInfo){
     vert2 = Transformation::transformVertex(curTransform, vert2);
     vert3 = Transformation::transformVertex(curTransform, vert3);
   }
-  Triangle tri = Triangle(curMaterial, vert1, vert2, vert3);
+  Triangle tri = Triangle(curMaterial, curTransform, vert1, vert2, vert3);
   triangles.push_back(tri);
   shapes.push_back(&tri);
 }
@@ -817,6 +832,7 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
     //determine reflecion ray (hit point in direction of reflection vector)
     //store reflection ray as curr_ray
   Ray curRay = start_ray;
+  //start_ray.print();
 
   float totalDist = 0.0;
   float alphaR = 1.0, alphaG = 1.0, alphaB = 1.0;
@@ -859,8 +875,10 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
       }
       for (Ellipsoid ellipsoid : ellipsoids) { // Check all spheres
         // std::cout << "Shape type: " << typeid(sphere).name() << '\n';
+        //curRay.print();
         hitTime = ellipsoid.hit(curRay);
-        // std::cout << "hitTime: " << hitTime << std::endl;
+         //std::cout << "hitTime: " << hitTime << std::endl;
+
         if (minHit < epsilon || (hitTime >= 0.0 && hitTime < minHit)){
           minHit = hitTime;
           hitEllipsoid = ellipsoid;
@@ -951,8 +969,8 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
             minHit = hitTime;
           }
         }
-        std::cout << minHit;
-        std::cout << "\n";
+        //std::cout << minHit;
+        //std::cout << "\n";
         // std::cout << "hit time: " << minHit << std::endl;
         // END COPIED CODE FROM ABOVE
         if (minHit > epsilon) {
@@ -976,9 +994,27 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
         std::cout << lightColor.get_b();
         std::cout << "\n";*/
         // lightColor = light.getShadingOnObject(hitShape.getMaterial(),hitPoint, normal, view);
+          /*if (lightColor.get_r() != 0 || lightColor.get_g() != 0 || lightColor.get_b() != 0){
+    std::cout << "Final Color: ";
+        std::cout << lightColor.get_r();
+        std::cout << ", ";
+        std::cout << lightColor.get_g();
+        std::cout << ", ";
+        std::cout << lightColor.get_b();
+        std::cout << "\n";
+  }*/
         curColor.update_r(curColor.get_r()+alphaR*lightColor.get_r());
         curColor.update_g(curColor.get_g()+alphaG*lightColor.get_g());
-        curColor.update_b(curColor.get_b()+alphaB*lightColor.get_b());        
+        curColor.update_b(curColor.get_b()+alphaB*lightColor.get_b());  
+          /*if (curColor.get_r() != 0 || curColor.get_g() != 0 || curColor.get_b() != 0){
+    std::cout << "Final Color: ";
+        std::cout << curColor.get_r();
+        std::cout << ", ";
+        std::cout << curColor.get_g();
+        std::cout << ", ";
+        std::cout << curColor.get_b();
+        std::cout << "\n";
+  }      */
       }
 
       for (PointLight light : pointLights) {
@@ -1053,7 +1089,16 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
         // lightColor = light.getShadingOnObject(hitShape.getMaterial(),hitPoint, normal, view);
         curColor.update_r(curColor.get_r()+alphaR*lightColor.get_r());
         curColor.update_g(curColor.get_g()+alphaG*lightColor.get_g());
-        curColor.update_b(curColor.get_b()+alphaB*lightColor.get_b());           
+        curColor.update_b(curColor.get_b()+alphaB*lightColor.get_b());  
+          /*if (curColor.get_r() != 0 || curColor.get_g() != 0 || curColor.get_b() != 0){
+    std::cout << "Final Color: ";
+        std::cout << curColor.get_r();
+        std::cout << ", ";
+        std::cout << curColor.get_g();
+        std::cout << ", ";
+        std::cout << curColor.get_b();
+        std::cout << "\n";
+  }         */
       }
       //DONE (lauren?)-->need the reflection ray
       // get direction of reflection ray
@@ -1069,13 +1114,13 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
     }
   }
   if (curColor.get_r() != 0 || curColor.get_g() != 0 || curColor.get_b() != 0){
-    //std::cout << "Final Color: ";
-     //   std::cout << curColor.get_r();
-      //  std::cout << ", ";
-      //  std::cout << curColor.get_g();
-      //  std::cout << ", ";
-      //  std::cout << curColor.get_b();
-      //  std::cout << "\n";
+    std::cout << "Final Color: ";
+        std::cout << curColor.get_r();
+        std::cout << ", ";
+        std::cout << curColor.get_g();
+        std::cout << ", ";
+        std::cout << curColor.get_b();
+        std::cout << "\n";
   }
   // std::cout << "cur_color R: " << curColor.get_r() << ", G: " << curColor.get_g() << ", G:" << curColor.get_b() << std::endl;
   return curColor;
@@ -1102,11 +1147,11 @@ int do_ray_tracing() {
     //TO DO (lauren?)
     //get correct point through viewplane
     Point viewPoint = viewplane.getPixelCoords(i);
-    // std::cout << "viewPoint X: " << viewPoint.getX() << ", Y:" << viewPoint.getY() << ", Z:" << viewPoint.getZ() << std::endl;
+    std::cout << "viewPoint X: " << viewPoint.getX() << ", Y:" << viewPoint.getY() << ", Z:" << viewPoint.getZ() << std::endl;
     
     // TODO semantics of ray definition
     Ray viewRay = Ray(viewPoint.getX(), viewPoint.getY(), viewPoint.getZ(), viewPoint.getX()-camera.getX(), viewPoint.getY()-camera.getY(), viewPoint.getZ()-camera.getZ());
-    // std::cout << "viewRay X: " << viewRay.getDirectionX() << ", Y:" << viewRay.getDirectionY() << ", Z:" << viewRay.getDirectionZ() << std::endl;
+    std::cout << "viewRay X: " << viewRay.getDirectionX() << ", Y:" << viewRay.getDirectionY() << ", Z:" << viewRay.getDirectionZ() << std::endl;
 
     //call follow_ray with 5 as recursive depth
     Color pixelColor = follow_ray(viewRay, 5);

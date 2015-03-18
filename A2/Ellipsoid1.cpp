@@ -23,18 +23,14 @@ float cx, float cy, float cz, float pxx,
 	this->pzz = pzz;*/
 
 Ellipsoid::Ellipsoid(Material material, Transformation trans, float cx, float cy, float cz, float r){
-	Transformation transformToUnit = Transformation(cx, cy, cz, 't');
-  	transformToUnit = Transformation::transformMultiply(transformToUnit, trans);
-  	transformToUnit = Transformation::transformMultiply(transformToUnit, Transformation(r, r, r, 's'));
-	this->transformation = transformToUnit;
-	Point center = Transformation::transformPoint(transformToUnit, Point(cx, cy, cz));
 	this->material = material;
-	this->cx = center.getX();
-	this->cy = center.getY();
-	this->cz = center.getZ();
+	this->cx = cx;
+	this->cy = cy;
+	this->cz = cz;
 	this->radius = r;
+	this->transformation = trans;
 	this->inverseTransformation = Transformation::getInverse(transformation);
-	//inverseTransformation.print();
+	transformation.print();
 }
 
 Material Ellipsoid::getMaterial(){
@@ -42,20 +38,15 @@ Material Ellipsoid::getMaterial(){
 }
 
 float Ellipsoid::hit(Ray ray){
-	//inverseTransformation.print();
-
 	//transform ray
 	Vertex vert = Vertex(ray.getStartX(), ray.getStartY(), ray.getStartZ());
 	Vector3 vect = Vector3(ray.getDirectionX(), ray.getDirectionY(), ray.getDirectionZ());
-	// std::cout << "start of hit: \n";
-	//ray.print();
 	vert = Transformation::transformVertex(this->inverseTransformation, vert);
 	vect = Transformation::vectorMultiply(this->inverseTransformation, vect);
 	Ray transformedRay = Ray(vert.getX(), vert.getY(), vert.getZ(), 
 			vect.getX(), vect.getY(), vect.getZ());
 	//this->inverseTransformation.print();
-
-	//transformedRay.print();
+	//ray.print();
 
 	//transformedRay.print();
 	//check if hits sphere
@@ -63,12 +54,15 @@ float Ellipsoid::hit(Ray ray){
 	a = transformedRay.getDirectionX()*transformedRay.getDirectionX()+
 		transformedRay.getDirectionY()*transformedRay.getDirectionY()+
 		transformedRay.getDirectionZ()*transformedRay.getDirectionZ();
-	b = 2*transformedRay.getDirectionX()*transformedRay.getStartX()+
-		2*transformedRay.getDirectionY()*transformedRay.getStartY()+
-		2*transformedRay.getDirectionZ()*transformedRay.getStartZ();
+	b = 2*transformedRay.getDirectionX()*(transformedRay.getStartX()-this->cx)+
+		2*transformedRay.getDirectionY()*(transformedRay.getStartY()-this->cy)+
+		2*transformedRay.getDirectionZ()*(transformedRay.getStartZ()-this->cz);
 	c = transformedRay.getStartX()*transformedRay.getStartX()+transformedRay.getStartY()*
-		transformedRay.getStartY()+transformedRay.getStartZ()*transformedRay.getStartZ()-
-		1;
+		transformedRay.getStartY()+transformedRay.getStartZ()*transformedRay.getStartZ()+
+		this->cx*this->cx + this->cy*this->cy + this->cz*this->cz -
+		2*(transformedRay.getStartX()*this->cx + transformedRay.getStartY()*this->cy + 
+		transformedRay.getStartZ()*this->cz) -
+		this->radius*this->radius;
 	/*	
 	std::cout << "a = ";
 	std::cout << a;
@@ -79,7 +73,7 @@ float Ellipsoid::hit(Ray ray){
 	std::cout << "\n";
 	*/
 	float dividend = b*b - 4*a*c;
-	if (dividend < 0.0 || a == 0.0){
+	if (dividend < 0.0){
 		return -1.0;
 	}
 	dividend = sqrt(dividend);
@@ -103,17 +97,13 @@ float Ellipsoid::hit(Ray ray){
 	std::cout << ", ";
 	std::cout << transformedRay.getDirectionZ();
 	std::cout << ")\n";*/
-	//transformedRay.print();
-
-	if (t1 < 0.0 && t2 < 0.0){
-		return -1.0;
-		/*
+	/*if (t1 >= 0.0 || t2 >= 0.0){
 		std::cout << t1;
 		std::cout << "\n";
 		std::cout << t2;
 		std::cout << "yay\n";
-		*/
-	}
+
+	}*/
 	//transformedRay.print();
 
 	if (t1 >= 0.0) {
@@ -122,26 +112,26 @@ float Ellipsoid::hit(Ray ray){
 			hity = ray.getStartY() + t2*ray.getDirectionY();
 			hitz = ray.getStartZ() + t2*ray.getDirectionZ();
 			//this->mostRecentHitPoint = Transformation::transformPoint(this->transformation, Point(hitx, hity, hitz));
-			std::cout << "Printing point: ";
+			/*std::cout << "Printing point: ";
 			std::cout << hitx;
 			std::cout << ", ";
 			std::cout << hity;
 			std::cout << ", ";
 			std::cout << hitz;
-			std::cout << "\n";
+			std::cout << "\n";*/
 			this->mostRecentHitPoint = Point(hitx, hity, hitz);
 			return t2;
 		}
 		hitx = ray.getStartX() + t1*ray.getDirectionX();
 		hity = ray.getStartY() + t1*ray.getDirectionY();
 		hitz = ray.getStartZ() + t1*ray.getDirectionZ();
-		std::cout << "Printing point: ";
+		/*std::cout << "Printing point: ";
 		std::cout << hitx;
 		std::cout << ", ";
 		std::cout << hity;
 		std::cout << ", ";
 		std::cout << hitz;
-		std::cout << "\n";
+		std::cout << "\n";*/
 		///this->mostRecentHitPoint = Transformation::transformPoint(this->transformation, Point(hitx, hity, hitz));
 		this->mostRecentHitPoint = Point(hitx, hity, hitz);
 		return t1;
@@ -152,13 +142,13 @@ float Ellipsoid::hit(Ray ray){
 	hitx = ray.getStartX() + t2*ray.getDirectionX();
 	hity = ray.getStartY() + t2*ray.getDirectionY();
 	hitz = ray.getStartZ() + t2*ray.getDirectionZ();
-	std::cout << "Printing point: ";
+	/*std::cout << "Printing point: ";
 		std::cout << hitx;
 		std::cout << ", ";
 		std::cout << hity;
 		std::cout << ", ";
 		std::cout << hitz;
-		std::cout << "\n";
+		std::cout << "\n";*/
 	//this->mostRecentHitPoint = Transformation::transformPoint(this->transformation, Point(hitx, hity, hitz));
 	//this->mostRecentHitPoint = Point(transformedRay.getDirectionX(), transformedRay.getDirectionY(), transformedRay.getDirectionZ());
 	//this->mostRecentHitPoint = Point(1,1,3);
