@@ -614,7 +614,7 @@ Polygon readObj(string fileName){
     faces.pop_front();
     if (face.numVerts < 6){
       curTri = Triangle(curMaterial, curTransform, vertexArr[face.vert1-1], vertexArr[face.vert2-1], vertexArr[face.vert3-1]);   
-      curTri.print();
+      //curTri.print();
     } else {
       curTri = Triangle(curMaterial, curTransform, vertexArr[face.vert1-1], vertexArr[face.vert2-1], vertexArr[face.vert3-1],
         normalArr[face.norm1-1], normalArr[face.norm2-1], normalArr[face.norm3-1]);
@@ -1047,15 +1047,15 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
         //std::cout << "here\n";
         lightDir = light.getLightVector(hitPoint.getX(), hitPoint.getY(), hitPoint.getZ());
         if (use_tri && Vector3::dot(lightDir, hitTri.getNormalAtPoint(hitPoint, view)) < 0) { // light behind surface
-          std::cout<<"Light behind surface tri"<<std::endl;
+          // std::cout<<"Light behind surface tri"<<std::endl;
           continue;
         }
         if (use_poly && Vector3::dot(lightDir, hitPoly.getNormalAtPoint(hitPoint, view)) < 0) { // light behind surface
-          std::cout<<"Light behind surface poly"<<std::endl;
+          // std::cout<<"Light behind surface poly"<<std::endl;
           continue;
         }
         if (use_ellipsoid && Vector3::dot(lightDir, hitEllipsoid.getNormalAtPoint(hitPoint)) < 0) { // light behind surface
-          std::cout<<"Light behind surface ellipse"<<std::endl;
+          // std::cout<<"Light behind surface ellipse"<<std::endl;
           continue;
         }
 
