@@ -46,14 +46,14 @@ Material Ellipsoid::getMaterial(){
 float Ellipsoid::hit(Ray ray){
 	//inverseTransformation.print();
 
-	std::cout << "Center: ";
+	/*std::cout << "Center: ";
 	std::cout << cx;
 	std::cout << ", ";
 	std::cout << cy;
 	std::cout << ", ";
 	std::cout << cz;
 	std::cout << ") \n";
-	transformation.print();
+	transformation.print();*/
 
 	//transform ray
 	Vertex vert = Vertex(ray.getStartX(), ray.getStartY(), ray.getStartZ());

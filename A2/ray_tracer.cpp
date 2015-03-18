@@ -44,8 +44,8 @@ list<Polygon> polygons;
 //list<Sphere> spheres;
 list<Ellipsoid> ellipsoids;
 list<Shape*> shapes;
-int pixelsV = 1000; // Default value, TODO allow to be overridden by arguments
-int pixelsH = 1000; // Default value, TODO allow to be overridden by arguments
+int pixelsV = 100; // Default value, TODO allow to be overridden by arguments
+int pixelsH = 100; // Default value, TODO allow to be overridden by arguments
 // int pixelsV = 5; // Default value, TODO allow to be overridden by arguments
 // int pixelsH = 5; // Default value, TODO allow to be overridden by arguments
 ViewPlane viewplane;
@@ -1142,16 +1142,16 @@ int do_ray_tracing() {
   // std::cout << "Shape: " << typeid(shape).name() << '\n';
 
   for (int i = 0; i < numPixels; i++){
-    std::cout << "pixelnum: " << i << ": ";
+   //std::cout << "pixelnum: " << i << ": ";
 
     //TO DO (lauren?)
     //get correct point through viewplane
     Point viewPoint = viewplane.getPixelCoords(i);
-    std::cout << "viewPoint X: " << viewPoint.getX() << ", Y:" << viewPoint.getY() << ", Z:" << viewPoint.getZ() << std::endl;
+    //std::cout << "viewPoint X: " << viewPoint.getX() << ", Y:" << viewPoint.getY() << ", Z:" << viewPoint.getZ() << std::endl;
     
     // TODO semantics of ray definition
     Ray viewRay = Ray(viewPoint.getX(), viewPoint.getY(), viewPoint.getZ(), viewPoint.getX()-camera.getX(), viewPoint.getY()-camera.getY(), viewPoint.getZ()-camera.getZ());
-    std::cout << "viewRay X: " << viewRay.getDirectionX() << ", Y:" << viewRay.getDirectionY() << ", Z:" << viewRay.getDirectionZ() << std::endl;
+    //std::cout << "viewRay X: " << viewRay.getDirectionX() << ", Y:" << viewRay.getDirectionY() << ", Z:" << viewRay.getDirectionZ() << std::endl;
 
     //call follow_ray with 5 as recursive depth
     Color pixelColor = follow_ray(viewRay, 5);
