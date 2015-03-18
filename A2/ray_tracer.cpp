@@ -155,6 +155,94 @@ void ellipsoidHitTest(){
   
 }
 
+void unitSphereNormalTest(){
+  Ellipsoid unitSphere = Ellipsoid(Material(), Transformation(), 0, 0, 0, 1);
+  float z;
+  Vector3 normal;
+  std::cout << "Centered at origin: \n";
+  for (float x = -1; x <= 1; x+=.1){
+    for (float y = -1; y <=1;  y+=.1){
+      z = pow(x, 2) + pow(y, 2) - 1;
+      normal = unitSphere.getNormalAtPoint(Point(x, y, z));
+      if (x != normal.getX() || y != normal.getY() || z != normal.getZ()){  
+        std::cout << "Fail: Normal should be (";
+        std::cout << x;
+        std::cout << ", ";
+        std::cout << y;
+        std::cout << ", ";
+        std::cout << z;
+        std::cout << ") but is: (";
+        std::cout << normal.getX();
+        std::cout << ", ";
+        std::cout << normal.getY();
+        std::cout << ", ";
+        std::cout << normal.getZ();
+        std::cout << ")\n";
+      }
+
+    }
+  }
+
+  std::cout << "Centered at (0, 0, -1)";
+  unitSphere = Ellipsoid(Material(), Transformation(), 0, 0, -1, 1);
+  for (float x = -1; x <= 1; x+=.1){
+    for (float y = -1; y <=1;  y+=.1){
+      z = pow(x, 2) + pow(y, 2) - 1;
+      normal = unitSphere.getNormalAtPoint(Point(x, y, z));
+      if (x != normal.getX() || y != normal.getY() || z+1 != normal.getZ()){  
+        std::cout << "Fail: Normal should be (";
+        std::cout << x;
+        std::cout << ", ";
+        std::cout << y;
+        std::cout << ", ";
+        std::cout << z;
+        std::cout << ") but is: (";
+        std::cout << normal.getX();
+        std::cout << ", ";
+        std::cout << normal.getY();
+        std::cout << ", ";
+        std::cout << normal.getZ();
+        std::cout << ")\n";
+      }
+
+    }
+  }
+
+  std::cout << "Intersection Test...\n";
+  Point tmpCam = Point(0, 0, 5);
+  Point viewPoint = Point(0,-5.0/6,0);
+  Ray viewRay = Ray(viewPoint.getX(), viewPoint.getY(), viewPoint.getZ(), 
+    viewPoint.getX()-tmpCam.getX(), viewPoint.getY()-tmpCam.getY(), 
+    viewPoint.getZ()-tmpCam.getZ());
+  std::cout << "View ray should be: (0,-0.83333,0) + (0,-0.83333,-5)t, ray actually is:\n";
+  viewRay.print();
+  float hitTime = unitSphere.hit(viewRay);
+  std::cout << "hitTime should be 0.135135, actually is: ";
+  std::cout << hitTime;
+  std::cout << "\n hitPoint should be (0, -.945945, -0.675675), actually is: (";
+  std::cout << unitSphere.getMostRecentHitPoint().getX();
+  std::cout << ", ";
+  std::cout << unitSphere.getMostRecentHitPoint().getY();
+  std::cout << ", ";
+  std::cout << unitSphere.getMostRecentHitPoint().getZ();
+  std::cout << ") \n";
+  std::cout << "Normal from this point should be: (";
+  normal = unitSphere.getNormalAtPoint(unitSphere.getMostRecentHitPoint());
+  std::cout << unitSphere.getMostRecentHitPoint().getX();
+  std::cout << ", ";
+  std::cout << unitSphere.getMostRecentHitPoint().getY();
+  std::cout << ", ";
+  std::cout << unitSphere.getMostRecentHitPoint().getZ()+1;
+  std::cout << ") and is: \n";  
+  std::cout << normal.getX();
+  std::cout << ", ";
+  std::cout << normal.getY();
+  std::cout << ", ";
+  std::cout << normal.getZ();
+  std::cout << ")\n";
+
+}
+
 Color pointLightShadingTest() {
   // Material mat = Material(1.0, 0.25, 0.5, 
   //   1.0, 1.0, 0.0, 1.0, 1.0, 1.0, 2,
@@ -324,39 +412,43 @@ Vector3 triangleNormTest() {
 void runTests(){
   std::cout << "Running Test 1:  printToFile test" << std::endl;
   int code = printToFileTest();
-  std::cout << "End Test 1:  code = "<< code << std::endl;
+  std::cout << "End Test 1:  code = "<< code << std::endl << std::endl;
   
   std::cout << "Running Test 2:  Triangle Hit test" << std::endl;
   triangleHitTest();
-  std::cout << "End Test 2:  Number of failed tests: " << numFailedTests << "\n";
+  std::cout << "End Test 2:  Number of failed tests: " << numFailedTests << "\n" << std::endl;
 
   std::cout << "Running Test 3:  PointLight shading test" << std::endl;
   Color clr = pointLightShadingTest();
-  std::cout << "End Test 3:  R: "<< clr.get_r() << ", G: " << clr.get_g() << ", B: " << clr.get_b() << std::endl;
+  std::cout << "End Test 3:  R: "<< clr.get_r() << ", G: " << clr.get_g() << ", B: " << clr.get_b() << std::endl << std::endl;
 
   std::cout << "Running Test 4:  DirectedLight shading test" << std::endl;
   clr = dirLightShadingTest();
-  std::cout << "End Test 4:  R: "<< clr.get_r() << ", G: " << clr.get_g() << ", B: " << clr.get_b() << std::endl;
+  std::cout << "End Test 4:  R: "<< clr.get_r() << ", G: " << clr.get_g() << ", B: " << clr.get_b() << std::endl << std::endl;
 
   std::cout << "Running Test 5:  AmbientLight shading test" << std::endl;
   clr = ambLightShadingTest();
-  std::cout << "End Test 5:  R: "<< clr.get_r() << ", G: " << clr.get_g() << ", B: " << clr.get_b() << std::endl;
+  std::cout << "End Test 5:  R: "<< clr.get_r() << ", G: " << clr.get_g() << ", B: " << clr.get_b() << std::endl << std::endl;
 
   std::cout << "Running Test 6:  Triangle Normal test" << std::endl;
   Vector3 norm = triangleNormTest();
-  std::cout << "End Test 6:  X: "<< norm.getX() << ", Y: " << norm.getY() << ", Z: " << norm.getZ() << std::endl;
+  std::cout << "End Test 6:  X: "<< norm.getX() << ", Y: " << norm.getY() << ", Z: " << norm.getZ() << std::endl << std::endl;
 
   std::cout << "Running Test 7: Ellipsoid Hit Test: " << std::endl;
   ellipsoidHitTest();
-  std::cout << "End Test 7: Number of failed tests: " << numFailedTests << "\n";
+  std::cout << "End Test 7: Number of failed tests: " << numFailedTests << "\n" << std::endl;
 
   std::cout << "Running Test 8: Inverse Transform Test: " << std::endl;
   inverseTransformTest();
-  std::cout << "End Test 8: " << "\n";
+  std::cout << "End Test 8: " << "\n" << std::endl;
 
   std::cout << "Running Test 9: Transform Multiply Test: " << std::endl;
   transformMultiplyTest();
-  std::cout << "End Test 9: " << "\n";
+  std::cout << "End Test 9: " << "\n" << std::endl;
+
+  std::cout << "Running Test 10: Unit Sphere Normal Test: " << std::endl;
+  unitSphereNormalTest();
+  std::cout << "End Test 10: " << std::endl << std::endl;
 
 }
 
