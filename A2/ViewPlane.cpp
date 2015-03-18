@@ -80,10 +80,11 @@ int ViewPlane::getNumPixels(){
 
 Point ViewPlane::getPixelCoords(int numPixel){
 	
-	std::cout << "llx: " << llx << ", lly: " << lly << ", llz: " << llz << std::endl;
-	std::cout << "lrx: " << lrx << ", lry: " << lry << ", lrz: " << lrz << std::endl;
-	std::cout << "ulx: " << ulx << ", uly: " << uly << ", ulz: " << ulz << std::endl;
-	std::cout << "urx: " << urx << ", ury: " << ury << ", urz: " << urz << std::endl;
+	// std::cout << "llx: " << llx << ", lly: " << lly << ", llz: " << llz << std::endl;
+	// std::cout << "lrx: " << lrx << ", lry: " << lry << ", lrz: " << lrz << std::endl;
+	// std::cout << "ulx: " << ulx << ", uly: " << uly << ", ulz: " << ulz << std::endl;
+	// std::cout << "urx: " << urx << ", ury: " << ury << ", urz: " << urz << std::endl;
+	
 	int pixY = (int) numPixel/pixelsHoriz;
 	int pixX = numPixel%pixelsHoriz;
     // std::cout << "pixY: " << pixY << ", pixX: " << pixX << "\n";

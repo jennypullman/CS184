@@ -44,8 +44,8 @@ list<Polygon> polygons;
 //list<Sphere> spheres;
 list<Ellipsoid> ellipsoids;
 list<Shape*> shapes;
-int pixelsV = 100; // Default value, TODO allow to be overridden by arguments
-int pixelsH = 100; // Default value, TODO allow to be overridden by arguments
+int pixelsV = 1000; // Default value, TODO allow to be overridden by arguments
+int pixelsH = 1000; // Default value, TODO allow to be overridden by arguments
 // int pixelsV = 5; // Default value, TODO allow to be overridden by arguments
 // int pixelsH = 5; // Default value, TODO allow to be overridden by arguments
 ViewPlane viewplane;
@@ -571,10 +571,10 @@ void handleCam(string camInfo){
   ulx = args[9], uly = args[10], ulz = args[11];
   urx = args[12], ury = args[13], urz = args[14];
 
-  std::cout << "llx: " << llx << ", lly: " << lly << ", llz: " << llz << std::endl;
-  std::cout << "lrx: " << lrx << ", lry: " << lry << ", lrz: " << lrz << std::endl;
-  std::cout << "ulx: " << ulx << ", uly: " << uly << ", ulz: " << ulz << std::endl;
-  std::cout << "urx: " << urx << ", ury: " << ury << ", urz: " << urz << std::endl;
+  // std::cout << "llx: " << llx << ", lly: " << lly << ", llz: " << llz << std::endl;
+  // std::cout << "lrx: " << lrx << ", lry: " << lry << ", lrz: " << lrz << std::endl;
+  // std::cout << "ulx: " << ulx << ", uly: " << uly << ", ulz: " << ulz << std::endl;
+  // std::cout << "urx: " << urx << ", ury: " << ury << ", urz: " << urz << std::endl;
 
   camera = Camera(args[0], args[1], args[2]);
   image = Image(pixelsV, pixelsH);
@@ -889,7 +889,7 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
       //std::cout << "\n";
 
       if (minHit < epsilon) {
-        // std::cout<<"No real hit"<<std::endl;
+        std::cout<<"No real hit"<<std::endl;
         break; // No real hit
       }
 
@@ -927,15 +927,15 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
       for (DirectedLight light : directedLights) {
         //std::cout << "here\n";
         lightDir = light.getLightVector(hitPoint.getX(), hitPoint.getY(), hitPoint.getZ());
-        if (use_tri && Vector3::dot(lightDir, hitTri.getNormalAtPoint(Point(), view)) < 0) { // light behind surface
+        if (use_tri && Vector3::dot(lightDir, hitTri.getNormalAtPoint(hitPoint, view)) < 0) { // light behind surface
           std::cout<<"Light behind surface tri"<<std::endl;
           continue;
         }
-        if (use_poly && Vector3::dot(lightDir, hitPoly.getNormalAtPoint(Point(), view)) < 0) { // light behind surface
+        if (use_poly && Vector3::dot(lightDir, hitPoly.getNormalAtPoint(hitPoint, view)) < 0) { // light behind surface
           std::cout<<"Light behind surface poly"<<std::endl;
           continue;
         }
-        if (use_ellipsoid && Vector3::dot(lightDir, hitEllipsoid.getNormalAtPoint(Point())) < 0) { // light behind surface
+        if (use_ellipsoid && Vector3::dot(lightDir, hitEllipsoid.getNormalAtPoint(hitPoint)) < 0) { // light behind surface
           std::cout<<"Light behind surface ellipse"<<std::endl;
           continue;
         }
