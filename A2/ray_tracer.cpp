@@ -1043,8 +1043,9 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
         material = hitEllipsoid.getMaterial();
       }
 
-      // std::cout << "hitPoint X: " << hitPoint.getX() << ", Y: " << hitPoint.getY() << ", Z:" << hitPoint.getZ() << std::endl;
-      // std::cout << "normal X: " << normal.getX() << ", Y: " << normal.getY() << ", Z:" << normal.getZ() << std::endl;
+      std::cout << "hitPoint X: " << hitPoint.getX() << ", Y: " << hitPoint.getY() << ", Z:" << hitPoint.getZ() << std::endl;
+      std::cout << "normal X: " << normal.getX() << ", Y: " << normal.getY() << ", Z:" << normal.getZ() << std::endl;
+      std::cout << "view X: " << view.getX() << ", Y: " << view.getY() << ", Z:" << view.getZ() << std::endl;
 
       //update distance
       totalDist += sqrt(pow(hitPoint.getX()-curRay.getStartX(),2)+pow(hitPoint.getY()-curRay.getStartY(),2)+
@@ -1211,7 +1212,11 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
         // std::cout << lightColor.get_b();
         // std::cout << "\n";
 
-        // lightColor = light.getShadingOnObject(hitShape.getMaterial(),hitPoint, normal, view);    
+        // lightColor = light.getShadingOnObject(hitShape.getMaterial(),hitPoint, normal, view); 
+        int falloff = light.getFalloff();
+        lightColor = Color::scalar_mult(lightColor, 1.0/(pow(totalDist, falloff)));
+
+
         curColor.update_r(curColor.get_r()+alphaR*lightColor.get_r());
         curColor.update_g(curColor.get_g()+alphaG*lightColor.get_g());
         curColor.update_b(curColor.get_b()+alphaB*lightColor.get_b());        
@@ -1246,6 +1251,7 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
       Vector3 reflect = Vector3::add(Vector3::scalarMultiply(view, -1), Vector3::scalarMultiply(normal, tmpScalar));
       reflect.normalize();
       curRay = Ray(hitPoint.getX(), hitPoint.getY(), hitPoint.getZ(), reflect.getX(), reflect.getY(), reflect.getZ());
+      std::cout << "reflect X: " << reflect.getX() << ", Y: " << reflect.getY() << ", Z:" << reflect.getZ() << std::endl;
 
 
       alphaR = alphaR*material.getKrr();
@@ -1284,7 +1290,7 @@ int do_ray_tracing() {
   // std::cout << "Shape: " << typeid(shape).name() << '\n';
 
   for (int i = 0; i < numPixels; i++){
-    // std::cout << "pixelnum: " << i << ": ";
+    std::cout << "pixelnum: " << i << ": ";
 
     //TO DO (lauren?)
     //get correct point through viewplane
@@ -1296,7 +1302,7 @@ int do_ray_tracing() {
     // std::cout << "viewRay X: " << viewRay.getDirectionX() << ", Y:" << viewRay.getDirectionY() << ", Z:" << viewRay.getDirectionZ() << std::endl;
 
     //call follow_ray with 5 as recursive depth
-    Color pixelColor = follow_ray(viewRay, 5);
+    Color pixelColor = follow_ray(viewRay, 1);
     // std::cout << "startColor R: " << startColor.get_r() << ", G: " << startColor.get_g() << ", G:" << startColor.get_b() << std::endl;
     
     // DONE lauren

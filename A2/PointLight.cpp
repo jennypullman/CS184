@@ -1,7 +1,7 @@
 #include "PointLight.h"
 
 PointLight::PointLight(){
-	x, y, z, r, g, b, falloff = 0.0;
+	x, y, z, r, g, b, falloff = 0;
 	activated = false;
 }
 
@@ -115,4 +115,8 @@ Color PointLight::getShadingOnObject(Material shp_mat, Point pnt, Vector3 normal
 	// TODO ? light.scaleLocation(1/(min(viewport.w, viewport.h)*0.9 / 2.0));
 
 	return color;
+}
+
+int PointLight::getFalloff() {
+	return falloff;
 }
