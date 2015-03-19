@@ -44,6 +44,8 @@ Material Triangle::getMaterial(){
 };
 float Triangle::hit(Ray ray){
 
+	float epsilon = 0.00001;
+
 	// Vector3 v1 = Vector3(vert1.getX() - vert2.getX(), vert1.getY() - vert2.getY(), vert1.getZ() - vert2.getZ());
 	// Vector3 v2 = Vector3(vert3.getX() - vert2.getX(), vert3.getY() - vert2.getY(), vert3.getZ() - vert2.getZ());
 	// Vector3 v1 = Vector3(vert2.getX() - vert1.getX(), vert2.getY() - vert1.getY(), vert2.getZ() - vert1.getZ());
@@ -52,7 +54,6 @@ float Triangle::hit(Ray ray){
 	//Lauren add
 	// ray.print();
 	// std::cout << "Triangle::hit " << std::endl;
-	float epsilon = 0.00000001;
 	Vector3 n = norm;
 	n.normalize();
 	float denom = ray.getDirectionX()*n.getX() + ray.getDirectionY()*n.getY() + ray.getDirectionZ()*n.getZ();
@@ -89,7 +90,7 @@ float Triangle::hit(Ray ray){
 	float beta = (Vector3::dot(vec2, vec3)*Vector3::dot(vec1, vec3) - Vector3::dot(vec3, vec3)*Vector3::dot(vec1, vec2)) / (denom);
 	float gamma = (Vector3::dot(vec2, vec3)*Vector3::dot(vec1, vec2) - Vector3::dot(vec2, vec2)*Vector3::dot(vec1, vec3)) / (denom);
 
-	if (beta < epsilon || gamma < epsilon || beta + gamma > 1){
+	if (beta < epsilon || gamma < epsilon || beta + gamma > 1-epsilon){
 		// std::cout << "not inside triangle\n";
 		// std::cout << beta;
 		// std::cout << "\n";
