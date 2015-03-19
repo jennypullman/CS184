@@ -52,6 +52,7 @@ int pixelsH = 1000; // Default value, TODO allow to be overridden by arguments
 ViewPlane viewplane;
 Image image;
 Camera camera;
+bool PRINT = false;
 
 int numFailedTests = 0;
 
@@ -952,6 +953,9 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
     //update alpha
     //determine reflecion ray (hit point in direction of reflection vector)
     //store reflection ray as curr_ray
+  // std::cout << PRINT << std::endl;
+
+
   Ray curRay = start_ray;
   //start_ray.print();
 
@@ -1028,6 +1032,7 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
       Vector3 normal, view;
       Material material;
       view = Vector3(-curRay.getDirectionX(), -curRay.getDirectionY(), -curRay.getDirectionZ());
+      view.normalize();
       if (use_tri){
         hitPoint = hitTri.getMostRecentHitPoint();
         normal = hitTri.getNormalAtPoint(hitPoint, view);
@@ -1042,10 +1047,13 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
         normal = hitEllipsoid.getNormalAtPoint(hitPoint);
         material = hitEllipsoid.getMaterial();
       }
+      normal.normalize();
 
-      // std::cout << "hitPoint X: " << hitPoint.getX() << ", Y: " << hitPoint.getY() << ", Z:" << hitPoint.getZ() << std::endl;
-      // std::cout << "normal X: " << normal.getX() << ", Y: " << normal.getY() << ", Z:" << normal.getZ() << std::endl;
-      // std::cout << "view X: " << view.getX() << ", Y: " << view.getY() << ", Z:" << view.getZ() << std::endl;
+      if (PRINT) {
+        std::cout << "hitPoint X: " << hitPoint.getX() << ", Y: " << hitPoint.getY() << ", Z:" << hitPoint.getZ() << std::endl;
+        std::cout << "normal X: " << normal.getX() << ", Y: " << normal.getY() << ", Z:" << normal.getZ() << std::endl;
+        std::cout << "view X: " << view.getX() << ", Y: " << view.getY() << ", Z:" << view.getZ() << std::endl;
+      }
 
       //update distance
       totalDist += sqrt(pow(hitPoint.getX()-curRay.getStartX(),2)+pow(hitPoint.getY()-curRay.getStartY(),2)+
@@ -1251,8 +1259,9 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
       Vector3 reflect = Vector3::add(Vector3::scalarMultiply(view, -1), Vector3::scalarMultiply(normal, tmpScalar));
       reflect.normalize();
       curRay = Ray(hitPoint.getX(), hitPoint.getY(), hitPoint.getZ(), reflect.getX(), reflect.getY(), reflect.getZ());
-      // std::cout << "reflect X: " << reflect.getX() << ", Y: " << reflect.getY() << ", Z:" << reflect.getZ() << std::endl;
-
+      if (PRINT) {
+        std::cout << "reflect X: " << reflect.getX() << ", Y: " << reflect.getY() << ", Z:" << reflect.getZ() << std::endl;
+      }
 
       alphaR = alphaR*material.getKrr();
       alphaG = alphaG*material.getKrg();
@@ -1290,7 +1299,12 @@ int do_ray_tracing() {
   // std::cout << "Shape: " << typeid(shape).name() << '\n';
 
   for (int i = 0; i < numPixels; i++){
-    // std::cout << "pixelnum: " << i << ": ";
+    // if (i >= 550000 && i < 551000) {
+    //   PRINT = true;
+    // } else {
+    //   PRINT = false;
+    // }
+    if (PRINT) {std::cout << "pixelnum: " << i << ": ";}
 
     //TO DO (lauren?)
     //get correct point through viewplane

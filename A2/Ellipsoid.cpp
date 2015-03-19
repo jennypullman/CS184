@@ -219,11 +219,13 @@ Point Ellipsoid::getMostRecentHitPoint(){
 
 Vector3 Ellipsoid::getNormalAtPoint(Point pnt){
 	pnt = Transformation::transformPoint(inverseTransformation, pnt);
-	//Vector3 normal = Vector3(pnt.getX()-this->cx, pnt.getY()-this->cy, pnt.getZ()-this->cz);
+	// Vector3 normal = Vector3(pnt.getX()-this->cx, pnt.getY()-this->cy, pnt.getZ()-this->cz);
 	Vector3 normal = Vector3(pnt.getX(), pnt.getY(), pnt.getZ());
+	// std::cout << cx << ", " << cy << ", " << cz << std::endl;
 		
-	//normal = Transformation::vectorMultiply(this->transformation, normal);
+	// normal = Transformation::vectorMultiply(this->transformation, normal);
 	normal = Transformation::vectorMultiply(Transformation::getTranspose(this->inverseTransformation), normal);
+	// normal = Transformation::vectorMultiply(Transformation::getTranspose(this->transformation), normal);
 	
 	//normal.normalize();
 	return normal;	
