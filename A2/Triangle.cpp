@@ -44,7 +44,7 @@ Material Triangle::getMaterial(){
 };
 float Triangle::hit(Ray ray){
 
-	float epsilon = 0.00001;
+	float epsilon = -0.00001;
 
 	// Vector3 v1 = Vector3(vert1.getX() - vert2.getX(), vert1.getY() - vert2.getY(), vert1.getZ() - vert2.getZ());
 	// Vector3 v2 = Vector3(vert3.getX() - vert2.getX(), vert3.getY() - vert2.getY(), vert3.getZ() - vert2.getZ());
