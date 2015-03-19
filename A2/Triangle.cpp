@@ -52,6 +52,7 @@ float Triangle::hit(Ray ray){
 	//Lauren add
 	// ray.print();
 	// std::cout << "Triangle::hit " << std::endl;
+	float epsilon = 0.00000001;
 	Vector3 n = norm;
 	n.normalize();
 	float denom = ray.getDirectionX()*n.getX() + ray.getDirectionY()*n.getY() + ray.getDirectionZ()*n.getZ();
@@ -65,7 +66,7 @@ float Triangle::hit(Ray ray){
 		denom;
 	// std::cout << "t: " << t << std::endl;
 	// std::cout << "t = " << t << "\n";
-	if (t < 0){
+	if (t < epsilon){
 		return t; //no hit
 	}
 
@@ -88,7 +89,7 @@ float Triangle::hit(Ray ray){
 	float beta = (Vector3::dot(vec2, vec3)*Vector3::dot(vec1, vec3) - Vector3::dot(vec3, vec3)*Vector3::dot(vec1, vec2)) / (denom);
 	float gamma = (Vector3::dot(vec2, vec3)*Vector3::dot(vec1, vec2) - Vector3::dot(vec2, vec2)*Vector3::dot(vec1, vec3)) / (denom);
 
-	if (beta < 0 || gamma < 0 || beta + gamma > 1){
+	if (beta < epsilon || gamma < epsilon || beta + gamma > 1){
 		// std::cout << "not inside triangle\n";
 		// std::cout << beta;
 		// std::cout << "\n";
