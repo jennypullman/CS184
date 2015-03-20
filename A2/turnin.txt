@@ -16,8 +16,8 @@ x	sphere over a plane, with back wall-->spherePlaneComplex.txt, spherePlaneCompl
 6) apply linear transformations to objects
 x	obj file-->gourd.txt
 x	obj file translated-->gourdTranslate.txt
-	obj file rotated-->ellipsoidRotated.txt, ellipsoidOriginal.txt
-	obj file scaled-->sphereScaleX.txt, sphereScaleY.txt, sphereScaleZ.txt, sphereOriginal.txt
+x	obj file rotated-->ellipsoidRotated.txt, ellipsoidOriginal.txt
+x	obj file scaled-->sphereScaleX.txt, sphereScaleY.txt, sphereScaleZ.txt, sphereOriginal.txt
 
 7) use point and directional lights
 	directional light shining on sphere
