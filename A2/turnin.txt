@@ -9,7 +9,7 @@ x	complex obj (look at examples)-->gourd.txt (and gourd.obj)
 	shading of sphere with different light and ambient colors
 4) compute shadows
 	sphere shadowing another sphere
-	sphere shadowing a square on the xz plane
+x	sphere shadowing a square on the xz plane-->spherePlane.txt
 5) compute reflections
 	multiple spheres
 	sphere over a plane, but with light coming in direction -1 -1 1 (i think that's the right direction)
