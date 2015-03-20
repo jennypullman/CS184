@@ -4,7 +4,7 @@
 	rotated ellipsoid about z-axis, and translated along x-axis
 2) render polygons:
 	simple diamond
-	complex obj (look at examples)
+x	complex obj (look at examples)-->gourd.txt (and gourd.obj)
 3) use simple phong shading (wouldn't this be already shown???)
 	shading of sphere with different light and ambient colors
 4) compute shadows

@@ -544,17 +544,17 @@ Polygon readObj(string fileName){
           numIndex++;
         }
       if (numIndex < 6){
-        std::cout << "should be here \n";
+        // std::cout << "should be here \n";
         Face face = Face();
         face.vert1 = nums[0];
-        std::cout << nums[0];
+        // std::cout << nums[0];
         face.vert2 = nums[1];
-        std::cout << ", ";
-        std::cout << nums[1];
+        // std::cout << ", ";
+        // std::cout << nums[1];
         face.vert3 = nums[2];
-        std::cout << ", ";
-        std::cout << nums[2];
-        std::cout << "\n";
+        // std::cout << ", ";
+        // std::cout << nums[2];
+        // std::cout << "\n";
         face.numVerts = numIndex;
         faces.push_back(face);
       } else {
