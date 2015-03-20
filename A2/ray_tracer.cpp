@@ -464,8 +464,8 @@ Polygon readObj(string fileName){
   fstream fs;
   fs.open(fileName);
   if (!fs.is_open()){
-    std::cout << "not valid file name \n";
-  };
+    fprintf(stderr, "Could not open .obj file for reading.\n");
+  }
   filebuf* inbuf = fs.rdbuf();
   char c = inbuf->sbumpc();
   list<Vertex> vertices;
@@ -529,7 +529,7 @@ Polygon readObj(string fileName){
       while (c != EOF && c != '\n'){
         if (isspace(c) || c == '/'){
           if (lastChar != '/' && !isspace(lastChar)){
-            std::cout << arg;
+            // std::cout << arg;
             nums[numIndex] = stoi(arg);
             numIndex++;
             arg = "";
@@ -541,7 +541,7 @@ Polygon readObj(string fileName){
         c = inbuf->sbumpc();
       };
       if (arg != ""){
-        std::cout << arg;
+        // std::cout << arg;
         nums[numIndex] = stoi(arg);
           numIndex++;
         }
@@ -588,7 +588,7 @@ Polygon readObj(string fileName){
   int vertSize = vertices.size();
   vector<Vertex> vertexArr (vertSize);
   // Vertex vertexArr [vertSize];
-  std::cout << "curtransform: ";
+  // std::cout << "curtransform: ";
   // curTransform.print();
   for (int i = 0; i < vertSize; i++){
     vertexArr[i] = Transformation::transformVertex(curTransform, vertices.front());
@@ -647,6 +647,10 @@ void handleArgs(int numArgs, float args[], string info){
       while (isspace(info[i])){
         i++;
       };
+      if (argIndex >= numArgs){
+        fprintf(stderr, "Warning: Too many arguments for this feature.\n");
+        break;
+      }
       args[argIndex] = stof(arg);
       argIndex += 1;
       arg = "";
@@ -657,8 +661,15 @@ void handleArgs(int numArgs, float args[], string info){
     }
   }
   if (arg != ""){
-    args[argIndex] = stof(arg);
-    argIndex += 1;
+    if (argIndex >= numArgs){
+      fprintf(stderr, "Warning: Too many arguments for this feature.\n");
+    } else {
+      args[argIndex] = stof(arg);
+      argIndex += 1;
+    }
+  }
+  if (numArgs < argIndex){
+    fprintf(stderr, "Warning: Not enough arguments for this feature.\n");
   }
 }
 
@@ -688,7 +699,7 @@ void handleCam(string camInfo){
   float args[15];
   handleArgs(15, args, camInfo);
   // DONE Lauren (image and viewplane)
-  std::cout << camInfo;
+  // std::cout << camInfo;
   ex = args[0], ey = args[1], ez = args[2];
   llx = args[3], lly = args[4], llz = args[5];
   lrx = args[6], lry = args[7], lrz = args[8];
@@ -750,8 +761,8 @@ void handleTri(string triInfo){
  */
 void handleObj(string objInfo){
   string arg = handleStringArgs(objInfo);
-  std::cout << arg;
-  std::cout << "\n";
+  // std::cout << arg;
+  // std::cout << "\n";
   Polygon polygon = readObj(arg);
   polygons.push_back(polygon);
   shapes.push_back(&polygon);
@@ -931,6 +942,7 @@ void processArgs(int argc, char *argv[]) {
       } else {
         //TO DO
         //send warning message
+        fprintf(stderr, "Warning: Feature is not supported.\n");
       }
       args = "";
       objectType = "";
