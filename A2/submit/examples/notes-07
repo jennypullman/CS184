@@ -3,3 +3,5 @@ Image 1 of 4 showing our ray tracer uses simple Phong shading.
 This image is of a green, diffuse sphere under a white point light at (1,1,1)
 
 Time to render: less than 1 second.
+
+Command line:  ./as1 examples/input-07

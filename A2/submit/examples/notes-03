@@ -7,3 +7,5 @@ It was created by taking our ellipsoid from input-02 and rotating it 90 degrees 
 Interestingly (and correctly), if we add the rotation after the scale in the input file, there is no change to the ellipsoid rendered.  This makes sense because the transformations are applied in an order that is the reverse of their appearance order in the input file, and applying a rotation to a non-scaled sphere will not change the sphere.
 
 Time to render:  1 second.
+
+Command line:  ./as1 examples/input-03

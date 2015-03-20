@@ -5,3 +5,5 @@ This image is of a polygon shaped and colored like a gourd under a simple white 
 Time to render: 2 minutes, 43 seconds.
 
 We are using the gourd.obj file from the following resource: http://people.sc.fsu.edu/~jburkardt/data/obj/obj.html.
+
+Command line:  ./as1 examples/input-06

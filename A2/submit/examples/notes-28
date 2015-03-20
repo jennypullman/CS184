@@ -3,3 +3,5 @@ Image 1 of 1 explicitly showing our ray tracer can handle directional lights.
 This image is of a white, shiny sphere centered at the origin with with radius 0.65.  The sphere is under a white directional light pointing down the x-, y-, and z-axes.  
 
 Time to render: 1 second.
+
+Command line:  ./as1 examples/input-28

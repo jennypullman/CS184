@@ -23,7 +23,7 @@ ViewPlane.o: ViewPlane.cpp
 Vector3.o: Vector3.cpp
 	$(CC) $(CFLAGS) -c Vector3.cpp -o Vector3.o
 Transformation.o: Transformation.cpp
-	$(CC) -std=c++11 $(CFLAGS) -c Transformation.cpp -o Transformation.o
+	$(CC) $(CFLAGS) -c Transformation.cpp -o Transformation.o
 Point.o: Point.cpp
 	$(CC) $(CFLAGS) -c Point.cpp -o Point.o
 Ray.o: Ray.cpp

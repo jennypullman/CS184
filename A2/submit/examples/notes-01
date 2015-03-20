@@ -3,3 +3,5 @@ Image 1 of 3 showing our ray tracer can render arbitrarily oriented ellipsoids
 This image shows a white, shiny sphere centered at the origin with radius 0.65 under a white point light at (1,1,1).
 
 Time to render:  Less than 1 second.
+
+Command line:  ./as1 examples/input-01

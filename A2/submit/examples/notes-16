@@ -3,3 +3,5 @@ Image 1 of 2 showing our ray tracer handles shadows, spheres, and polygons.
 This image is of three spheres, the middle larger than the others, all aligned in the z=0 plane and along the x=y diagonal.  There is a white directional light pointing down the x- and y-axes.  The rendered image correctly shows the smaller sphere in quadrant I correctly casting a shadow over part of the larger sphere at the origin, which in turn casts the smaller sphere in quadrant III completely in a shadow.
 
 Time to render: 1.5 seconds.
+
+Command line:  ./as1 examples/input-16

@@ -5,3 +5,5 @@ This image shows a white, shiny ellipse centered at the origin with a radius of 
 It was created by taking our sphere from input-01 and scaling it in the x-direction by 0.5 and in the y-direction by 1.5.
 
 Time to render:  Less than 1 second.
+
+Command line:  ./as1 examples/input-02

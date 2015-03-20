@@ -3,3 +3,5 @@ Image 1 of 5 showing our ray tracer handles reflections.
 This image is of a diffuse yellow a diffuse, reflective blue sphere.  Both spheres are under a white directional light pointing down the z-axis.  The rendered image correctly shows that the yellow sphere is somewhat visibile (the reflective coefficients have half the magnitude of the diffuse coefficients) in the reflective blue sphere, while the blue sphere is not at all visible in the non-reflective yellow sphere.
 
 Time to render: 2 seconds.
+
+Command line:  ./as1 examples/input-18
