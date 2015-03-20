@@ -524,11 +524,12 @@ Polygon readObj(string fileName){
       int nums[6];
       string arg = "";
       int numIndex = 0;
-      string lastChar = " ";
+      char lastChar = ' ';
       bool hasNormals = false;
       while (c != EOF && c != '\n'){
-        if (c == ' ' || c == '/'){
-          if (lastChar != "/" && lastChar != " "){
+        if (isspace(c) || c == '/'){
+          if (lastChar != '/' && !isspace(lastChar)){
+            std::cout << arg;
             nums[numIndex] = stoi(arg);
             numIndex++;
             arg = "";
@@ -540,6 +541,7 @@ Polygon readObj(string fileName){
         c = inbuf->sbumpc();
       };
       if (arg != ""){
+        std::cout << arg;
         nums[numIndex] = stoi(arg);
           numIndex++;
         }
