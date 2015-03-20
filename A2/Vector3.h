@@ -14,6 +14,7 @@ public:
 	float getZ();
 	void normalize();
 	float getMagnitude();
+	void print();
 
 	//static methods (obviously)
 	static Vector3 add(Vector3 vec1, Vector3 vec2);

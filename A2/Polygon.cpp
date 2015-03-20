@@ -45,5 +45,8 @@ void Polygon::print(){
 
 
 Vector3 Polygon::getNormalAtPoint(Point pnt, Vector3 viewVect){
+	/*if (!this->mostRecentHitTriangle.hasNormals()){
+		std::cout << "hasNormals tri: " << this->mostRecentHitTriangle.hasNormals() << "\n";
+	}*/
 	return this->mostRecentHitTriangle.getNormalAtPoint(pnt, viewVect);
 }

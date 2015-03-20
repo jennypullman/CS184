@@ -12,10 +12,12 @@ public:
 	void print();
 	Point getMostRecentHitPoint();
 	Vector3 getNormalAtPoint(Point pnt, Vector3 viewVect);
+	int hasNormals();
 
 private:
 	Material material;
 	Vertex vert1, vert2, vert3;
 	Vector3 norm1, norm2, norm3, norm;
 	Point mostRecentHitPoint;
+	int hasVectorNormals;
 };

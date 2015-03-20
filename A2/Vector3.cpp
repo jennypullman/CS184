@@ -54,3 +54,13 @@ Vector3 Vector3::scalarDivide(Vector3 vec, float i){
 	}
 	throw std::overflow_error("Divide by zero error.");
 }
+
+void Vector3::print(){
+	std::cout << "Printing Vector...\n(";
+	std::cout << this->x;
+	std::cout << ", ";
+	std::cout << this->y;
+	std::cout << ", ";
+	std::cout << this->z;
+	std::cout << ")\n";
+}

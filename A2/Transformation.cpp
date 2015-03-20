@@ -40,7 +40,7 @@ Transformation::Transformation(float f1, float f2, float f3, char type){
 	this->matrix[15] = 1.0;
 	float thetaEpisilon = 0.000000000001;
 	if (type == 't'){
-		std::cout << "translate\n";
+		// std::cout << "translate\n";
 		this->matrix[0] = 1.0;
 		this->matrix[3] = f1;
 		this->matrix[5] = 1.0;

@@ -587,7 +587,7 @@ Polygon readObj(string fileName){
   vector<Vertex> vertexArr (vertSize);
   // Vertex vertexArr [vertSize];
   std::cout << "curtransform: ";
-  curTransform.print();
+  // curTransform.print();
   for (int i = 0; i < vertSize; i++){
     vertexArr[i] = Transformation::transformVertex(curTransform, vertices.front());
     //vertexArr[i] = vertices.front();
@@ -617,7 +617,7 @@ Polygon readObj(string fileName){
     faces.pop_front();
     if (face.numVerts < 6){
       curTri = Triangle(curMaterial, curTransform, vertexArr[face.vert1-1], vertexArr[face.vert2-1], vertexArr[face.vert3-1]);   
-      curTri.print();
+      // curTri.print();
     } else {
       curTri = Triangle(curMaterial, curTransform, vertexArr[face.vert1-1], vertexArr[face.vert2-1], vertexArr[face.vert3-1],
         normalArr[face.norm1-1], normalArr[face.norm2-1], normalArr[face.norm3-1]);
@@ -1035,11 +1035,13 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
       view.normalize();
       if (use_tri){
         hitPoint = hitTri.getMostRecentHitPoint();
+        // std::cout << "normals?: " << hitTri.hasNormals() << "\n";
         normal = hitTri.getNormalAtPoint(hitPoint, view);
         material = hitTri.getMaterial();
 
       } else if (use_poly) {
         hitPoint = hitPoly.getMostRecentHitPoint();
+        //std::cout << "normals?: " << hitTri.hasNormals() << "\n";
         normal = hitPoly.getNormalAtPoint(hitPoint, view);
         material = hitPoly.getMaterial();
       } else if (use_ellipsoid) {
