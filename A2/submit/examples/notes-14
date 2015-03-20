@@ -1,0 +1,5 @@
+Image 1 of 2 showing our ray tracer handles shadows and triangles.
+
+This image is of three triangles layed over one another with their bottom edges aligned at z=-3.  They are all under a white directional light pointing down the y-axis.  The rendered image correctly shows each triangle shadowed completely by the triangle above (if there is such a triangle).  
+
+Time to render: 2 seconds.

@@ -1342,7 +1342,7 @@ int do_ray_tracing() {
   // std::cout << "END pixel loop" << std::endl;
 
   // std::cout << "START print to file" << std::endl;
-  char fileName[] = {'t','e','s','t','I','m','g','.','p','n','g', '\0'};
+  char fileName[] = {'o','u','t','I','m','g','.','p','n','g', '\0'};
   return image.printToFile(fileName);
 }
 

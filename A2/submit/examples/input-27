@@ -1,0 +1,9 @@
+cam 0 0 5 -2 -2 2 2 -2 2 -2 2 2 2 2 2 
+mat 0 0 0 1 1 0 .1 0 .1 64 .05 .05 .05  
+ltd 0 0 -1 1 1 1 
+
+xft 0 1 0
+xfr 0 0 45
+xfs 2 1 1
+
+obj examples/gourd.obj

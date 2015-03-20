@@ -1,0 +1,5 @@
+Image 3 of 4 showing our ray tracer uses simple Phong shading.
+
+This image is of a green sphere with a specular component that reflects blue light and with an ambient component that responds to all colors of light.  Each of these components have equal weights.  It is under a white point light at (1,1,1), and a red ambient light of equal strength.  The rendered sphere is mostly red because the ambient component contributes to the color of the entire sphere.  But it is correctly yellow where both the point light and ambient light contribute, and has a redder blue specular contribution.  
+
+Time to render: less than 1 second.

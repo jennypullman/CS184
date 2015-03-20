@@ -1,0 +1,5 @@
+Image 1 of 3 showing our ray tracer can render polygons.
+
+This image shows a white, shiny polygon that picks up cyan ambient light under a white directional light in the direction (-1, -1, -1) and a white ambient light with 1/10 the magnitude.  The polygon is a diamond and has 10 vertices and 16 faces.
+
+Time to render:  4 seconds.

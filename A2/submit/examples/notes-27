@@ -1,0 +1,10 @@
+Image 5 of 5 showing our ray tracer can handle linear transformations.
+
+This image is of the same gourd from input-23 under the same lighting.  However, this gourd has been transformed a combination of the following transformations, applied from top to bottom:
+-Scale by a factor of 2 in the x-direction
+-Rotate 45 degrees about the z-axis
+-Translate 0.5 units down the y-axis
+
+Time to render: 2 minutes, 49 seconds.
+
+We are using the gourd.obj file from the following resource: http://people.sc.fsu.edu/~jburkardt/data/obj/obj.html.

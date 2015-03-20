@@ -1,0 +1,5 @@
+Image 2 of 3 showing our ray tracer handles falloff for point lights.
+
+This image is of a green sphere with a specular component that reflects blue light.  There sphere is centered at the origin with a radius of 0.65.  It is under a white point light at (2,2,2) with linear falloff.  The rendered sphere is less lit than the sphere created by input-11.  
+
+Time to render: less than 1 second.

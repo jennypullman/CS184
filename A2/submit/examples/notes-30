@@ -1,0 +1,5 @@
+Image 1 of 1 explicitly showing our ray tracer can handle a change in focal length.
+
+This image is of the exact same sphere with the exact same lighting as input-28.  However, the camera is located at (0,0,4) instead of (0,0,2) with the same view plane.  As a result, the sphere appears larger in the rendered image.  This is the correct behavior.  
+
+Time to render: 1 second.

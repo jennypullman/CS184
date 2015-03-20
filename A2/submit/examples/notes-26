@@ -1,0 +1,7 @@
+Image 4 of 5 showing our ray tracer can handle linear transformations.
+
+This image is of the same gourd from input-23 under the same lighting.  However, this gourd has been transformed by scaling it by a factor of 2 along the x-axis.  
+
+Time to render: 3 minutes, 4 seconds.
+
+We are using the gourd.obj file from the following resource: http://people.sc.fsu.edu/~jburkardt/data/obj/obj.html.

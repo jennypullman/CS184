@@ -1,7 +1,7 @@
 1) render arbitrarily oriented ellipsoids:
 x	normal sphere --> sphereBasicPoint.txt
 x	ellipsoid --> ellipsoidBasic.txt
-x	rotated ellipsoid about z-axis, and translated along x-axis --> 
+x	rotated ellipsoid about z-axis, and translated along x-axis --> ellipsoidTranslated.txt
 2) render polygons:
 x	simple diamond-->diamond.txt, diamondNormals.txt
 x	complex obj (look at examples)-->gourd.txt (and gourd.obj)

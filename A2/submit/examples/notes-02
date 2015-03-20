@@ -1,0 +1,7 @@
+Image 2 of 3 showing our ray tracer can render arbitrarily oriented ellipsoids
+
+This image shows a white, shiny ellipse centered at the origin with a radius of 0.325 in the x-direction, 1.3 in the y-direction, and 0.65 in the z-direction.  Again the ellipsoid is under a white point light at (1,1,1). 
+
+It was created by taking our sphere from input-01 and scaling it in the x-direction by 0.5 and in the y-direction by 1.5.
+
+Time to render:  Less than 1 second.

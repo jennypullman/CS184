@@ -1,0 +1,5 @@
+Image 1 of 1 explicitly showing our ray tracer can handle point lights.
+
+This image is of a white, shiny sphere centered at the origin with with radius 0.65.  The sphere is under a white point light located at (1,1,1) with no falloff.  As expected, the lit of region of this sphere is smaller than that from input-28.
+
+Time to render: 1 second.
