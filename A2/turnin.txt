@@ -1,24 +1,25 @@
- 1) render arbitrarily oriented ellipsoids:
-	normal sphere
-	ellipsoid
-	rotated ellipsoid about z-axis, and translated along x-axis
+1) render arbitrarily oriented ellipsoids:
+x	normal sphere --> sphereBasicPoint.txt
+x	ellipsoid --> ellipsoidBasic.txt
+x	rotated ellipsoid about z-axis, and translated along x-axis --> 
 2) render polygons:
 x	simple diamond-->diamond.txt, diamondNormals.txt
 x	complex obj (look at examples)-->gourd.txt (and gourd.obj)
 3) use simple phong shading (wouldn't this be already shown???)
-	shading of sphere with different light and ambient colors
+x	shading of sphere with different light and ambient colors --> sphereGreen.txt, sphereGreenBlueSpecular.txt, sphereGreenRedAmbient.txt, sphereGreenLessRed.txt
 4) compute shadows
-	sphere shadowing another sphere
+x 	triangles shadowing each other --> triangleShadowsPoint.txt, trianglesShadowDir.txt
+x	sphere shadowing another sphere --> sphereShadows.txt
 x	sphere shadowing a square on the xz plane-->spherePlane.txt
 5) compute reflections
-	multiple spheres
+x	multiple spheres --> sphereReflectionsBasic.txt, sphereReflections.txt
 x	sphere over a plane, with back wall-->spherePlaneComplex.txt, spherePlaneComplexNoReflectSpheres.txt
+x   complex image --> inchworm.txt
 6) apply linear transformations to objects
 x	obj file-->gourd.txt
 x	obj file translated-->gourdTranslate.txt
 x	obj file rotated-->ellipsoidRotated.txt, ellipsoidOriginal.txt
 x	obj file scaled-->sphereScaleX.txt, sphereScaleY.txt, sphereScaleZ.txt, sphereOriginal.txt
-
 7) use point and directional lights
-	directional light shining on sphere
-	point light shining on same sphere
+x	directional light shining on sphere --> sphereBasicDir.txt
+x	point light shining on same sphere --> sphereBasicPoint.txt
