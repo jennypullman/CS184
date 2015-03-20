@@ -1,0 +1,23 @@
+ 1) render arbitrarily oriented ellipsoids:
+	normal sphere
+	ellipsoid
+	rotated ellipsoid about z-axis, and translated along x-axis
+2) render polygons:
+	simple diamond
+	complex obj (look at examples)
+3) use simple phong shading (wouldn't this be already shown???)
+	shading of sphere with different light and ambient colors
+4) compute shadows
+	sphere shadowing another sphere
+	sphere shadowing a square on the xz plane
+5) compute reflections
+	multiple spheres
+	sphere over a plane, but with light coming in direction -1 -1 1 (i think that's the right direction)
+6) apply linear transformations to objects
+	obj file
+	obj file translated
+	obj file rotated
+	obj file scaled
+7) use point and directional lights
+	directional light shining on sphere
+	point light shining on same sphere
