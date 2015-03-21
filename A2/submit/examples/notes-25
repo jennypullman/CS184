@@ -1,0 +1,9 @@
+Image 3 of 5 showing our ray tracer can handle linear transformations.
+
+This image is of the same gourd from input-23 under the same lighting.  However, this gourd has been transformed by rotating it 90 degrees about the y-axis, and then 30 degrees about the x-axis.  
+
+Time to render: 2 minutes, 37 seconds.
+
+We are using the gourd.obj file from the following resource: http://people.sc.fsu.edu/~jburkardt/data/obj/obj.html.
+
+Command line:  ./as1 examples/input-25

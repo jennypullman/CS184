@@ -1,0 +1,7 @@
+Image 2 of 3 showing our ray tracer can render polygons.
+
+This image shows the diamond from input-04 under the same lighting, but the corresponding .obj file for this image specifices vertex normals for the 10 vertices.  As a result, the diamond has a smoothed out appearance, as we would expect, rather than the flat-face appearance which results from using one normal for each whole face in img-04.png.
+
+Time to render:  4 seconds.
+
+Command line:  ./as1 examples/input-05
