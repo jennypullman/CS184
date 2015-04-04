@@ -11,18 +11,16 @@ endif
 	
 RM = /bin/rm -f 
 all: main 
-main: Vector3.o Color.o Image.o Light.o example_01.o 
-	$(CC) $(CFLAGS) -o as1 Vector3.o Light.o Color.o Image.o example_01.o $(LDFLAGS)
-Vector3.o: Vector3.cpp
-	$(CC) $(CFLAGS) -c Vector3.cpp -o Vector3.o
-Color.o: Color.cpp
-	$(CC) $(CFLAGS) -c Color.cpp -o Color.o
-Image.o: Image.cpp
-	$(CC) $(CFLAGS) -c Image.cpp -o Image.o
-Light.o: Light.cpp
-	$(CC) $(CFLAGS) -c Light.cpp -o Light.o
-example_01.o: example_01.cpp
-	$(CC) $(CFLAGS) -c example_01.cpp -o example_01.o
+main: Point.o Curve.o Surface.o example_03.o 
+	$(CC) $(CFLAGS) -o as1 Point.o Curve.o Surface.o example_03.o $(LDFLAGS)
+Point.o: Point.cpp
+	$(CC) $(CFLAGS) -c Point.cpp -o Point.o
+Curve.o: Curve.cpp
+	$(CC) $(CFLAGS) -c Curve.cpp -o Curve.o
+Surface.o: Surface.cpp
+	$(CC) $(CFLAGS) -c Surface.cpp -o Surface.o
+example_03.o: example_03.cpp
+	$(CC) $(CFLAGS) -c example_03.cpp -o example_03.o
 clean: 
 	$(RM) *.o as1
  
