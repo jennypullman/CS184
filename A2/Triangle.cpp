@@ -2,20 +2,33 @@
 #include <stdlib.h>
 
 Triangle::Triangle() {
+	this->hasVectorNormals = 0;
 };
 Triangle::Triangle(Material mat, Transformation trans, Vertex vert1, Vertex vert2, Vertex vert3){
+	this->hasVectorNormals = 0;
 	this->material = mat;
 	this->vert1 = vert1;
 	this->vert2 = vert2;
 	this->vert3 = vert3;
 
-	Vector3 vec1 = Vector3(vert1.getX()-vert2.getX(), vert1.getY()-vert2.getY(), vert1.getZ()-vert2.getZ());
-	Vector3 vec2 = Vector3(vert3.getX()-vert2.getX(), vert3.getY()-vert2.getY(), vert3.getZ()-vert2.getZ());
+	// std::cout << "Vert 1: (" << vert1.getX() << ", " << vert1.getY() << ", " << vert1.getZ() << ") \n";			
+	// std::cout << "Vert 2: (" << vert2.getX() << ", " << vert2.getY() << ", " << vert2.getZ() << ") \n";	
+	// std::cout << "Vert 3: (" << vert3.getX() << ", " << vert3.getY() << ", " << vert3.getZ() << ") \n";	
+
+	// Vector3 vec1 = Vector3(vert1.getX()-vert2.getX(), vert1.getY()-vert2.getY(), vert1.getZ()-vert2.getZ());
+	// Vector3 vec2 = Vector3(vert3.getX()-vert2.getX(), vert3.getY()-vert2.getY(), vert3.getZ()-vert2.getZ());
+	Vector3 vec1 = Vector3(vert2.getX()-vert1.getX(), vert2.getY()-vert1.getY(), vert2.getZ()-vert1.getZ());
+	Vector3 vec2 = Vector3(vert3.getX()-vert1.getX(), vert3.getY()-vert1.getY(), vert3.getZ()-vert1.getZ());
 	Transformation normalTransformation = Transformation::getTranspose(Transformation::getInverse(trans));
-	this->norm = Transformation::vectorMultiply(normalTransformation, Vector3::cross(vec1, vec2));
+	//this->norm = Transformation::vectorMultiply(normalTransformation, Vector3::cross(vec1, vec2));
+	this->norm = Vector3::cross(vec1, vec2);
+	// trans.print();
+	// std::cout << "Normal : (" << norm.getX() << ", " << norm.getY() << ", " << norm.getZ() << ") \n";
 };
 
 Triangle::Triangle(Material mat, Transformation trans, Vertex vert1, Vertex vert2, Vertex vert3, Vector3 norm1, Vector3 norm2, Vector3 norm3){
+	// std::cout << "noooo\n";
+	this->hasVectorNormals = 1;
 	this->material = mat;
 	this->vert1 = vert1;
 	this->vert2 = vert2;
@@ -24,16 +37,26 @@ Triangle::Triangle(Material mat, Transformation trans, Vertex vert1, Vertex vert
 	this->norm2 = norm2;
 	this->norm3 = norm3;
 
-	Vector3 vec1 = Vector3(vert1.getX()-vert2.getX(), vert1.getY()-vert2.getY(), vert1.getZ()-vert2.getZ());
-	Vector3 vec2 = Vector3(vert3.getX()-vert2.getX(), vert3.getY()-vert2.getY(), vert3.getZ()-vert2.getZ());
+	Vector3 vec1 = Vector3(vert2.getX()-vert1.getX(), vert2.getY()-vert1.getY(), vert2.getZ()-vert1.getZ());
+	Vector3 vec2 = Vector3(vert3.getX()-vert1.getX(), vert3.getY()-vert1.getY(), vert3.getZ()-vert1.getZ());
 	Transformation normalTransformation = Transformation::getTranspose(Transformation::getInverse(trans));
-	this->norm = Transformation::vectorMultiply(normalTransformation, Vector3::cross(vec1, vec2));
+	//this->norm = Transformation::vectorMultiply(normalTransformation, Vector3::cross(vec1, vec2));
+	this->norm = Vector3::cross(vec1, vec2);
+	// std::cout << "hasnormals: " << this->hasVectorNormals << "\n";
 };
 //instance methods
 Material Triangle::getMaterial(){
 	return this->material;
 };
+
+int Triangle::hasNormals(){
+	return this->hasVectorNormals;
+}
+
+
 float Triangle::hit(Ray ray){
+
+	float epsilon = -0.00001;
 
 	// Vector3 v1 = Vector3(vert1.getX() - vert2.getX(), vert1.getY() - vert2.getY(), vert1.getZ() - vert2.getZ());
 	// Vector3 v2 = Vector3(vert3.getX() - vert2.getX(), vert3.getY() - vert2.getY(), vert3.getZ() - vert2.getZ());
@@ -41,7 +64,7 @@ float Triangle::hit(Ray ray){
 	// Vector3 v2 = Vector3(vert3.getX() - vert1.getX(), vert3.getY() - vert1.getY(), vert3.getZ() - vert1.getZ());
 	// Vector3 n = Vector3::cross(v1, v2);
 	//Lauren add
-	
+	// ray.print();
 	// std::cout << "Triangle::hit " << std::endl;
 	Vector3 n = norm;
 	n.normalize();
@@ -55,7 +78,8 @@ float Triangle::hit(Ray ray){
 		(ray.getStartX()*n.getX() + ray.getStartY()*n.getY() + ray.getStartZ()*n.getZ())) /
 		denom;
 	// std::cout << "t: " << t << std::endl;
-	if (t < 0){
+	// std::cout << "t = " << t << "\n";
+	if (t < epsilon){
 		return t; //no hit
 	}
 
@@ -78,7 +102,7 @@ float Triangle::hit(Ray ray){
 	float beta = (Vector3::dot(vec2, vec3)*Vector3::dot(vec1, vec3) - Vector3::dot(vec3, vec3)*Vector3::dot(vec1, vec2)) / (denom);
 	float gamma = (Vector3::dot(vec2, vec3)*Vector3::dot(vec1, vec2) - Vector3::dot(vec2, vec2)*Vector3::dot(vec1, vec3)) / (denom);
 
-	if (beta < 0 || gamma < 0 || beta + gamma > 1){
+	if (beta < epsilon || gamma < epsilon || beta + gamma > 1-epsilon){
 		// std::cout << "not inside triangle\n";
 		// std::cout << beta;
 		// std::cout << "\n";
@@ -86,6 +110,7 @@ float Triangle::hit(Ray ray){
 		// std::cout << "\n";
 		return -1.0;
 	};
+	// std::cout << "Hitpoint: (" << px << ", " << py << ", " << pz << ")\n";
 	this->mostRecentHitPoint = Point(px, py, pz);
 	return t;
 };
@@ -118,8 +143,56 @@ void Triangle::print(){
 Vector3 Triangle::getNormalAtPoint(Point pnt, Vector3 viewVect){
 	// TODO may want to get normal by interpolation of normal's at corners
 	Vector3 normal = this->norm;
-	if (Vector3::dot(this->norm, viewVect) < 0){
-		normal = Vector3(-this->norm.getX(), -this->norm.getY(), -this->norm.getZ());
+	// if (Vector3::dot(this->norm, viewVect) < 0){
+	// 	normal = Vector3(-this->norm.getX(), -this->norm.getY(), -this->norm.getZ());
+	// }
+		// std::cout << "hasvectorNormals: ";
+		// std::cout << this->hasVectorNormals;
+		// std::cout << "\n";
+	// std::cout << "hasvectornormalssss: " << this->hasVectorNormals << "\n";
+
+	if (this->hasVectorNormals == 1){
+		// std::cout << "original normal: \n";
+		// this->norm.print();
+
+		float epsilon = -0.00001;
+
+		float px = pnt.getX();
+		float py = pnt.getY();
+		float pz = pnt.getZ();
+
+		Vector3 vec1 = Vector3(px - vert1.getX(), py - vert1.getY(), pz - vert1.getZ());
+		Vector3 vec2 = Vector3(vert2.getX() - vert1.getX(), vert2.getY() - vert1.getY(), vert2.getZ() - vert1.getZ());
+		Vector3 vec3 = Vector3(vert3.getX() - vert1.getX(), vert3.getY() - vert1.getY(), vert3.getZ() - vert1.getZ());
+
+		//denom = Vector3::dot(vec1, vec1)*Vector3::dot(vec2, vec2) - Vector3::dot(vec1, vec2)*Vector3::dot(vec2, vec1);
+		float denom = Vector3::dot(vec2, vec3)*Vector3::dot(vec2, vec3)-Vector3::dot(vec2,vec2)*Vector3::dot(vec3,vec3);
+		if (denom == 0){
+			//figure out when this is the case
+			// std::cout << "denom was zero, second time";
+			std::cout << "BAD NORMAL\n";
+			return this->norm;
+		};
+		float beta = (Vector3::dot(vec2, vec3)*Vector3::dot(vec1, vec3) - Vector3::dot(vec3, vec3)*Vector3::dot(vec1, vec2)) / (denom);
+		float gamma = (Vector3::dot(vec2, vec3)*Vector3::dot(vec1, vec2) - Vector3::dot(vec2, vec2)*Vector3::dot(vec1, vec3)) / (denom);
+
+		if (beta < epsilon || gamma < epsilon || beta + gamma > 1-epsilon){
+			// std::cout << "not inside triangle\n";
+			// std::cout << beta;
+			// std::cout << "\n";
+			// std::cout << gamma;
+			// std::cout << "\n";
+			std::cout << "BAD NORMAL\n";
+			return this->norm;
+		};
+
+		float normx = (1-beta-gamma)*norm1.getX() + beta*norm2.getX() + gamma*norm3.getX();
+		float normy = (1-beta-gamma)*norm1.getY() + beta*norm2.getY() + gamma*norm3.getY();
+		float normz = (1-beta-gamma)*norm1.getZ() + beta*norm2.getZ() + gamma*norm3.getZ(); 
+
+		normal = Vector3(normx, normy, normz);
+		// std::cout << "new normal: \n";
+		// normal.print();
 	}
 	return normal;
 }

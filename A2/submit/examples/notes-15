@@ -1,0 +1,7 @@
+Image 2 of 2 showing our ray tracer handles shadows and triangles.
+
+This image is of three triangles layed over one another with their bottom edges aligned at z=-3.  They are all under a white point light at (0,1,0).  The rendered image correctly shows each triangle shadowed by the triangle above (if there is such a triangle).  The fact that the shadows do not reach the bottoms of the triangles even though the triangles bottoms are aligned correctly reveals that the point light is in front of the bottoms of the triangles.
+
+Time to render: 2 seconds.
+
+Command line:  ./as1 examples/input-15

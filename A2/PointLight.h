@@ -11,6 +11,7 @@ public:
 	bool IsActivated();
 	void scaleLocation(float scalar);
 	Color getShadingOnObject(Material shp_mat, Point pnt, Vector3 normal, Vector3 view);
+	int getFalloff();
 private:
 	float x;
 	float y;

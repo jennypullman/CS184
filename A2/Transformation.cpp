@@ -38,8 +38,9 @@ Transformation::Transformation(float f1, float f2, float f3, char type){
 	this->matrix[13] = 0.0;
 	this->matrix[14] = 0.0;
 	this->matrix[15] = 1.0;
+	float thetaEpisilon = 0.000000000001;
 	if (type == 't'){
-		std::cout << "translate\n";
+		// std::cout << "translate\n";
 		this->matrix[0] = 1.0;
 		this->matrix[3] = f1;
 		this->matrix[5] = 1.0;
@@ -48,12 +49,55 @@ Transformation::Transformation(float f1, float f2, float f3, char type){
 		this->matrix[11] = f3;
 		this->matrix[15] = 1.0;
 	} else if (type == 'r'){
-		this->matrix[1] = -f3;
-		this->matrix[2] = f2;
-		this->matrix[4] = f3;
-		this->matrix[6] = -f1;
-		this->matrix[8] = -f2;
-		this->matrix[9] = f1;
+		Vector3 rhat = Vector3(f1, f2, f3);
+		std::cout << "f1 = " << f1 << "\n";
+		std::cout << "f2 = " << f2 << "\n";
+		std::cout << "f3 = " << f3 << "\n";
+		float theta = rhat.getMagnitude();
+		float sinTheta = sin(theta*M_PI/180);
+		float cosTheta = cos(theta*M_PI/180);
+		/*if ((sinTheta > 0.0 && sinTheta < thetaEpisilon) || (sinTheta < 0.0 || sinTheta > -thetaEpisilon)){
+			sinTheta = 0.0;
+		}
+		if ((cosTheta > 0.0 && cosTheta < thetaEpisilon) || (cosTheta < 0.0 || cosTheta > -thetaEpisilon)){
+			cosTheta = 0.0;
+		}*/
+		std::cout << "theta = " << theta << "\n";
+
+		rhat.normalize();
+		float rhatMatr[16] = {rhat.getX()*rhat.getX(), rhat.getX()*rhat.getY(), 
+			rhat.getX()*rhat.getZ(), 0.0, rhat.getX()*rhat.getY(), 
+			rhat.getY()*rhat.getY(), rhat.getY()*rhat.getZ(), 0.0, 
+			rhat.getX()*rhat.getZ(), rhat.getY()*rhat.getZ(), 
+			rhat.getZ()*rhat.getZ(), 0.0, 0.0, 0.0, 0.0, 0.0};
+		float rCrossMatr[16] = {0, -rhat.getZ(), rhat.getY(), 0.0, rhat.getZ(), 
+			0.0, -rhat.getX(), 0.0, -rhat.getY(), rhat.getX(), 0.0, 0.0, 
+			0.0, 0.0, 0.0, 0.0};
+		Transformation rhatTransform = Transformation(rhatMatr);
+		// rhatTransform.print();
+		Transformation rCross = Transformation(rCrossMatr);
+		// rCross.print();
+		Transformation finalTransform = Transformation::scaleTransformation(rCross, sinTheta);
+		// finalTransform.print();
+		// std::cout << "pi " << M_PI << "\n";
+		// std::cout << "sin: " << sin(theta*M_PI/180) << " cos: " << cos(theta*M_PI/180) << "\n";
+		finalTransform = Transformation::addTransformation(rhatTransform, finalTransform);
+		Transformation rCrossSquared = Transformation::transformMultiply(rCross, rCross);
+		rCrossSquared = Transformation::scaleTransformation(rCrossSquared, -cosTheta);
+		finalTransform = Transformation::addTransformation(finalTransform, rCrossSquared);
+
+		float *finalTransformMatrix = finalTransform.getMatrix();
+		this->matrix[0] = finalTransformMatrix[0];
+		this->matrix[1] = finalTransformMatrix[1];
+		this->matrix[2] = finalTransformMatrix[2];
+		this->matrix[4] = finalTransformMatrix[4];
+		this->matrix[5] = finalTransformMatrix[5];
+		this->matrix[6] = finalTransformMatrix[6];
+		this->matrix[8] = finalTransformMatrix[8];
+		this->matrix[9] = finalTransformMatrix[9];
+		this->matrix[10] = finalTransformMatrix[10];
+		print();
+
 	} else if (type == 's'){
 		this->matrix[0] = f1;
 		this->matrix[5] = f2;
@@ -88,6 +132,51 @@ float* Transformation::getMatrix(){
 
 bool Transformation::isNull(){
 	return this->null;
+}
+
+Transformation Transformation::scaleTransformation(Transformation trans, float scalar){
+	float matrix[16];
+	float *transMatr = trans.getMatrix();
+	matrix[0] = scalar*transMatr[0];
+	matrix[1] = scalar*transMatr[1];
+	matrix[2] = scalar*transMatr[2];
+	matrix[3] = scalar*transMatr[3];
+	matrix[4] = scalar*transMatr[4];
+	matrix[5] = scalar*transMatr[5];
+	matrix[6] = scalar*transMatr[6];
+	matrix[7] = scalar*transMatr[7];
+	matrix[8] = scalar*transMatr[8];
+	matrix[9] = scalar*transMatr[9];
+	matrix[10] = scalar*transMatr[10];
+	matrix[11] = scalar*transMatr[11];
+	matrix[12] = scalar*transMatr[12];
+	matrix[13] = scalar*transMatr[13];
+	matrix[14] = scalar*transMatr[14];
+	matrix[15] = scalar*transMatr[15];
+	return Transformation(matrix);
+}
+
+Transformation Transformation::addTransformation(Transformation trans1, Transformation trans2){
+	float *trans1Matr = trans1.getMatrix();
+	float *trans2Matr = trans2.getMatrix();
+	float newMatr[16];
+	newMatr[0] = trans1Matr[0] + trans2Matr[0];
+	newMatr[1] = trans1Matr[1] + trans2Matr[1];
+	newMatr[2] = trans1Matr[2] + trans2Matr[2];
+	newMatr[3] = trans1Matr[3] + trans2Matr[3];
+	newMatr[4] = trans1Matr[4] + trans2Matr[4];
+	newMatr[5] = trans1Matr[5] + trans2Matr[5];
+	newMatr[6] = trans1Matr[6] + trans2Matr[6];
+	newMatr[7] = trans1Matr[7] + trans2Matr[7];
+	newMatr[8] = trans1Matr[8] + trans2Matr[8];
+	newMatr[9] = trans1Matr[9] + trans2Matr[9];
+	newMatr[10] = trans1Matr[10] + trans2Matr[10];
+	newMatr[11] = trans1Matr[11] + trans2Matr[11];
+	newMatr[12] = trans1Matr[12] + trans2Matr[12];
+	newMatr[13] = trans1Matr[13] + trans2Matr[13];
+	newMatr[14] = trans1Matr[14] + trans2Matr[14];
+	newMatr[15] = trans1Matr[15] + trans2Matr[15];
+	return Transformation(newMatr);
 }
 
 Transformation Transformation::transformMultiply(Transformation trans1, Transformation trans2){

@@ -23,6 +23,7 @@ float cx, float cy, float cz, float pxx,
 	this->pzz = pzz;*/
 
 Ellipsoid::Ellipsoid(Material material, Transformation trans, float cx, float cy, float cz, float r){
+<<<<<<< HEAD
 	Transformation transformToUnit = Transformation(cx, cy, cz, 't');
   	transformToUnit = Transformation::transformMultiply(transformToUnit, trans);
   	Transformation scale = Transformation(r, r, r, 's');
@@ -30,6 +31,19 @@ Ellipsoid::Ellipsoid(Material material, Transformation trans, float cx, float cy
 	this->transformation = transformToUnit;
 	Point center = Transformation::transformPoint(trans, Point(cx, cy, cz));
 	center = Transformation::transformPoint(scale, center);
+=======
+	Transformation transformFromUnit = Transformation(cx, cy, cz, 't');
+	Point center = Point(0,0,0);
+	center = Transformation::transformPoint(trans, center);
+	center = Transformation::transformPoint(transformFromUnit, center);
+  	transformFromUnit = Transformation::transformMultiply(transformFromUnit,trans);
+  	transformFromUnit = Transformation::transformMultiply(transformFromUnit, Transformation(r, r, r, 's'));
+  	//transformFromUnit = Transformation::transformMultiply(transformFromUnit, Transformation(r, r, r, 's'));
+  	//Transformation tmp = Transformation::transformMultiply(trans, Transformation(r, r, r, 's'));
+  	//transformFromUnit = Transformation::transformMultiply(tmp, transformFromUnit);
+	this->transformation = transformFromUnit;
+	// Point center = Transformation::transformPoint(transformFromUnit, Point(0, 0, 0));
+>>>>>>> 65b95a6df0b92f9d7eadee2cbaaaf3d7ae2f060d
 	this->material = material;
 	this->cx = center.getX();
 	this->cy = center.getY();
@@ -60,35 +74,35 @@ float Ellipsoid::hit(Ray ray){
 	Vector3 vect = Vector3(ray.getDirectionX(), ray.getDirectionY(), ray.getDirectionZ());
 	// std::cout << "start of hit: \n";
 	//ray.print();
+
 	vert = Transformation::transformVertex(this->inverseTransformation, vert);
 	vect = Transformation::vectorMultiply(this->inverseTransformation, vect);
 	Ray transformedRay = Ray(vert.getX(), vert.getY(), vert.getZ(), 
 			vect.getX(), vect.getY(), vect.getZ());
+
 	//this->inverseTransformation.print();
-
-	//transformedRay.print();
-
-	//transformedRay.print();
+	// inverseTransformation.print();
+	// transformedRay.print();
 	//check if hits sphere
 	float a, b, c;
-	a = transformedRay.getDirectionX()*transformedRay.getDirectionX()+
+	a = 0.0 + transformedRay.getDirectionX()*transformedRay.getDirectionX()+
 		transformedRay.getDirectionY()*transformedRay.getDirectionY()+
 		transformedRay.getDirectionZ()*transformedRay.getDirectionZ();
-	b = 2*transformedRay.getDirectionX()*transformedRay.getStartX()+
+	b = 0.0 + 2*transformedRay.getDirectionX()*transformedRay.getStartX()+
 		2*transformedRay.getDirectionY()*transformedRay.getStartY()+
 		2*transformedRay.getDirectionZ()*transformedRay.getStartZ();
-	c = transformedRay.getStartX()*transformedRay.getStartX()+transformedRay.getStartY()*
+	c = 0.0 + transformedRay.getStartX()*transformedRay.getStartX()+transformedRay.getStartY()*
 		transformedRay.getStartY()+transformedRay.getStartZ()*transformedRay.getStartZ()-
 		1;
-	/*	
-	std::cout << "a = ";
-	std::cout << a;
-	std::cout << "\nb = ";
-	std::cout << b;
-	std::cout << "\nc = ";
-	std::cout << c;
-	std::cout << "\n";
-	*/
+		
+	// std::cout << "a = ";
+	// std::cout << a;
+	// std::cout << "\nb = ";
+	// std::cout << b;
+	// std::cout << "\nc = ";
+	// std::cout << c;
+	// std::cout << "\n";
+	
 	float dividend = b*b - 4*a*c;
 	if (dividend < 0.0 || a == 0.0){
 			
@@ -145,26 +159,26 @@ float Ellipsoid::hit(Ray ray){
 			hity = ray.getStartY() + t2*ray.getDirectionY();
 			hitz = ray.getStartZ() + t2*ray.getDirectionZ();
 			//this->mostRecentHitPoint = Transformation::transformPoint(this->transformation, Point(hitx, hity, hitz));
-			std::cout << "Printing point: ";
+			/*std::cout << "Printing point: ";
 			std::cout << hitx;
 			std::cout << ", ";
 			std::cout << hity;
 			std::cout << ", ";
 			std::cout << hitz;
-			std::cout << "\n";
+			std::cout << "\n";*/
 			this->mostRecentHitPoint = Point(hitx, hity, hitz);
 			return t2;
 		}
 		hitx = ray.getStartX() + t1*ray.getDirectionX();
 		hity = ray.getStartY() + t1*ray.getDirectionY();
 		hitz = ray.getStartZ() + t1*ray.getDirectionZ();
-		std::cout << "Printing point: ";
+		/*std::cout << "Printing point: ";
 		std::cout << hitx;
 		std::cout << ", ";
 		std::cout << hity;
 		std::cout << ", ";
 		std::cout << hitz;
-		std::cout << "\n";
+		std::cout << "\n";*/
 		///this->mostRecentHitPoint = Transformation::transformPoint(this->transformation, Point(hitx, hity, hitz));
 		this->mostRecentHitPoint = Point(hitx, hity, hitz);
 		return t1;
@@ -175,13 +189,13 @@ float Ellipsoid::hit(Ray ray){
 	hitx = ray.getStartX() + t2*ray.getDirectionX();
 	hity = ray.getStartY() + t2*ray.getDirectionY();
 	hitz = ray.getStartZ() + t2*ray.getDirectionZ();
-	std::cout << "Printing point: ";
-		std::cout << hitx;
-		std::cout << ", ";
-		std::cout << hity;
-		std::cout << ", ";
-		std::cout << hitz;
-		std::cout << "\n";
+	/*std::cout << "Printing point: ";
+	std::cout << hitx;
+	std::cout << ", ";
+	std::cout << hity;
+	std::cout << ", ";
+	std::cout << hitz;
+	std::cout << "\n";*/
 	//this->mostRecentHitPoint = Transformation::transformPoint(this->transformation, Point(hitx, hity, hitz));
 	//this->mostRecentHitPoint = Point(transformedRay.getDirectionX(), transformedRay.getDirectionY(), transformedRay.getDirectionZ());
 	//this->mostRecentHitPoint = Point(1,1,3);
@@ -223,10 +237,20 @@ Point Ellipsoid::getMostRecentHitPoint(){
 }
 
 Vector3 Ellipsoid::getNormalAtPoint(Point pnt){
+<<<<<<< HEAD
 	Vector3 normal = Vector3(pnt.getX(), pnt.getY(), pnt.getZ());
 	
 	//normal = Transformation::vectorMultiply(this->transformation, normal);
+=======
+	pnt = Transformation::transformPoint(inverseTransformation, pnt);
+	// Vector3 normal = Vector3(pnt.getX()-this->cx, pnt.getY()-this->cy, pnt.getZ()-this->cz);
+	Vector3 normal = Vector3(pnt.getX(), pnt.getY(), pnt.getZ());
+	// std::cout << cx << ", " << cy << ", " << cz << std::endl;
+		
+	// normal = Transformation::vectorMultiply(this->transformation, normal);
+>>>>>>> 65b95a6df0b92f9d7eadee2cbaaaf3d7ae2f060d
 	normal = Transformation::vectorMultiply(Transformation::getTranspose(this->inverseTransformation), normal);
+	// normal = Transformation::vectorMultiply(Transformation::getTranspose(this->transformation), normal);
 	
 	//normal.normalize();
 	return normal;	

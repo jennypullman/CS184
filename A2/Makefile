@@ -1,9 +1,9 @@
 CC = g++
 ifeq ($(shell sw_vers 2>/dev/null | grep Mac | awk '{ print $$2}'),Mac)
-	CFLAGS = -g -DGL_GLEXT_PROTOTYPES -I./include/ -I/usr/X11/include -DOSX
+	CFLAGS = -g -DGL_GLEXT_PROTOTYPES -I./include/ -I/usr/X11/include -DOSX -I/usr/local/Cellar/libpng/1.6.16/include/libpng16
 	LDFLAGS = -framework GLUT -framework OpenGL \
-    	-L"/System/Library/Frameworks/OpenGL.framework/Libraries" \
-    	-lGL -lGLU -lm -lstdc++
+    	-L/usr/local/Cellar/libpng/1.6.16/lib -lpng16 \
+    	-lm -lstdc++
 else
 	LDFLAGS = -lpng
 endif
