@@ -1,3 +1,7 @@
+#include <iostream>
+using namespace std;
+#include <stdlib.h>
+
 class Point{
 public:
 	Point();
@@ -7,6 +11,7 @@ public:
 	float getX();
 	float getY();
 	float getZ();
+	void print();
 
 private:
 	float x;

@@ -21,3 +21,7 @@ float Point::getY(){
 float Point::getZ(){
 	return this->z;
 }
+
+void Point::print(){
+	std::cout << "(" << this->x << ", " << this->y << ", " << this->z << ")";
+}

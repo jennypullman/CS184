@@ -10,3 +10,15 @@ Curve::Curve(Point c1, Point c2, Point c3, Point c4){
 	this->c3 = c3;
 	this->c4 = c4;
 }
+
+void Curve::print(){
+	std::cout << "Points 1-4: ";
+	this->c1.print();
+	std::cout << " ";
+	this->c2.print();
+	std::cout << " ";
+	this->c3.print();
+	std::cout << " ";
+	this->c4.print();
+	std::cout << "\n";
+}
