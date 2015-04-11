@@ -6,6 +6,7 @@ public:
 	Curve(Point c1, Point c2, Point c3, Point c4); //Curve defined by control points
 
 	//instance methods
+	Point computeDecasteljau(float u);
 	void print();
 
 private:
