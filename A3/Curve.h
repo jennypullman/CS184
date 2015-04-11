@@ -1,4 +1,4 @@
-#include "Point.h"
+#include "Patch.h"
 
 class Curve{
 public:

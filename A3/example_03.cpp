@@ -57,6 +57,26 @@ Surface *surfaces;
 int numSurfaces;
 
 
+int decasteljauTest1(){
+  Curve c = Curve(Point(0,0,0),Point(0,1,0), Point(1,1,0), Point(1,0,0));
+  Point d = c.computeDecasteljau(0.5);
+  if (d.getX() != 0.5 && d.getY() != 0.75 && d.getZ() != 0){
+    //fail
+    cout << "Failed decasteljauTest1.\n";
+    return 0;
+  }
+  return 1;
+}
+
+void runTests(){
+  int success = 0;
+  int total;
+  cout << "Running decasteljauTest1...\n";
+  success += decasteljauTest1();
+  total += 1;
+  cout << "Total success: " << success << "/" << total << "\n";
+}
+
 
 //****************************************************
 // Simple init function
@@ -237,39 +257,40 @@ void processArgs(int argc, char *argv[]) {
 // the usual stuff, nothing exciting here
 //****************************************************
 int main(int argc, char *argv[]) {
-  //This initializes glut
-  glutInit(&argc, argv);
+  runTests();
+  // //This initializes glut
+  // glutInit(&argc, argv);
 
-  //This tells glut to use a double-buffered window with red, green, and blue channels 
-  glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+  // //This tells glut to use a double-buffered window with red, green, and blue channels 
+  // glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
 
-  // Initalize theviewport size
-  viewport.w = 400;
-  viewport.h = 400;
+  // // Initalize theviewport size
+  // viewport.w = 400;
+  // viewport.h = 400;
 
-  //The size and position of the window
-  glutInitWindowSize(viewport.w, viewport.h);
-  glutInitWindowPosition(0,0);
-  cout << argv[0] << "\n";
-  glutCreateWindow(argv[0]);
+  // //The size and position of the window
+  // glutInitWindowSize(viewport.w, viewport.h);
+  // glutInitWindowPosition(0,0);
+  // cout << argv[0] << "\n";
+  // glutCreateWindow(argv[0]);
 
-  initScene();              // quick function to set up scene
-  processArgs(argc, argv);   // extra arguments from command
+  // initScene();              // quick function to set up scene
+  // processArgs(argc, argv);   // extra arguments from command
 
-  // cout << "ka_r: " << ka[0] << " ka_g: " << ka[1] << " ka_b: " << ka[2] << endl;
-  // cout << "kd_r: " << kd[0] << " kd_g: " << kd[1] << " kd_b: " << kd[2] << endl;
-  // cout << "ks_r: " << ks[0] << " ks_g: " << ks[1] << " ks_b: " << ks[2] << endl;
-  // cout << "sp: " << sp << endl;
-  // cout << "num_dir_lights: " << num_dir_lights << endl;
-  // cout << "num_point_lights: " << num_point_lights << endl;
+  // // cout << "ka_r: " << ka[0] << " ka_g: " << ka[1] << " ka_b: " << ka[2] << endl;
+  // // cout << "kd_r: " << kd[0] << " kd_g: " << kd[1] << " kd_b: " << kd[2] << endl;
+  // // cout << "ks_r: " << ks[0] << " ks_g: " << ks[1] << " ks_b: " << ks[2] << endl;
+  // // cout << "sp: " << sp << endl;
+  // // cout << "num_dir_lights: " << num_dir_lights << endl;
+  // // cout << "num_point_lights: " << num_point_lights << endl;
 
-  glutDisplayFunc(myDisplay);       // function to run when its time to draw something
-  glutReshapeFunc(myReshape);       // function to run when the window gets resized
+  // glutDisplayFunc(myDisplay);       // function to run when its time to draw something
+  // glutReshapeFunc(myReshape);       // function to run when the window gets resized
 
-  glutKeyboardFunc(myKeyboardFunc); // function to run on keyboard input - exit on spacebar
+  // glutKeyboardFunc(myKeyboardFunc); // function to run on keyboard input - exit on spacebar
 
-  glutMainLoop();             // infinite loop that will keep drawing and resizing
-  // and whatever else
+  // glutMainLoop();             // infinite loop that will keep drawing and resizing
+  // // and whatever else
 
   return 0;
 }

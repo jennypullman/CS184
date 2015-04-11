@@ -20,6 +20,16 @@ Point Surface::computeBezier(float u, float v){
 	return c.computeDecasteljau(v);
 }
 
+Patch Surface::determinePatch(float u, float v, float du, float dv){
+	//return patch starting from u,v, and going clockwise
+	if (u < 0 || v < 0 || du < 0 || dv < 0 || u+du >= 1 || v+dv >= 1){
+		cout << "Incorrect arguments in determinePatch\n";
+		//TO DO 
+	}
+	return Patch(this->computeBezier(u,v),this->computeBezier(u,v+dv),
+				this->computeBezier(u+du,v+dv), this->computeBezier(u+du,v));
+}
+
 void Surface::print(){
 	std::cout << "Curve 1: ";
 	this->c1.print();
