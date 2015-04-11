@@ -252,6 +252,53 @@ void processArgs(int argc, char *argv[]) {
   }
 }
 
+void uniformTesselation(float du, float dv, int surfaceNum, Patch *patches){
+  int patchIndex = 0;
+  float u,v;
+  Surface curSurface = surfaces[surfaceNum];
+  for (u = 0; u+du < 1; u+= du){
+    for (v = 0; v+dv < 1; v+= dv){
+      patches[patchIndex++] = curSurface.determinePatch(u,v,du,dv);
+    }
+    if (v+dv > 1){
+      patches[patchIndex++] = curSurface.determinePatch(u,v,du,1-(v+dv));
+    }
+  }
+  if (u+du > 1){
+    for (v = 0; v+dv < 1; v+= dv){
+      patches[patchIndex++] = curSurface.determinePatch(u,v,1-(u+du),dv);
+    }
+    if (v+dv > 1){
+      patches[patchIndex++] = curSurface.determinePatch(u,v,1-(u+du),1-(v+dv));
+    }
+  }
+}
+
+void adaptiveTriangulation(Triangle tri){
+  //check all midpoints
+  //subdivide if bad, recursively call adaptiveTriangulation on subdivisions
+  //draw if all good
+}
+
+void drawSurfaces(){
+  for (int surfaceIndex = 0; surfaceIndex < numSurfaces;surfaceIndex++){
+    int size = ceil(1/subdivision)*ceil(1/subdivision);
+    Patch patches[size];
+    uniformTesselation(subdivision, subdivision, surfaceIndex, patches);
+    for (Patch patch : patches){
+      if (option == ADAPTIVE){
+        Triangle tri1 = Triangle(patch.getP1(), patch.getP2(), patch.getP3());
+        Triangle tri2 = Triangle(patch.getP3(), patch.getP4(), patch.getP1());
+        adaptiveTriangulation(tri1);
+        adaptiveTriangulation(tri2);
+      } else {
+        //drawPatch
+      }
+    }
+  }
+}
+
+
 
 //****************************************************
 // the usual stuff, nothing exciting here
