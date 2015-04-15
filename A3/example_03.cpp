@@ -29,6 +29,7 @@ using namespace std;
 #include <stdlib.h>
 #include "Surface.h"
 #include <cfloat>
+#include <vector>
 //****************************************************
 // Some Classes
 //****************************************************
@@ -252,7 +253,9 @@ void processArgs(int argc, char *argv[]) {
   }
 }
 
-void uniformTesselation(float du, float dv, int surfaceNum, Patch *patches){
+// tesselates one patch (group of 16 control points)
+void uniformTesselation(float du, float dv, int surfaceNum, std::vector<Patch> &patches){
+  // TODO add one normal for patch - might want compute normal function
   int patchIndex = 0;
   float u,v;
   Surface curSurface = surfaces[surfaceNum];
@@ -282,11 +285,12 @@ void adaptiveTriangulation(Triangle tri){
 
 void drawSurfaces(){
   for (int surfaceIndex = 0; surfaceIndex < numSurfaces;surfaceIndex++){
-    int size = ceil(1/subdivision)*ceil(1/subdivision);
-    Patch patches[size];
+    int size = ceil(1/subdivision)*ceil(1/subdivision); //TODO check here
+    std::vector<Patch> patches;
     uniformTesselation(subdivision, subdivision, surfaceIndex, patches);
     for (Patch patch : patches){
       if (option == ADAPTIVE){
+        // TODO check points taken in correct order
         Triangle tri1 = Triangle(patch.getP1(), patch.getP2(), patch.getP3());
         Triangle tri2 = Triangle(patch.getP3(), patch.getP4(), patch.getP1());
         adaptiveTriangulation(tri1);
