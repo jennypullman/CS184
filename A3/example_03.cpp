@@ -56,6 +56,8 @@ float error;
 int option;
 Surface *surfaces;
 int numSurfaces;
+std::vector<Patch> patches;
+int patchesLength;
 
 
 int decasteljauTest1(){
@@ -80,24 +82,41 @@ void runTests(){
 
 
 //****************************************************
-// Simple init function
-//****************************************************
-void initScene(){
-  // Nothing to do here for this simple example.
-}
-
-
-//****************************************************
 // reshape viewport if the window is resized
 //****************************************************
 void myReshape(int w, int h) {
+  // viewport.w = w;
+  // viewport.h = h;
+  
+  // glViewport (0,0,viewport.w,viewport.h);
+  // glMatrixMode(GL_PROJECTION);
+  // glLoadIdentity();
+  // gluOrtho2D(0, viewport.w, 0, viewport.h);
+
   viewport.w = w;
   viewport.h = h;
-  
-  glViewport (0,0,viewport.w,viewport.h);
+
+  glViewport(0,0,viewport.w,viewport.h);// sets the rectangle that will be the window
   glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-  gluOrtho2D(0, viewport.w, 0, viewport.h);
+  glLoadIdentity();                // loading the identity matrix for the screen
+
+  //----------- setting the projection -------------------------
+  // glOrtho sets left, right, bottom, top, zNear, zFar of the chord system
+
+
+  // glOrtho(-1, 1 + (w-400)/200.0 , -1 -(h-400)/200.0, 1, 1, -1); // resize type = add
+  // glOrtho(-w/400.0, w/400.0, -h/400.0, h/400.0, 1, -1); // resize type = center
+
+  glOrtho(-1, 1, -1, 1, 1, -1);    // resize type = stretch
+}
+
+//****************************************************
+// Simple init function
+//****************************************************
+void initScene(){
+  glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // Clear to black, fully transparent
+
+  myReshape(viewport.w,viewport.h);
 }
 
 
@@ -122,11 +141,41 @@ void myDisplay() {
 
   glClear(GL_COLOR_BUFFER_BIT);       // clear the color buffer
 
+  // glEnable(GL_DEPTH_TEST);   // Enable depth testing for z-culling
   glMatrixMode(GL_MODELVIEW);             // indicate we are specifying camera transformations
   glLoadIdentity();               // make sure transformation is "zero'd"
 
 
   // Start drawing
+  glColor3f(1.0f, 1.0f, 1.0f);
+
+  Patch currPatch;
+  std::cout<<"patches length: "<<patchesLength<<std::endl;
+  for (int i = 0; i < patchesLength; i++) {
+    glBegin(GL_POLYGON);
+    std::cout<<"drawing patch "<<i<<std::endl;
+    currPatch = patches[i];
+    Point p = currPatch.getP1();
+    // p.print();
+    glVertex3f(p.getX(), p.getY(), p.getZ());
+    p = currPatch.getP2();
+    // p.print();
+    glVertex3f(p.getX(), p.getY(), p.getZ());
+    p = currPatch.getP3();
+    // p.print();
+    glVertex3f(p.getX(), p.getY(), p.getZ());
+    p = currPatch.getP4();
+    // p.print();
+    glVertex3f(p.getX(), p.getY(), p.getZ());
+    glEnd();
+
+  //   glBegin(GL_POLYGON);                         // draw diamond
+  //   glVertex3f( 0.0f, 0.3f, 0.0f);               // top corner of diamond
+  // glVertex3f( 0.3f, 0.0f, 0.0f);               // right corner of diamond
+  // glVertex3f( 0.0f,-0.3f, 0.0f);               // bottom corner of diamond
+  // glVertex3f(-0.3f, 0.0f, 0.0f);               // left corner of diamond
+  //   glEnd();
+  }
 
   glFlush();
   glutSwapBuffers();          // swap buffers (we earlier set double buffer)
@@ -309,7 +358,8 @@ void drawSurfaces(){
     if (option == UNIFORM) {
       std::cout << "using UNIFORM" << std::endl;
       int size = ceil(1/subdivision)*ceil(1/subdivision); //TODO check here
-      std::vector<Patch> patches(size);
+      patchesLength = size;
+      patches = std::vector<Patch>(patchesLength);
       uniformTesselation(subdivision, subdivision, surfaceIndex, patches);
     } else {
       // TODO fill in ADAPTIVE tesselation
