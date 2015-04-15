@@ -146,6 +146,7 @@ int readBezierFile(string fileName){
   if (file.is_open()){
     //get number of surfaces
     getline(file, line);
+    std::cout << "line: " << line << std::endl;
     char c;
     string numSurfacesStr = "";
     int i = 0;
@@ -154,17 +155,22 @@ int readBezierFile(string fileName){
       numSurfacesStr += c;
       i++;
     }
-    // std::cout << "NumSurfaces: " << numSurfaces << "\n";
+    std::cout << "NumSurfacesStr: " << numSurfacesStr << "\n";
     //get surfaces
     numSurfaces = stoi(numSurfacesStr);
+    std::cout << "NumSurfaces: " << numSurfaces << "\n";
+
     surfaces = new Surface[numSurfaces];
     
     int curCurveIndex = 0;
     int surfaceIndex = 0;
     Curve curves[4];
     while (getline(file, line)){
-
-      if (isspace(line[0])){
+      std::cout << "line: " << line << std::endl;
+      // std::cout << "line length: " << line.length() << std::endl;
+      // if (isspace(line[0])){
+      if (line.length() <= 1) {
+        std::cout << "end line b/c space" << std::endl;
         surfaceIndex++;
         if (curCurveIndex < 4 && curCurveIndex != 0){
           cout << "not enough curves in patch\n";
@@ -180,15 +186,21 @@ int readBezierFile(string fileName){
       int lineIndex = 0;
       while (coordinateIndex < 12 && lineIndex < line.length()){
         c = line[lineIndex];
+        // std::cout << "c: " << c <<std::endl;
         if (!isspace(c)){
           curPoint += c;
           lineIndex++;
         } else {
-          coordinates[coordinateIndex] = stof(curPoint);
-          curPoint = "";
-          coordinateIndex++;
-          while(isspace(c) && lineIndex < line.length()){
-            c = line[++lineIndex];
+          if (curPoint.length() > 0){
+            // std::cout << "cmurPoint: " << curPoint << std::endl;
+            coordinates[coordinateIndex] = stof(curPoint);
+            curPoint = "";
+            coordinateIndex++;
+            while(isspace(c) && lineIndex < line.length()){
+              c = line[++lineIndex];
+            }
+          } else {
+            lineIndex++;
           }
         }
         
@@ -199,7 +211,7 @@ int readBezierFile(string fileName){
       }
       Point points[4];
       for (int i = 0; i < 4; i++){
-        points[i] = Point(coordinates[i*4], coordinates[i*4+1], coordinates[i*4+2]);
+        points[i] = Point(coordinates[i*3], coordinates[i*3+1], coordinates[i*3+2]);
       }
       curves[curCurveIndex++] = Curve(points[0], points[1], points[2], points[3]);
 
@@ -249,6 +261,11 @@ void processArgs(int argc, char *argv[]) {
       subdivision = atof(argv[2]);
       option = UNIFORM;
     }
+
+    std::cout << "fileName: " << fileName <<std::endl;
+    std::cout << "subdivision: " << subdivision << std::endl;
+    std::cout << "option: " << option <<std::endl;
+
     readBezierFile(fileName);
   }
 }
@@ -261,18 +278,22 @@ void uniformTesselation(float du, float dv, int surfaceNum, std::vector<Patch> &
   Surface curSurface = surfaces[surfaceNum];
   for (u = 0; u+du < 1; u+= du){
     for (v = 0; v+dv < 1; v+= dv){
+      // std::cout << "u: " << u << ", v: " << v << ", du: " << du << ", dv: " << dv << std::endl;
       patches[patchIndex++] = curSurface.determinePatch(u,v,du,dv);
     }
     if (v+dv > 1){
-      patches[patchIndex++] = curSurface.determinePatch(u,v,du,1-(v+dv));
+      // std::cout << "u: " << u << ", v: " << v << ", du: " << du << ", dv: " << (1-v) << std::endl;
+      patches[patchIndex++] = curSurface.determinePatch(u,v,du,1-v);
     }
   }
   if (u+du > 1){
     for (v = 0; v+dv < 1; v+= dv){
-      patches[patchIndex++] = curSurface.determinePatch(u,v,1-(u+du),dv);
+      // std::cout << "u: " << u << ", v: " << v << ", du: " << (1-u) << ", dv: " << dv << std::endl;
+      patches[patchIndex++] = curSurface.determinePatch(u,v,1-u,dv);
     }
     if (v+dv > 1){
-      patches[patchIndex++] = curSurface.determinePatch(u,v,1-(u+du),1-(v+dv));
+      // std::cout << "u: " << u << ", v: " << v << ", du: " << (1-u) << ", dv: " << (1-v) << std::endl;
+      patches[patchIndex++] = curSurface.determinePatch(u,v,1-u,1-v);
     }
   }
 }
@@ -285,20 +306,25 @@ void adaptiveTriangulation(Triangle tri){
 
 void drawSurfaces(){
   for (int surfaceIndex = 0; surfaceIndex < numSurfaces;surfaceIndex++){
-    int size = ceil(1/subdivision)*ceil(1/subdivision); //TODO check here
-    std::vector<Patch> patches;
-    uniformTesselation(subdivision, subdivision, surfaceIndex, patches);
-    for (Patch patch : patches){
-      if (option == ADAPTIVE){
-        // TODO check points taken in correct order
-        Triangle tri1 = Triangle(patch.getP1(), patch.getP2(), patch.getP3());
-        Triangle tri2 = Triangle(patch.getP3(), patch.getP4(), patch.getP1());
-        adaptiveTriangulation(tri1);
-        adaptiveTriangulation(tri2);
-      } else {
-        //drawPatch
-      }
+    if (option == UNIFORM) {
+      std::cout << "using UNIFORM" << std::endl;
+      int size = ceil(1/subdivision)*ceil(1/subdivision); //TODO check here
+      std::vector<Patch> patches(size);
+      uniformTesselation(subdivision, subdivision, surfaceIndex, patches);
+    } else {
+      // TODO fill in ADAPTIVE tesselation
     }
+    // for (Patch patch : patches){
+    //   if (option == ADAPTIVE){
+    //     // TODO check points taken in correct order
+    //     Triangle tri1 = Triangle(patch.getP1(), patch.getP2(), patch.getP3());
+    //     Triangle tri2 = Triangle(patch.getP3(), patch.getP4(), patch.getP1());
+    //     adaptiveTriangulation(tri1);
+    //     adaptiveTriangulation(tri2);
+    //   } else {
+    //     //drawPatch
+    //   }
+    // }
   }
 }
 
@@ -326,7 +352,9 @@ int main(int argc, char *argv[]) {
   // glutCreateWindow(argv[0]);
 
   // initScene();              // quick function to set up scene
-  // processArgs(argc, argv);   // extra arguments from command
+  processArgs(argc, argv);   // extra arguments from command
+
+  drawSurfaces();
 
   // // cout << "ka_r: " << ka[0] << " ka_g: " << ka[1] << " ka_b: " << ka[2] << endl;
   // // cout << "kd_r: " << kd[0] << " kd_g: " << kd[1] << " kd_b: " << kd[2] << endl;

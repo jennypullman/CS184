@@ -22,7 +22,9 @@ Point Surface::computeBezier(float u, float v){
 
 Patch Surface::determinePatch(float u, float v, float du, float dv){
 	//return patch starting from u,v, and going clockwise
-	if (u < 0 || v < 0 || du < 0 || dv < 0 || u+du >= 1 || v+dv >= 1){
+	if (u < 0 || v < 0 || du < 0 || dv < 0 || u+du > 1 || v+dv >1){
+		// cout << (u < 0) << (v < 0) << (du < 0) << (dv < 0) << (u+du >= 1) << (v+dv >= 1) << endl;
+		// cout << "v+dv: " << v+dv << endl;
 		cout << "Incorrect arguments in determinePatch\n";
 		//TO DO 
 	}
