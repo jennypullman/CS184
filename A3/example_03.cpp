@@ -335,23 +335,23 @@ void drawSurfaces(){
 //****************************************************
 int main(int argc, char *argv[]) {
   runTests();
-  // //This initializes glut
-  // glutInit(&argc, argv);
+  //This initializes glut
+  glutInit(&argc, argv);
 
-  // //This tells glut to use a double-buffered window with red, green, and blue channels 
-  // glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+  //This tells glut to use a double-buffered window with red, green, and blue channels 
+  glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
 
-  // // Initalize theviewport size
-  // viewport.w = 400;
-  // viewport.h = 400;
+  // Initalize theviewport size
+  viewport.w = 400;
+  viewport.h = 400;
 
-  // //The size and position of the window
-  // glutInitWindowSize(viewport.w, viewport.h);
-  // glutInitWindowPosition(0,0);
-  // cout << argv[0] << "\n";
-  // glutCreateWindow(argv[0]);
+  //The size and position of the window
+  glutInitWindowSize(viewport.w, viewport.h);
+  glutInitWindowPosition(0,0);
+  cout << argv[0] << "\n";
+  glutCreateWindow(argv[0]);
 
-  // initScene();              // quick function to set up scene
+  initScene();              // quick function to set up scene
   processArgs(argc, argv);   // extra arguments from command
 
   drawSurfaces();
@@ -363,13 +363,13 @@ int main(int argc, char *argv[]) {
   // // cout << "num_dir_lights: " << num_dir_lights << endl;
   // // cout << "num_point_lights: " << num_point_lights << endl;
 
-  // glutDisplayFunc(myDisplay);       // function to run when its time to draw something
-  // glutReshapeFunc(myReshape);       // function to run when the window gets resized
+  glutDisplayFunc(myDisplay);       // function to run when its time to draw something
+  glutReshapeFunc(myReshape);       // function to run when the window gets resized
 
-  // glutKeyboardFunc(myKeyboardFunc); // function to run on keyboard input - exit on spacebar
+  glutKeyboardFunc(myKeyboardFunc); // function to run on keyboard input - exit on spacebar
 
-  // glutMainLoop();             // infinite loop that will keep drawing and resizing
-  // // and whatever else
+  glutMainLoop();             // infinite loop that will keep drawing and resizing
+  // and whatever else
 
   return 0;
 }
