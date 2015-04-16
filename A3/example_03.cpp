@@ -60,6 +60,7 @@ std::vector<Patch> patches;
 int patchesLength;
 
 bool wireframe, rotateL, rotateR, rotateU, rotateD, transL, transR, transU, transD, in, out = false;
+bool flat = true;
 
 
 int decasteljauTest1(){
@@ -202,8 +203,14 @@ void myDisplay() {
 
   // glRotatef(-45.0f, 1.0f, 0.0f, 0.0f);
 
+  // TODO update normals
+  if (flat) {
+    glShadeModel(GL_FLAT);
+  } else {
+    glShadeModel(GL_SMOOTH);
+  }
+
   // Initialize lights
-  glShadeModel(GL_FLAT);
   GLfloat light_pos[] = {0., -1., 1., 0.};
   glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
   GLfloat diffuse[] = {1.0, 1.0, 1.0, 1.0};
@@ -310,6 +317,15 @@ void toggleWireframe() {
   glutPostRedisplay();
 }
 
+void toggleShading() {
+  if (flat) {
+    flat = false;
+  } else {
+    flat = true;
+  }
+  glutPostRedisplay();
+}
+
 void rotateRight() {
   rotateR = true;
   glutPostRedisplay();
@@ -365,6 +381,10 @@ void myKeyboardFunc(unsigned char key, int x, int y) {
     case ' ':  exit(1);  // exit on space
     case 'w':  {
       toggleWireframe();
+      break;
+    }
+    case 's':  {
+      toggleShading();
       break;
     }
     case '+':  {
