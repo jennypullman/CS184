@@ -110,7 +110,7 @@ void myReshape(int w, int h) {
   // glOrtho(-1, 1 + (w-400)/200.0 , -1 -(h-400)/200.0, 1, 1, -1); // resize type = add
   // glOrtho(-w/400.0, w/400.0, -h/400.0, h/400.0, 1, -1); // resize type = center
 
-  glOrtho(-4, 4, -4, 4, 4, -4);    // resize type = stretch
+  glOrtho(-4, 4, -4, 4, -4, 4);    // resize type = stretch
 }
 
 //****************************************************
@@ -120,13 +120,32 @@ void initScene(){
   glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // Clear to black, fully transparent
   // glClearDepth(5.0f); // Clear to black, fully transparent
 
-  glEnable(GL_CULL_FACE);
+  // glEnable(GL_CULL_FACE);
   glEnable(GL_DEPTH_TEST);
-
   glDepthMask(GL_TRUE);
   glDepthFunc(GL_LEQUAL);    // Set the type of depth-test
 
-  glLoadIdentity();               // make sure transformation is "zero'd"
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
+
+  glEnable(GL_LIGHTING);
+  glEnable(GL_LIGHT0);
+
+  // Initialize lights
+  GLfloat light_pos[] = {0., 0., 1., 0.};
+  glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
+  GLfloat diffuse[] = {1.0, 1.0, 1.0, 1.0};
+  glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
+  GLfloat specular[] = {1.0, 1.0, 1.0, 1.0};
+  glLightfv(GL_LIGHT0, GL_DIFFUSE, specular);
+
+  
+  // Set material
+  GLfloat cyan[] = {0.f, .8f, .8f, 1.f};
+  glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, cyan);
+  // glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
 
 
   myReshape(viewport.w,viewport.h);
@@ -157,12 +176,12 @@ void myDisplay() {
 
 
 
-  glEnable(GL_LIGHTING);
-  glEnable(GL_LIGHT0);
+ 
 
-  // glEnable(GL_DEPTH_TEST);   // Enable depth testing for z-culling
   glMatrixMode(GL_MODELVIEW);             // indicate we are specifying camera transformations
   // glLoadIdentity();               // make sure transformation is "zero'd"
+
+
   
 
   if (rotateR) {
@@ -209,19 +228,6 @@ void myDisplay() {
   } else {
     glShadeModel(GL_SMOOTH);
   }
-
-  // Initialize lights
-  GLfloat light_pos[] = {0., -1., 1., 0.};
-  glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
-  GLfloat diffuse[] = {1.0, 1.0, 1.0, 1.0};
-  glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
-  GLfloat specular[] = {1.0, 1.0, 1.0, 1.0};
-  glLightfv(GL_LIGHT0, GL_DIFFUSE, specular);
-
-  // Set material
-  GLfloat cyan[] = {0.f, .8f, .8f, 1.f};
-  glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, cyan);
-  // glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
 
 
   // Start drawing
