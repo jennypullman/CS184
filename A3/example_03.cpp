@@ -255,10 +255,19 @@ void myDisplay() {
     Point p3 = currPatch.getP3();
     Point p4 = currPatch.getP4();
 
-    Vector3 n1 = currPatch.getN1();
-    Vector3 n2 = currPatch.getN2();
-    Vector3 n3 = currPatch.getN3();
-    Vector3 n4 = currPatch.getN4();
+
+    Vector3 n1, n2, n3, n4;
+    if (flat) {
+      n1 = currPatch.getFN1();
+      n2 = currPatch.getFN2();
+      n3 = currPatch.getFN3();
+      n4 = currPatch.getFN4();
+    } else {
+      n1 = currPatch.getSN1();
+      n2 = currPatch.getSN2();
+      n3 = currPatch.getSN3();
+      n4 = currPatch.getSN4();
+    }
 
     n1.normalize();
     n2.normalize();
