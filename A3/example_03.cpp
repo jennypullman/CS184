@@ -144,6 +144,8 @@ void initScene(){
   
   // Set material
   GLfloat cyan[] = {0.f, .8f, .8f, 1.f};
+  GLfloat orange[] = {.8f, .4f, 0.f, 1.f};
+  GLfloat green[] = {0.f, .8f, 0.1f, 1.f};
   glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, cyan);
   // glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
 
@@ -593,10 +595,11 @@ void uniformTesselation(float du, float dv, int surfaceNum, std::vector<Patch>& 
 
   int patchIndex = 0;
   float u,v;
+  float ep = 0.0001;
   Surface curSurface = surfaces[surfaceNum];
-  for (u = 0; u+du <= 1; u+= du){
+  for (u = 0; u+du <= 1+ep; u+= du){
     // std::cout<<"U: " << u << std::endl;
-    for (v = 0; v+dv <= 1; v+= dv){
+    for (v = 0; v+dv <= 1+ep; v+= dv){
       // std::cout<<"V: " << v << std::endl;
       // std::cout << "u: " << u << ", v: " << v << ", du: " << du << ", dv: " << dv << std::endl;
       patches.push_back(curSurface.determinePatch(u,v,du,dv));
@@ -606,21 +609,21 @@ void uniformTesselation(float du, float dv, int surfaceNum, std::vector<Patch>& 
       // std::cout << "PRINTING FROM PATCH" << std::endl;
       // patches[patchIndex-1].getP4().print();
     }
-    if (v < 1){
+    if (v < 1+ep){
       // std::cout << "u: " << u << ", v: " << v << ", du: " << du << ", dv: " << (1-v) << std::endl;
       patches.push_back(curSurface.determinePatch(u,v,du,1-v));
       // std::cout<<"patches length: "<<patches.size()<<std::endl;
       // patches[patchIndex++] = curSurface.determinePatch(u,v,du,1-v);
     }
   }
-  if (u < 1){
-    for (v = 0; v+dv <= 1; v+= dv){
+  if (u < 1+ep){
+    for (v = 0; v+dv <= 1+ep; v+= dv){
       // std::cout << "u: " << u << ", v: " << v << ", du: " << (1-u) << ", dv: " << dv << std::endl;
       patches.push_back(curSurface.determinePatch(u,v,1-u,dv));
       // std::cout<<"patches length: "<<patches.size()<<std::endl;
       // patches[patchIndex++] = curSurface.determinePatch(u,v,1-u,dv);
     }
-    if (v < 1){
+    if (v < 1+ep){
       // std::cout << "u: " << u << ", v: " << v << ", du: " << (1-u) << ", dv: " << (1-v) << std::endl;
       patches.push_back(curSurface.determinePatch(u,v,1-u,1-v));
       // std::cout<<"patches length: "<<patches.size()<<std::endl;
