@@ -150,6 +150,8 @@ void initScene(){
   glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, cyan);
   // glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
 
+  glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
+
 
   myReshape(viewport.w,viewport.h);
 }
