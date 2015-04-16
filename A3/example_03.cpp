@@ -115,10 +115,10 @@ void myReshape(int w, int h) {
 //****************************************************
 void initScene(){
   glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // Clear to black, fully transparent
+  // glClearDepth(-5.0f); // Clear to black, fully transparent
 
-  // glEnable(GL_CULL_FACE);
-  // glEnable(GL_DEPTH_TEST);
-  // glDepthMask(GL_TRUE);
+  glEnable(GL_CULL_FACE);
+  glEnable(GL_DEPTH_TEST);
 
   myReshape(viewport.w,viewport.h);
 }
@@ -146,6 +146,8 @@ void myDisplay() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);       // clear the color buffer
   // glClear(GL_COLOR_BUFFER_BIT);       // clear the color buffer
 
+  glDepthMask(GL_TRUE);
+  glDepthFunc(GL_LEQUAL);    // Set the type of depth-test
 
   glEnable(GL_LIGHTING);
   glEnable(GL_LIGHT0);
@@ -210,31 +212,31 @@ void myDisplay() {
     // p4.print();
     n4.print();
 
-    // // glNormal3f(n1.getX(), n1.getY(), n1.getZ());
-    // glVertex3f(p1.getX(), p1.getY(), p1.getZ());
+    glNormal3f(n1.getX(), n1.getY(), n1.getZ());
+    glVertex3f(p1.getX(), p1.getY(), p1.getZ());
     
-    // // glNormal3f(n2.getX(), n2.getY(), n2.getZ());
-    // glVertex3f(p2.getX(), p2.getY(), p2.getZ());
+    glNormal3f(n2.getX(), n2.getY(), n2.getZ());
+    glVertex3f(p2.getX(), p2.getY(), p2.getZ());
 
-    // // glNormal3f(n3.getX(), n3.getY(), n3.getZ());
-    // glVertex3f(p3.getX(), p3.getY(), p3.getZ());
+    glNormal3f(n3.getX(), n3.getY(), n3.getZ());
+    glVertex3f(p3.getX(), p3.getY(), p3.getZ());
 
-    // // glNormal3f(n4.getX(), n4.getY(), n4.getZ());
-    // glVertex3f(p4.getX(), p4.getY(), p4.getZ());
+    glNormal3f(n4.getX(), n4.getY(), n4.getZ());
+    glVertex3f(p4.getX(), p4.getY(), p4.getZ());
 
 
 // // switch z, y for testing purposes
-    glNormal3f(n1.getX(), n1.getZ(), n1.getY());
-    glVertex3f(p1.getX(), p1.getZ(), p1.getY());
+    // glNormal3f(n1.getX(), n1.getZ(), n1.getY());
+    // glVertex3f(p1.getX(), p1.getZ(), p1.getY());
     
-    glNormal3f(n2.getX(), n2.getZ(), n2.getY());
-    glVertex3f(p2.getX(), p2.getZ(), p2.getY());
+    // glNormal3f(n2.getX(), n2.getZ(), n2.getY());
+    // glVertex3f(p2.getX(), p2.getZ(), p2.getY());
 
-    glNormal3f(n3.getX(), n3.getZ(), n3.getY());
-    glVertex3f(p3.getX(), p3.getZ(), p3.getY());
+    // glNormal3f(n3.getX(), n3.getZ(), n3.getY());
+    // glVertex3f(p3.getX(), p3.getZ(), p3.getY());
 
-    glNormal3f(n4.getX(), n4.getZ(), n4.getY());
-    glVertex3f(p4.getX(), p4.getZ(), p4.getY());
+    // glNormal3f(n4.getX(), n4.getZ(), n4.getY());
+    // glVertex3f(p4.getX(), p4.getZ(), p4.getY());
     // glEnd();
   }
   glEnd();
