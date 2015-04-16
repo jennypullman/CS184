@@ -60,6 +60,9 @@ std::vector<Patch> patches;
 std::vector<Triangle> triangles;
 int patchesLength;
 
+bool wireframe, rotateL, rotateR, rotateU, rotateD, transL, transR, transU, transD, in, out = false;
+bool flat = true;
+
 
 int decasteljauTest1(){
   Curve c = Curve(Point(0,0,0),Point(0,1,0), Point(1,1,0), Point(1,0,0));
@@ -108,7 +111,7 @@ void myReshape(int w, int h) {
   // glOrtho(-1, 1 + (w-400)/200.0 , -1 -(h-400)/200.0, 1, 1, -1); // resize type = add
   // glOrtho(-w/400.0, w/400.0, -h/400.0, h/400.0, 1, -1); // resize type = center
 
-  glOrtho(-5, 5, -5, 5, 5, -5);    // resize type = stretch
+  glOrtho(-4, 4, -4, 4, -4, 4);    // resize type = stretch
 }
 
 //****************************************************
@@ -116,10 +119,35 @@ void myReshape(int w, int h) {
 //****************************************************
 void initScene(){
   glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // Clear to black, fully transparent
+  // glClearDepth(5.0f); // Clear to black, fully transparent
 
   // glEnable(GL_CULL_FACE);
-  // glEnable(GL_DEPTH_TEST);
-  // glDepthMask(GL_TRUE);
+  glEnable(GL_DEPTH_TEST);
+  glDepthMask(GL_TRUE);
+  glDepthFunc(GL_LEQUAL);    // Set the type of depth-test
+
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
+
+  glEnable(GL_LIGHTING);
+  glEnable(GL_LIGHT0);
+
+  // Initialize lights
+  GLfloat light_pos[] = {0., 0., 1., 0.};
+  glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
+  GLfloat diffuse[] = {1.0, 1.0, 1.0, 1.0};
+  glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
+  GLfloat specular[] = {1.0, 1.0, 1.0, 1.0};
+  glLightfv(GL_LIGHT0, GL_DIFFUSE, specular);
+
+  
+  // Set material
+  GLfloat cyan[] = {0.f, .8f, .8f, 1.f};
+  glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, cyan);
+  // glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
+
 
   myReshape(viewport.w,viewport.h);
 }
@@ -148,26 +176,59 @@ void myDisplay() {
   // glClear(GL_COLOR_BUFFER_BIT);       // clear the color buffer
 
 
-  glEnable(GL_LIGHTING);
-  glEnable(GL_LIGHT0);
 
-  // glEnable(GL_DEPTH_TEST);   // Enable depth testing for z-culling
+ 
+
   glMatrixMode(GL_MODELVIEW);             // indicate we are specifying camera transformations
-  glLoadIdentity();               // make sure transformation is "zero'd"
+  // glLoadIdentity();               // make sure transformation is "zero'd"
 
-  // Initialize lights
-  glShadeModel(GL_FLAT);
-  GLfloat light_pos[] = {0., 0., 1., 0.};
-  glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
-  GLfloat diffuse[] = {1.0, 1.0, 1.0, 1.0};
-  glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
-  GLfloat specular[] = {1.0, 1.0, 1.0, 1.0};
-  glLightfv(GL_LIGHT0, GL_DIFFUSE, specular);
 
-  // Set material
-  GLfloat cyan[] = {0.f, .8f, .8f, 1.f};
-  glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, cyan);
-  // glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
+  
+
+  if (rotateR) {
+    glRotatef(1.0f, 0.0f, 1.0f, 0.0f);
+    rotateR = false;
+  } else if (rotateL) {
+    glRotatef(-1.0f, 0.0f, 1.0f, 0.0f);
+    rotateL = false;
+  } else if (rotateU) {
+    glRotatef(-1.0f, 1.0f, 0.0f, 0.0f);
+    rotateU = false;
+  } else if (rotateD) {
+    glRotatef(1.0f, 1.0f, 0.0f, 0.0f);
+    rotateD = false;
+  }
+
+  if (transR) {
+    glTranslatef(0.05f, 0.0f, 0.0f);
+    transR = false;
+  } else if (transL) {
+    glTranslatef(-0.05f, 0.0f, 0.0f);
+    transL = false;
+  } else if (transU) {
+    glTranslatef(0.0f, 0.05f, 0.0f);
+    transU = false;
+  } else if (transD) {
+    glTranslatef(0.0f, -0.05f, 0.0f);
+    transD = false;
+  }
+
+  if (in) {
+    glScaled(1.05263, 1.05263, 1.05263);
+    in = false;
+  } else if (out) {
+    glScaled(0.95, 0.95, 0.95);
+    out = false;
+  }
+
+  // glRotatef(-45.0f, 1.0f, 0.0f, 0.0f);
+
+  // TODO update normals
+  if (flat) {
+    glShadeModel(GL_FLAT);
+  } else {
+    glShadeModel(GL_SMOOTH);
+  }
 
 
   // Start drawing
@@ -178,8 +239,11 @@ void myDisplay() {
   // std::cout<<"patches length: "<<patches.size()<<std::endl;
   // for (int i = 0; i < patchesLength; i++) {
 
-  // glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-  glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+  if (wireframe) {
+    glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+  } else {
+    glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+  }
 
   glBegin(GL_QUADS);
   for(std::vector<Patch>::iterator it = patches.begin() ; it != patches.end(); ++it) {
@@ -192,10 +256,19 @@ void myDisplay() {
     Point p3 = currPatch.getP3();
     Point p4 = currPatch.getP4();
 
-    Vector3 n1 = currPatch.getN1();
-    Vector3 n2 = currPatch.getN2();
-    Vector3 n3 = currPatch.getN3();
-    Vector3 n4 = currPatch.getN4();
+
+    Vector3 n1, n2, n3, n4;
+    if (flat) {
+      n1 = currPatch.getFN1();
+      n2 = currPatch.getFN2();
+      n3 = currPatch.getFN3();
+      n4 = currPatch.getFN4();
+    } else {
+      n1 = currPatch.getSN1();
+      n2 = currPatch.getSN2();
+      n3 = currPatch.getSN3();
+      n4 = currPatch.getSN4();
+    }
 
     n1.normalize();
     n2.normalize();
@@ -203,39 +276,39 @@ void myDisplay() {
     n4.normalize();
 
     // p1.print();
-    n1.print();
+    // n1.print();
     // p2.print();
-    n2.print();
+    // n2.print();
     // p3.print();
-    n3.print();
+    // n3.print();
     // p4.print();
-    n4.print();
+    // n4.print();
 
-    // // glNormal3f(n1.getX(), n1.getY(), n1.getZ());
-    // glVertex3f(p1.getX(), p1.getY(), p1.getZ());
+    glNormal3f(n1.getX(), n1.getY(), n1.getZ());
+    glVertex3f(p1.getX(), p1.getY(), p1.getZ());
     
-    // // glNormal3f(n2.getX(), n2.getY(), n2.getZ());
-    // glVertex3f(p2.getX(), p2.getY(), p2.getZ());
+    glNormal3f(n2.getX(), n2.getY(), n2.getZ());
+    glVertex3f(p2.getX(), p2.getY(), p2.getZ());
 
-    // // glNormal3f(n3.getX(), n3.getY(), n3.getZ());
-    // glVertex3f(p3.getX(), p3.getY(), p3.getZ());
+    glNormal3f(n3.getX(), n3.getY(), n3.getZ());
+    glVertex3f(p3.getX(), p3.getY(), p3.getZ());
 
-    // // glNormal3f(n4.getX(), n4.getY(), n4.getZ());
-    // glVertex3f(p4.getX(), p4.getY(), p4.getZ());
+    glNormal3f(n4.getX(), n4.getY(), n4.getZ());
+    glVertex3f(p4.getX(), p4.getY(), p4.getZ());
 
 
 // // switch z, y for testing purposes
-    glNormal3f(n1.getX(), n1.getZ(), n1.getY());
-    glVertex3f(p1.getX(), p1.getZ(), p1.getY());
+    // glNormal3f(n1.getX(), n1.getZ(), n1.getY());
+    // glVertex3f(p1.getX(), p1.getZ(), p1.getY());
     
-    glNormal3f(n2.getX(), n2.getZ(), n2.getY());
-    glVertex3f(p2.getX(), p2.getZ(), p2.getY());
+    // glNormal3f(n2.getX(), n2.getZ(), n2.getY());
+    // glVertex3f(p2.getX(), p2.getZ(), p2.getY());
 
-    glNormal3f(n3.getX(), n3.getZ(), n3.getY());
-    glVertex3f(p3.getX(), p3.getZ(), p3.getY());
+    // glNormal3f(n3.getX(), n3.getZ(), n3.getY());
+    // glVertex3f(p3.getX(), p3.getZ(), p3.getY());
 
-    glNormal3f(n4.getX(), n4.getZ(), n4.getY());
-    glVertex3f(p4.getX(), p4.getZ(), p4.getY());
+    // glNormal3f(n4.getX(), n4.getZ(), n4.getY());
+    // glVertex3f(p4.getX(), p4.getZ(), p4.getY());
     // glEnd();
   }
   glEnd();
@@ -251,11 +324,137 @@ void myDisplay() {
   glutSwapBuffers();          // swap buffers (we earlier set double buffer)
 }
 
+void toggleWireframe() {
+  if (wireframe) {
+    wireframe = false;
+  } else {
+    wireframe = true;
+  }
+  glutPostRedisplay();
+}
+
+void toggleShading() {
+  if (flat) {
+    flat = false;
+  } else {
+    flat = true;
+  }
+  glutPostRedisplay();
+}
+
+void rotateRight() {
+  rotateR = true;
+  glutPostRedisplay();
+
+}
+
+void rotateLeft() {
+  rotateL = true;
+  glutPostRedisplay();
+
+}
+
+void rotateUp() {
+  rotateU = true;
+  glutPostRedisplay();
+
+}
+
+void rotateDown() {
+  rotateD = true;
+  glutPostRedisplay();
+
+}
+
+void transRight() {
+  transR = true;
+  glutPostRedisplay();
+
+}
+
+void transLeft() {
+  transL = true;
+  glutPostRedisplay();
+
+}
+
+void transUp() {
+  transU = true;
+  glutPostRedisplay();
+
+}
+
+void transDown() {
+  transD = true;
+  glutPostRedisplay();
+
+}
+
 void myKeyboardFunc(unsigned char key, int x, int y) {
+  // std::cout << "key: " << key << std::endl;
+  // std::cout << "KEY UP: " << GLUT_KEY_UP << std::endl;
   switch(key) {
     case ' ':  exit(1);  // exit on space
+    case 'w':  {
+      toggleWireframe();
+      break;
+    }
+    case 's':  {
+      toggleShading();
+      break;
+    }
+    case '+':  {
+      in = true;
+      glutPostRedisplay();
+      break;
+    }
+    case '-':  {
+      out = true;
+      glutPostRedisplay();
+      break;
+    }
     break;
   };
+}
+
+void mySpecialKeysFunc(int key, int x, int y) {
+  // std::cout << "key: " << key << std::endl;
+  // std::cout << "KEY UP: " << GLUT_KEY_UP << std::endl;
+  int mod = glutGetModifiers();
+  if (mod == GLUT_ACTIVE_SHIFT) {
+    switch(key) {
+      case GLUT_KEY_LEFT: 
+        transLeft();
+        break;
+      case GLUT_KEY_RIGHT:
+        transRight();
+        break;
+      case GLUT_KEY_UP:
+        transUp();
+        break;
+      case GLUT_KEY_DOWN:
+        transDown();
+        break;
+      break;
+    };
+  } else {
+    switch(key) {
+      case GLUT_KEY_LEFT: 
+        rotateLeft();
+        break;
+      case GLUT_KEY_RIGHT:
+        rotateRight();
+        break;
+      case GLUT_KEY_UP:
+        rotateUp();
+        break;
+      case GLUT_KEY_DOWN:
+        rotateDown();
+        break;
+      break;
+    };
+  }
+  
 }
 
 int readBezierFile(string fileName){
@@ -659,6 +858,7 @@ int main(int argc, char *argv[]) {
   glutReshapeFunc(myReshape);       // function to run when the window gets resized
 
   glutKeyboardFunc(myKeyboardFunc); // function to run on keyboard input - exit on spacebar
+  glutSpecialFunc(mySpecialKeysFunc); // function to process special keys
 
   glutMainLoop();             // infinite loop that will keep drawing and resizing
   // and whatever else

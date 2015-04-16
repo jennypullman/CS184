@@ -87,14 +87,29 @@ Vector3 Surface::computeNormal(Point p1, Point p2, Point p3, Point p4) {
 			Vector3 v41 = Vector3(p4.getX()-p1.getX(), p4.getY()-p1.getY(), p4.getZ()-p1.getZ());
 			return Vector3::cross(v21, v41);
 		} else {
+			// std::cout << "p1 equals p4" << std::endl;
 			Vector3 v21 = Vector3(p2.getX()-p1.getX(), p2.getY()-p1.getY(), p2.getZ()-p1.getZ());
 			Vector3 v31 = Vector3(p3.getX()-p1.getX(), p3.getY()-p1.getY(), p3.getZ()-p1.getZ());
 			return Vector3::cross(v21, v31);
 		}
 	} else {
-		Vector3 v31 = Vector3(p3.getX()-p1.getX(), p3.getY()-p1.getY(), p3.getZ()-p1.getZ());
-		Vector3 v41 = Vector3(p4.getX()-p1.getX(), p4.getY()-p1.getY(), p4.getZ()-p1.getZ());
-		return Vector3::cross(v31, v41);
+		// if (p1.equals(p4)) {
+		// 	std::cout << "p1 equals p2 and p4" << std::endl;
+		// }
+		// if (p3.equals(p4)) {
+		// 	std::cout << "p1 equals p2 and p3 equals p4" << std::endl;
+		// }
+		// std::cout << "p1 equals p2" << std::endl;
+		// Vector3 v31 = Vector3(p3.getX()-p1.getX(), p3.getY()-p1.getY(), p3.getZ()-p1.getZ());
+		// v31.print();
+		// Vector3 v41 = Vector3(p4.getX()-p1.getX(), p4.getY()-p1.getY(), p4.getZ()-p1.getZ());
+		// v41.print();
+		// Vector3::cross(v31, v41).print();
+		// return Vector3::cross(v31, v41);
+
+		Vector3 v14 = Vector3(p1.getX()-p4.getX(), p1.getY()-p4.getY(), p1.getZ()-p4.getZ());
+		Vector3 v34 = Vector3(p3.getX()-p4.getX(), p3.getY()-p4.getY(), p3.getZ()-p4.getZ());
+		return Vector3::cross(v14, v34);
 	}
 }
 
@@ -115,16 +130,16 @@ Patch Surface::determinePatch(float u, float v, float du, float dv){
 	// p3.print();
 	Point p4 = this->computeBezier(u,v+dv);
 	// p4.print();
-	// Vector3 n1 = this->computeNormal(u,v);
-	// Vector3 n2 = this->computeNormal(u+du,v);
-	// Vector3 n3 = this->computeNormal(u+du,v+dv);
-	// Vector3 n4 = this->computeNormal(u,v+dv);
+	Vector3 sn1 = this->computeNormal(u,v);
+	Vector3 sn2 = this->computeNormal(u+du,v);
+	Vector3 sn3 = this->computeNormal(u+du,v+dv);
+	Vector3 sn4 = this->computeNormal(u,v+dv);
 
-	Vector3 n1 = this->computeNormal(p1, p2, p3, p4);
-	Vector3 n2 = this->computeNormal(p1, p2, p3, p4);
-	Vector3 n3 = this->computeNormal(p1, p2, p3, p4);
-	Vector3 n4 = this->computeNormal(p1, p2, p3, p4);
-	return Patch(p1, p2, p3, p4, n1, n2, n3, n4);
+	Vector3 fn1 = this->computeNormal(p1, p2, p3, p4);
+	Vector3 fn2 = this->computeNormal(p1, p2, p3, p4);
+	Vector3 fn3 = this->computeNormal(p1, p2, p3, p4);
+	Vector3 fn4 = this->computeNormal(p1, p2, p3, p4);
+	return Patch(p1, p2, p3, p4, sn1, sn2, sn3, sn4, fn1, fn2, fn3, fn4);
 }
 
 void Surface::print(){
