@@ -238,8 +238,6 @@ void myDisplay() {
   // Start drawing
   // glColor3f(1.0f, 1.0f, 1.0f);
 
-  Patch currPatch;
-
   // std::cout<<"patches length: "<<patches.size()<<std::endl;
   // for (int i = 0; i < patchesLength; i++) {
 
@@ -249,80 +247,122 @@ void myDisplay() {
     glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
   }
 
-  glBegin(GL_QUADS);
-  for(std::vector<Patch>::iterator it = patches.begin() ; it != patches.end(); ++it) {
-    
-    // std::cout<<"drawing patch "<<i<<std::endl;
-    // currPatch = patches[i];
-    currPatch = *it;
-    Point p1 = currPatch.getP1();
-    Point p2 = currPatch.getP2();
-    Point p3 = currPatch.getP3();
-    Point p4 = currPatch.getP4();
+
+  if (option == UNIFORM) {
+    Patch currPatch;
+    glBegin(GL_QUADS);
+    for(std::vector<Patch>::iterator it = patches.begin() ; it != patches.end(); ++it) {
+      
+      // std::cout<<"drawing patch "<<i<<std::endl;
+      // currPatch = patches[i];
+      currPatch = *it;
+      Point p1 = currPatch.getP1();
+      Point p2 = currPatch.getP2();
+      Point p3 = currPatch.getP3();
+      Point p4 = currPatch.getP4();
 
 
-    Vector3 n1, n2, n3, n4;
-    if (flat) {
-      n1 = currPatch.getFN1();
-      n2 = currPatch.getFN2();
-      n3 = currPatch.getFN3();
-      n4 = currPatch.getFN4();
-    } else {
-      n1 = currPatch.getSN1();
-      n2 = currPatch.getSN2();
-      n3 = currPatch.getSN3();
-      n4 = currPatch.getSN4();
+      Vector3 n1, n2, n3, n4;
+      if (flat) {
+        n1 = currPatch.getFN1();
+        n2 = currPatch.getFN2();
+        n3 = currPatch.getFN3();
+        n4 = currPatch.getFN4();
+      } else {
+        n1 = currPatch.getSN1();
+        n2 = currPatch.getSN2();
+        n3 = currPatch.getSN3();
+        n4 = currPatch.getSN4();
+      }
+
+      n1.normalize();
+      n2.normalize();
+      n3.normalize();
+      n4.normalize();
+
+      // p1.print();
+      // n1.print();
+      // p2.print();
+      // n2.print();
+      // p3.print();
+      // n3.print();
+      // p4.print();
+      // n4.print();
+
+      glNormal3f(n1.getX(), n1.getY(), n1.getZ());
+      glVertex3f(p1.getX(), p1.getY(), p1.getZ());
+      
+      glNormal3f(n2.getX(), n2.getY(), n2.getZ());
+      glVertex3f(p2.getX(), p2.getY(), p2.getZ());
+
+      glNormal3f(n3.getX(), n3.getY(), n3.getZ());
+      glVertex3f(p3.getX(), p3.getY(), p3.getZ());
+
+      glNormal3f(n4.getX(), n4.getY(), n4.getZ());
+      glVertex3f(p4.getX(), p4.getY(), p4.getZ());
+
+
+  // // switch z, y for testing purposes
+      // glNormal3f(n1.getX(), n1.getZ(), n1.getY());
+      // glVertex3f(p1.getX(), p1.getZ(), p1.getY());
+      
+      // glNormal3f(n2.getX(), n2.getZ(), n2.getY());
+      // glVertex3f(p2.getX(), p2.getZ(), p2.getY());
+
+      // glNormal3f(n3.getX(), n3.getZ(), n3.getY());
+      // glVertex3f(p3.getX(), p3.getZ(), p3.getY());
+
+      // glNormal3f(n4.getX(), n4.getZ(), n4.getY());
+      // glVertex3f(p4.getX(), p4.getZ(), p4.getY());
+      // glEnd();
     }
-
-    n1.normalize();
-    n2.normalize();
-    n3.normalize();
-    n4.normalize();
-
-    // p1.print();
-    // n1.print();
-    // p2.print();
-    // n2.print();
-    // p3.print();
-    // n3.print();
-    // p4.print();
-    // n4.print();
-
-    glNormal3f(n1.getX(), n1.getY(), n1.getZ());
-    glVertex3f(p1.getX(), p1.getY(), p1.getZ());
-    
-    glNormal3f(n2.getX(), n2.getY(), n2.getZ());
-    glVertex3f(p2.getX(), p2.getY(), p2.getZ());
-
-    glNormal3f(n3.getX(), n3.getY(), n3.getZ());
-    glVertex3f(p3.getX(), p3.getY(), p3.getZ());
-
-    glNormal3f(n4.getX(), n4.getY(), n4.getZ());
-    glVertex3f(p4.getX(), p4.getY(), p4.getZ());
+    glEnd();
+  } else {
+    Triangle currTri;
+    glBegin(GL_TRIANGLES);
+    for(std::vector<Triangle>::iterator it = triangles.begin() ; it != triangles.end(); ++it) {
+      
+      // std::cout<<"drawing patch "<<i<<std::endl;
+      // currPatch = patches[i];
+      currTri = *it;
+      Point p1 = currTri.getP1();
+      Point p2 = currTri.getP2();
+      Point p3 = currTri.getP3();
 
 
-// // switch z, y for testing purposes
-    // glNormal3f(n1.getX(), n1.getZ(), n1.getY());
-    // glVertex3f(p1.getX(), p1.getZ(), p1.getY());
-    
-    // glNormal3f(n2.getX(), n2.getZ(), n2.getY());
-    // glVertex3f(p2.getX(), p2.getZ(), p2.getY());
+      Vector3 n1, n2, n3, n4;
+      if (flat) {
+        n1 = currTri.getFN();
+        n2 = currTri.getFN();
+        n3 = currTri.getFN();
+      } else {
+        n1 = currTri.getSN1();
+        n2 = currTri.getSN2();
+        n3 = currTri.getSN3();
+      }
 
-    // glNormal3f(n3.getX(), n3.getZ(), n3.getY());
-    // glVertex3f(p3.getX(), p3.getZ(), p3.getY());
+      n1.normalize();
+      n2.normalize();
+      n3.normalize();
 
-    // glNormal3f(n4.getX(), n4.getZ(), n4.getY());
-    // glVertex3f(p4.getX(), p4.getZ(), p4.getY());
-    // glEnd();
+      // p1.print();
+      // n1.print();
+      // p2.print();
+      // n2.print();
+      // p3.print();
+      // n3.print();
+
+      glNormal3f(n1.getX(), n1.getY(), n1.getZ());
+      glVertex3f(p1.getX(), p1.getY(), p1.getZ());
+      
+      glNormal3f(n2.getX(), n2.getY(), n2.getZ());
+      glVertex3f(p2.getX(), p2.getY(), p2.getZ());
+
+      glNormal3f(n3.getX(), n3.getY(), n3.getZ());
+      glVertex3f(p3.getX(), p3.getY(), p3.getZ());
+    }
+    glEnd();
   }
-  glEnd();
-
-  //   glBegin(GL_POLYGON);                         // draw diamond
-  //   glVertex3f( 0.0f, 0.3f, 0.0f);               // top corner of diamond
-  // glVertex3f( 0.3f, 0.0f, 0.0f);               // right corner of diamond
-  // glVertex3f( 0.0f,-0.3f, 0.0f);               // bottom corner of diamond
-  // glVertex3f(-0.3f, 0.0f, 0.0f);               // left corner of diamond
-  //   glEnd();
 
   glFlush();
   glutSwapBuffers();          // swap buffers (we earlier set double buffer)
@@ -349,49 +389,41 @@ void toggleShading() {
 void rotateRight() {
   rotateR = true;
   glutPostRedisplay();
-
 }
 
 void rotateLeft() {
   rotateL = true;
   glutPostRedisplay();
-
 }
 
 void rotateUp() {
   rotateU = true;
   glutPostRedisplay();
-
 }
 
 void rotateDown() {
   rotateD = true;
   glutPostRedisplay();
-
 }
 
 void transRight() {
   transR = true;
   glutPostRedisplay();
-
 }
 
 void transLeft() {
   transL = true;
   glutPostRedisplay();
-
 }
 
 void transUp() {
   transU = true;
   glutPostRedisplay();
-
 }
 
 void transDown() {
   transD = true;
   glutPostRedisplay();
-
 }
 
 void myKeyboardFunc(unsigned char key, int x, int y) {

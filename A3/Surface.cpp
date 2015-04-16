@@ -114,8 +114,9 @@ Vector3 Surface::computeNormal(Point p1, Point p2, Point p3, Point p4) {
 }
 
 Patch Surface::determinePatch(float u, float v, float du, float dv){
+	float ep = 0.0001;
 	//return patch starting from u,v, and going clockwise
-	if (u < 0 || v < 0 || du < 0 || dv < 0 || u+du > 1 || v+dv >1){
+	if (u < 0 || v < 0 || du < 0 || dv < 0 || u+du > (1+ep) || v+dv > (1+ep)){
 		// cout << (u < 0) << (v < 0) << (du < 0) << (dv < 0) << (u+du >= 1) << (v+dv >= 1) << endl;
 		// cout << "v+dv: " << v+dv << endl;
 		cout << "Incorrect arguments in determinePatch\n";
