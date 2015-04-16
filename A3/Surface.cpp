@@ -12,21 +12,21 @@ Surface::Surface(Curve c1, Curve c2, Curve c3, Curve c4){
 }
 
 Point Surface::computeBezier(float u, float v){
-	cout << "COMPUTE BEZIER (u,v): (" << u << ", " << v << ")\n"; 
+	// cout << "COMPUTE BEZIER (u,v): (" << u << ", " << v << ")\n"; 
 	Point cp1 = this->c1.computeDecasteljau(u);
 	Point cp2 = this->c2.computeDecasteljau(u);
 	Point cp3 = this->c3.computeDecasteljau(u);
 	Point cp4 = this->c4.computeDecasteljau(u);
-	cp1.print();
-	cp2.print();
-	cp3.print();
-	cp4.print();
+	// cp1.print();
+	// cp2.print();
+	// cp3.print();
+	// cp4.print();
 	Curve c = Curve(cp1, cp2, cp3, cp4);
 	// cout << "printing curve: \n";
 	// c.print();
-	std::cout << "BEZIER RESULT: ";
-	 c.computeDecasteljau(v).print();
-	std::cout << std::endl;
+	// std::cout << "BEZIER RESULT: ";
+	 // c.computeDecasteljau(v).print();
+	// std::cout << std::endl;
 	return c.computeDecasteljau(v);
 }
 
@@ -38,16 +38,20 @@ Patch Surface::determinePatch(float u, float v, float du, float dv){
 		cout << "Incorrect arguments in determinePatch\n";
 		//TO DO 
 	}
-	cout << "(u,v,du,dv): (" << u << ", " << v << ", " << du << ", " << dv << ")\n"; 
+	// cout << "(u,v,du,dv): (" << u << ", " << v << ", " << du << ", " << dv << ")\n"; 
 	Point p1 = this->computeBezier(u,v);
-	p1.print();
+	// p1.print();
 	Point p2 = this->computeBezier(u+du,v);
-	p2.print();
+	// p2.print();
 	Point p3 = this->computeBezier(u+du,v+dv);
-	p3.print();
+	// p3.print();
 	Point p4 = this->computeBezier(u,v+dv);
-	p4.print();
-	return Patch(p1, p2, p3, p4);
+	// p4.print();
+	Vector3 n1 = Vector3();
+	Vector3 n2 = Vector3();
+	Vector3 n3 = Vector3();
+	Vector3 n4 = Vector3();
+	return Patch(p1, p2, p3, p4, n1, n2, n3, n4);
 }
 
 void Surface::print(){

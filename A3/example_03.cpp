@@ -107,7 +107,7 @@ void myReshape(int w, int h) {
   // glOrtho(-1, 1 + (w-400)/200.0 , -1 -(h-400)/200.0, 1, 1, -1); // resize type = add
   // glOrtho(-w/400.0, w/400.0, -h/400.0, h/400.0, 1, -1); // resize type = center
 
-  glOrtho(-1, 1, -1, 1, 1, -1);    // resize type = stretch
+  glOrtho(-5, 5, -5, 5, 1, -1);    // resize type = stretch
 }
 
 //****************************************************
@@ -141,38 +141,87 @@ void myDisplay() {
 
   glClear(GL_COLOR_BUFFER_BIT);       // clear the color buffer
 
+  glEnable(GL_LIGHTING);
+  glEnable(GL_LIGHT0);
+  // glEnable(GL_DEPTH_TEST);
+
   // glEnable(GL_DEPTH_TEST);   // Enable depth testing for z-culling
   glMatrixMode(GL_MODELVIEW);             // indicate we are specifying camera transformations
   glLoadIdentity();               // make sure transformation is "zero'd"
 
+  // Initialize lights
+  glShadeModel(GL_FLAT);
+  GLfloat light_pos[] = {0., 0., 1., 0.};
+  glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
+  GLfloat diffuse[] = {1.0, 1.0, 1.0, 1.0};
+  glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
+  GLfloat specular[] = {1.0, 1.0, 1.0, 1.0};
+  glLightfv(GL_LIGHT0, GL_DIFFUSE, specular);
+
+  // Set material
+  GLfloat cyan[] = {0.f, .8f, .8f, 1.f};
+  glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, cyan);
+  // glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
+
 
   // Start drawing
-  glColor3f(1.0f, 1.0f, 1.0f);
+  // glColor3f(1.0f, 1.0f, 1.0f);
 
   Patch currPatch;
 
   std::cout<<"patches length: "<<patches.size()<<std::endl;
   patches[0].getP3().print();
   // for (int i = 0; i < patchesLength; i++) {
+  glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+  glBegin(GL_QUADS);
   for(std::vector<Patch>::iterator it = patches.begin() ; it != patches.end(); ++it) {
-    glBegin(GL_POLYGON);
+    
     // std::cout<<"drawing patch "<<i<<std::endl;
     // currPatch = patches[i];
     currPatch = *it;
-    Point p = currPatch.getP1();
-    p.print();
-    glVertex3f(p.getX(), p.getY(), p.getZ());
-    p = currPatch.getP2();
-    p.print();
-    glVertex3f(p.getX(), p.getY(), p.getZ());
-    p = currPatch.getP3();
-    p.print();
-    glVertex3f(p.getX(), p.getY(), p.getZ());
-    p = currPatch.getP4();
-    p.print();
-    glVertex3f(p.getX(), p.getY(), p.getZ());
-    glEnd();
+    Point p1 = currPatch.getP1();
+    Point p2 = currPatch.getP2();
+    Point p3 = currPatch.getP3();
+    Point p4 = currPatch.getP4();
+
+    Vector3 n1 = currPatch.getN1();
+    Vector3 n2 = currPatch.getN2();
+    Vector3 n3 = currPatch.getN3();
+    Vector3 n4 = currPatch.getN4();
+
+    // glNormal3f(n1.getX(), n1.getY(), n1.getZ());
+    glVertex3f(p1.getX(), p1.getY(), p1.getZ());
+    
+    // glNormal3f(n2.getX(), n2.getY(), n2.getZ());
+    glVertex3f(p2.getX(), p2.getY(), p2.getZ());
+
+    // glNormal3f(n3.getX(), n3.getY(), n3.getZ());
+    glVertex3f(p3.getX(), p3.getY(), p3.getZ());
+
+    // glNormal3f(n4.getX(), n4.getY(), n4.getZ());
+    glVertex3f(p4.getX(), p4.getY(), p4.getZ());
+
+
+// switch z, y for testing purposes
+    // glBegin(GL_POLYGON);
+    // // std::cout<<"drawing patch "<<i<<std::endl;
+    // // currPatch = patches[i];
+    // currPatch = *it;
+    // Point p = currPatch.getP1();
+    // p.print();
+    // glVertex3f(p.getX(), p.getZ(), p.getY());
+    // p = currPatch.getP2();
+    // p.print();
+    // glVertex3f(p.getX(), p.getZ(), p.getY());
+    // p = currPatch.getP3();
+    // p.print();
+    // glVertex3f(p.getX(), p.getZ(), p.getY());
+    // p = currPatch.getP4();
+    // p.print();
+    // glVertex3f(p.getX(), p.getZ(), p.getY());
+    // glEnd();
   }
+  glEnd();
 
   //   glBegin(GL_POLYGON);                         // draw diamond
   //   glVertex3f( 0.0f, 0.3f, 0.0f);               // top corner of diamond
@@ -411,6 +460,7 @@ int main(int argc, char *argv[]) {
 
   //This tells glut to use a double-buffered window with red, green, and blue channels 
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
+  
 
   // Initalize theviewport size
   viewport.w = 800;
