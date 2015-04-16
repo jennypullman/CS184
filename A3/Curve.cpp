@@ -28,6 +28,14 @@ Point Curve::computeDecasteljau(float u){
 	Point mid5 = Point((1-u)*mid2.getX()+u*mid3.getX(),
 					(1-u)*mid2.getY()+u*mid3.getY(),
 					(1-u)*mid2.getZ()+u*mid3.getZ());
+	// cout << "mid4: ";
+	// mid4.print();
+	// cout << "\n";
+	// cout << "mid5: "; 
+	// mid5.print();
+	// cout << "\n";
+
+
 
 	return Point((1-u)*mid4.getX()+u*mid5.getX(),
 					(1-u)*mid4.getY()+u*mid5.getY(),

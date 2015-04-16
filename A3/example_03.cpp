@@ -150,22 +150,26 @@ void myDisplay() {
   glColor3f(1.0f, 1.0f, 1.0f);
 
   Patch currPatch;
-  std::cout<<"patches length: "<<patchesLength<<std::endl;
-  for (int i = 0; i < patchesLength; i++) {
+
+  std::cout<<"patches length: "<<patches.size()<<std::endl;
+  // patches[0].getP3().print();
+  // for (int i = 0; i < patchesLength; i++) {
+  for(std::vector<Patch>::iterator it = patches.begin() ; it != patches.end(); ++it) {
     glBegin(GL_POLYGON);
-    std::cout<<"drawing patch "<<i<<std::endl;
-    currPatch = patches[i];
+    // std::cout<<"drawing patch "<<i<<std::endl;
+    // currPatch = patches[i];
+    currPatch = *it;
     Point p = currPatch.getP1();
-    // p.print();
+    p.print();
     glVertex3f(p.getX(), p.getY(), p.getZ());
     p = currPatch.getP2();
-    // p.print();
+    p.print();
     glVertex3f(p.getX(), p.getY(), p.getZ());
     p = currPatch.getP3();
-    // p.print();
+    p.print();
     glVertex3f(p.getX(), p.getY(), p.getZ());
     p = currPatch.getP4();
-    // p.print();
+    p.print();
     glVertex3f(p.getX(), p.getY(), p.getZ());
     glEnd();
 
@@ -320,29 +324,43 @@ void processArgs(int argc, char *argv[]) {
 }
 
 // tesselates one patch (group of 16 control points)
-void uniformTesselation(float du, float dv, int surfaceNum, std::vector<Patch> &patches){
+void uniformTesselation(float du, float dv, int surfaceNum, std::vector<Patch>& patches){
   // TODO add one normal for patch - might want compute normal function
+
   int patchIndex = 0;
   float u,v;
   Surface curSurface = surfaces[surfaceNum];
-  for (u = 0; u+du < 1; u+= du){
-    for (v = 0; v+dv < 1; v+= dv){
+  for (u = 0; u+du <= 1; u+= du){
+    // std::cout<<"U: " << u << std::endl;
+    for (v = 0; v+dv <= 1; v+= dv){
+      // std::cout<<"V: " << v << std::endl;
       // std::cout << "u: " << u << ", v: " << v << ", du: " << du << ", dv: " << dv << std::endl;
-      patches[patchIndex++] = curSurface.determinePatch(u,v,du,dv);
+      patches.push_back(curSurface.determinePatch(u,v,du,dv));
+      // std::cout<<"patches length: "<<patches.size()<<std::endl;
+
+      // patches[patchIndex++] = curSurface.determinePatch(u,v,du,dv);
+      // std::cout << "PRINTING FROM PATCH" << std::endl;
+      // patches[patchIndex-1].getP4().print();
     }
-    if (v+dv > 1){
+    if (v < 1){
       // std::cout << "u: " << u << ", v: " << v << ", du: " << du << ", dv: " << (1-v) << std::endl;
-      patches[patchIndex++] = curSurface.determinePatch(u,v,du,1-v);
+      patches.push_back(curSurface.determinePatch(u,v,du,1-v));
+      // std::cout<<"patches length: "<<patches.size()<<std::endl;
+      // patches[patchIndex++] = curSurface.determinePatch(u,v,du,1-v);
     }
   }
-  if (u+du > 1){
-    for (v = 0; v+dv < 1; v+= dv){
+  if (u < 1){
+    for (v = 0; v+dv <= 1; v+= dv){
       // std::cout << "u: " << u << ", v: " << v << ", du: " << (1-u) << ", dv: " << dv << std::endl;
-      patches[patchIndex++] = curSurface.determinePatch(u,v,1-u,dv);
+      patches.push_back(curSurface.determinePatch(u,v,1-u,dv));
+      // std::cout<<"patches length: "<<patches.size()<<std::endl;
+      // patches[patchIndex++] = curSurface.determinePatch(u,v,1-u,dv);
     }
-    if (v+dv > 1){
+    if (v < 1){
       // std::cout << "u: " << u << ", v: " << v << ", du: " << (1-u) << ", dv: " << (1-v) << std::endl;
-      patches[patchIndex++] = curSurface.determinePatch(u,v,1-u,1-v);
+      patches.push_back(curSurface.determinePatch(u,v,1-u,1-v));
+      // std::cout<<"patches length: "<<patches.size()<<std::endl;
+      // patches[patchIndex++] = curSurface.determinePatch(u,v,1-u,1-v);
     }
   }
 }
@@ -356,11 +374,14 @@ void adaptiveTriangulation(Triangle tri){
 void drawSurfaces(){
   for (int surfaceIndex = 0; surfaceIndex < numSurfaces;surfaceIndex++){
     if (option == UNIFORM) {
-      std::cout << "using UNIFORM" << std::endl;
+      // std::cout << "using UNIFORM" << std::endl;
       int size = ceil(1/subdivision)*ceil(1/subdivision); //TODO check here
       patchesLength = size;
-      patches = std::vector<Patch>(patchesLength);
-      uniformTesselation(subdivision, subdivision, surfaceIndex, patches);
+      // patches = std::vector<Patch>(patchesLength);
+      // if (surfaceIndex == 0){
+        uniformTesselation(subdivision, subdivision, surfaceIndex, patches);
+        // patches[0].getP3().print();
+      // }
     } else {
       // TODO fill in ADAPTIVE tesselation
     }
@@ -389,11 +410,11 @@ int main(int argc, char *argv[]) {
   glutInit(&argc, argv);
 
   //This tells glut to use a double-buffered window with red, green, and blue channels 
-  glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+  glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH);
 
   // Initalize theviewport size
-  viewport.w = 400;
-  viewport.h = 400;
+  viewport.w = 800;
+  viewport.h = 800;
 
   //The size and position of the window
   glutInitWindowSize(viewport.w, viewport.h);
