@@ -11,10 +11,12 @@ endif
 	
 RM = /bin/rm -f 
 all: main 
-main: Point.o Triangle.o Vector3.o Patch.o Curve.o Surface.o example_03.o 
-	$(CC) $(CFLAGS) -o as1 Point.o Triangle.o Vector3.o Patch.o Curve.o Surface.o example_03.o $(LDFLAGS)
+main: Point.o UVPoint.o Triangle.o Vector3.o Patch.o Curve.o Surface.o example_03.o 
+	$(CC) $(CFLAGS) -o as1 Point.o UVPoint.o Triangle.o Vector3.o Patch.o Curve.o Surface.o example_03.o $(LDFLAGS)
 Point.o: Point.cpp
 	$(CC) $(CFLAGS) -c Point.cpp -o Point.o
+UVPoint.o: UVPoint.cpp
+	$(CC) $(CFLAGS) -c UVPoint.cpp -o UVPoint.o
 Triangle.o: Triangle.cpp
 	$(CC) $(CFLAGS) -c Triangle.cpp -o Triangle.o
 Patch.o: Vector3.cpp

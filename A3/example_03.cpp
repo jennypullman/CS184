@@ -428,7 +428,9 @@ void uniformTesselation(float du, float dv, int surfaceNum, std::vector<Patch>& 
 }
 
 void adaptiveTriangulation(Triangle tri){
-  //check all midpoints
+  //check all midpoints:
+  //find current midpoint of line.
+  //c
   //subdivide if bad, recursively call adaptiveTriangulation on subdivisions
   //draw if all good
 }
