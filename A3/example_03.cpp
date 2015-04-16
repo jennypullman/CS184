@@ -59,6 +59,8 @@ int numSurfaces;
 std::vector<Patch> patches;
 int patchesLength;
 
+bool wireframe = false;
+
 
 int decasteljauTest1(){
   Curve c = Curve(Point(0,0,0),Point(0,1,0), Point(1,1,0), Point(1,0,0));
@@ -107,7 +109,7 @@ void myReshape(int w, int h) {
   // glOrtho(-1, 1 + (w-400)/200.0 , -1 -(h-400)/200.0, 1, 1, -1); // resize type = add
   // glOrtho(-w/400.0, w/400.0, -h/400.0, h/400.0, 1, -1); // resize type = center
 
-  glOrtho(-5, 5, -5, 5, 5, -5);    // resize type = stretch
+  glOrtho(-4, 4, -4, 4, 4, -4);    // resize type = stretch
 }
 
 //****************************************************
@@ -115,10 +117,13 @@ void myReshape(int w, int h) {
 //****************************************************
 void initScene(){
   glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // Clear to black, fully transparent
-  // glClearDepth(-5.0f); // Clear to black, fully transparent
+  // glClearDepth(5.0f); // Clear to black, fully transparent
 
   glEnable(GL_CULL_FACE);
   glEnable(GL_DEPTH_TEST);
+
+  glDepthMask(GL_TRUE);
+  glDepthFunc(GL_LEQUAL);    // Set the type of depth-test
 
   myReshape(viewport.w,viewport.h);
 }
@@ -146,8 +151,7 @@ void myDisplay() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);       // clear the color buffer
   // glClear(GL_COLOR_BUFFER_BIT);       // clear the color buffer
 
-  glDepthMask(GL_TRUE);
-  glDepthFunc(GL_LEQUAL);    // Set the type of depth-test
+
 
   glEnable(GL_LIGHTING);
   glEnable(GL_LIGHT0);
@@ -155,10 +159,11 @@ void myDisplay() {
   // glEnable(GL_DEPTH_TEST);   // Enable depth testing for z-culling
   glMatrixMode(GL_MODELVIEW);             // indicate we are specifying camera transformations
   glLoadIdentity();               // make sure transformation is "zero'd"
+  glRotatef(-45.0f, 1.0f, 0.0f, 0.0f);
 
   // Initialize lights
   glShadeModel(GL_FLAT);
-  GLfloat light_pos[] = {0., 0., 1., 0.};
+  GLfloat light_pos[] = {0., -1., 1., 0.};
   glLightfv(GL_LIGHT0, GL_POSITION, light_pos);
   GLfloat diffuse[] = {1.0, 1.0, 1.0, 1.0};
   glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse);
@@ -179,8 +184,11 @@ void myDisplay() {
   // std::cout<<"patches length: "<<patches.size()<<std::endl;
   // for (int i = 0; i < patchesLength; i++) {
 
-  // glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
-  glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+  if (wireframe) {
+    glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+  } else {
+    glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+  }
 
   glBegin(GL_QUADS);
   for(std::vector<Patch>::iterator it = patches.begin() ; it != patches.end(); ++it) {
@@ -204,13 +212,13 @@ void myDisplay() {
     n4.normalize();
 
     // p1.print();
-    n1.print();
+    // n1.print();
     // p2.print();
-    n2.print();
+    // n2.print();
     // p3.print();
-    n3.print();
+    // n3.print();
     // p4.print();
-    n4.print();
+    // n4.print();
 
     glNormal3f(n1.getX(), n1.getY(), n1.getZ());
     glVertex3f(p1.getX(), p1.getY(), p1.getZ());
@@ -252,9 +260,19 @@ void myDisplay() {
   glutSwapBuffers();          // swap buffers (we earlier set double buffer)
 }
 
+void toggleWireframe() {
+  if (wireframe) {
+    wireframe = false;
+  } else {
+    wireframe = true;
+  }
+  glutPostRedisplay();
+}
+
 void myKeyboardFunc(unsigned char key, int x, int y) {
   switch(key) {
     case ' ':  exit(1);  // exit on space
+    case 'w':  toggleWireframe();
     break;
   };
 }
