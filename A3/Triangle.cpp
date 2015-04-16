@@ -3,13 +3,18 @@
 Triangle::Triangle(){
 }
 
-Triangle::Triangle(Point p1, Point p2, Point p3, UVPoint uv1, UVPoint uv2, UVPoint uv3){
+Triangle::Triangle(Point p1, Point p2, Point p3, UVPoint uv1, UVPoint uv2, UVPoint uv3, 
+		   Vector3 fn, Vector3 sn1, Vector3 sn2, Vector3 sn3){
 	this->p1 = p1;
 	this->p2 = p2;
 	this->p3 = p3;
 	this->uv1 = uv1;
 	this->uv2 = uv2;
 	this->uv3 = uv3;
+	this->fn = fn;
+	this->sn1 = sn1;
+	this->sn2 = sn2;
+	this->sn3 = sn3;
 }
 
 Point Triangle::getP1(){
@@ -34,6 +39,22 @@ UVPoint Triangle::getUV2(){
 
 UVPoint Triangle::getUV3(){
   return this->uv3;
+}
+
+Vector3 Triangle::getFN(){
+  return this->fn;
+}
+
+Vector3 Triangle::getSN1(){
+  return this->sn1;
+}
+
+Vector3 Triangle::getSN2(){
+  return this->sn2;
+}
+
+Vector3 Triangle::getSN3(){
+  return this->sn3;
 }
 
 /*

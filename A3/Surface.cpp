@@ -11,6 +11,22 @@ Surface::Surface(Curve c1, Curve c2, Curve c3, Curve c4){
 	this->c4 = c4;
 }
 
+Curve Surface::getCurve1(){
+  return this->c1;
+}
+
+Curve Surface::getCurve2(){
+  return this->c2;
+}
+
+Curve Surface::getCurve3(){
+  return this->c3;
+}
+
+Curve Surface::getCurve4(){
+  return this->c4;
+}
+
 Point Surface::computeBezier(float u, float v){
 	// cout << "COMPUTE BEZIER (u,v): (" << u << ", " << v << ")\n"; 
 	Point cp1 = this->c1.computeDecasteljau(u);
