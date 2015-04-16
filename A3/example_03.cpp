@@ -59,7 +59,7 @@ int numSurfaces;
 std::vector<Patch> patches;
 int patchesLength;
 
-bool wireframe = false;
+bool wireframe, rotateL, rotateR, rotateU, rotateD, transL, transR, transU, transD, in, out = false;
 
 
 int decasteljauTest1(){
@@ -125,6 +125,9 @@ void initScene(){
   glDepthMask(GL_TRUE);
   glDepthFunc(GL_LEQUAL);    // Set the type of depth-test
 
+  glLoadIdentity();               // make sure transformation is "zero'd"
+
+
   myReshape(viewport.w,viewport.h);
 }
 
@@ -158,8 +161,46 @@ void myDisplay() {
 
   // glEnable(GL_DEPTH_TEST);   // Enable depth testing for z-culling
   glMatrixMode(GL_MODELVIEW);             // indicate we are specifying camera transformations
-  glLoadIdentity();               // make sure transformation is "zero'd"
-  glRotatef(-45.0f, 1.0f, 0.0f, 0.0f);
+  // glLoadIdentity();               // make sure transformation is "zero'd"
+  
+
+  if (rotateR) {
+    glRotatef(1.0f, 0.0f, 1.0f, 0.0f);
+    rotateR = false;
+  } else if (rotateL) {
+    glRotatef(-1.0f, 0.0f, 1.0f, 0.0f);
+    rotateL = false;
+  } else if (rotateU) {
+    glRotatef(-1.0f, 1.0f, 0.0f, 0.0f);
+    rotateU = false;
+  } else if (rotateD) {
+    glRotatef(1.0f, 1.0f, 0.0f, 0.0f);
+    rotateD = false;
+  }
+
+  if (transR) {
+    glTranslatef(0.05f, 0.0f, 0.0f);
+    transR = false;
+  } else if (transL) {
+    glTranslatef(-0.05f, 0.0f, 0.0f);
+    transL = false;
+  } else if (transU) {
+    glTranslatef(0.0f, 0.05f, 0.0f);
+    transU = false;
+  } else if (transD) {
+    glTranslatef(0.0f, -0.05f, 0.0f);
+    transD = false;
+  }
+
+  if (in) {
+    glScaled(1.05263, 1.05263, 1.05263);
+    in = false;
+  } else if (out) {
+    glScaled(0.95, 0.95, 0.95);
+    out = false;
+  }
+
+  // glRotatef(-45.0f, 1.0f, 0.0f, 0.0f);
 
   // Initialize lights
   glShadeModel(GL_FLAT);
@@ -269,12 +310,115 @@ void toggleWireframe() {
   glutPostRedisplay();
 }
 
+void rotateRight() {
+  rotateR = true;
+  glutPostRedisplay();
+
+}
+
+void rotateLeft() {
+  rotateL = true;
+  glutPostRedisplay();
+
+}
+
+void rotateUp() {
+  rotateU = true;
+  glutPostRedisplay();
+
+}
+
+void rotateDown() {
+  rotateD = true;
+  glutPostRedisplay();
+
+}
+
+void transRight() {
+  transR = true;
+  glutPostRedisplay();
+
+}
+
+void transLeft() {
+  transL = true;
+  glutPostRedisplay();
+
+}
+
+void transUp() {
+  transU = true;
+  glutPostRedisplay();
+
+}
+
+void transDown() {
+  transD = true;
+  glutPostRedisplay();
+
+}
+
 void myKeyboardFunc(unsigned char key, int x, int y) {
+  // std::cout << "key: " << key << std::endl;
+  // std::cout << "KEY UP: " << GLUT_KEY_UP << std::endl;
   switch(key) {
     case ' ':  exit(1);  // exit on space
-    case 'w':  toggleWireframe();
+    case 'w':  {
+      toggleWireframe();
+      break;
+    }
+    case '+':  {
+      in = true;
+      glutPostRedisplay();
+      break;
+    }
+    case '-':  {
+      out = true;
+      glutPostRedisplay();
+      break;
+    }
     break;
   };
+}
+
+void mySpecialKeysFunc(int key, int x, int y) {
+  // std::cout << "key: " << key << std::endl;
+  // std::cout << "KEY UP: " << GLUT_KEY_UP << std::endl;
+  int mod = glutGetModifiers();
+  if (mod == GLUT_ACTIVE_SHIFT) {
+    switch(key) {
+      case GLUT_KEY_LEFT: 
+        transLeft();
+        break;
+      case GLUT_KEY_RIGHT:
+        transRight();
+        break;
+      case GLUT_KEY_UP:
+        transUp();
+        break;
+      case GLUT_KEY_DOWN:
+        transDown();
+        break;
+      break;
+    };
+  } else {
+    switch(key) {
+      case GLUT_KEY_LEFT: 
+        rotateLeft();
+        break;
+      case GLUT_KEY_RIGHT:
+        rotateRight();
+        break;
+      case GLUT_KEY_UP:
+        rotateUp();
+        break;
+      case GLUT_KEY_DOWN:
+        rotateDown();
+        break;
+      break;
+    };
+  }
+  
 }
 
 int readBezierFile(string fileName){
@@ -605,6 +749,7 @@ int main(int argc, char *argv[]) {
   glutReshapeFunc(myReshape);       // function to run when the window gets resized
 
   glutKeyboardFunc(myKeyboardFunc); // function to run on keyboard input - exit on spacebar
+  glutSpecialFunc(mySpecialKeysFunc); // function to process special keys
 
   glutMainLoop();             // infinite loop that will keep drawing and resizing
   // and whatever else
