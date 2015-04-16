@@ -152,7 +152,7 @@ void myDisplay() {
   Patch currPatch;
 
   std::cout<<"patches length: "<<patches.size()<<std::endl;
-  // patches[0].getP3().print();
+  patches[0].getP3().print();
   // for (int i = 0; i < patchesLength; i++) {
   for(std::vector<Patch>::iterator it = patches.begin() ; it != patches.end(); ++it) {
     glBegin(GL_POLYGON);
@@ -172,6 +172,7 @@ void myDisplay() {
     p.print();
     glVertex3f(p.getX(), p.getY(), p.getZ());
     glEnd();
+  }
 
   //   glBegin(GL_POLYGON);                         // draw diamond
   //   glVertex3f( 0.0f, 0.3f, 0.0f);               // top corner of diamond
@@ -179,7 +180,6 @@ void myDisplay() {
   // glVertex3f( 0.0f,-0.3f, 0.0f);               // bottom corner of diamond
   // glVertex3f(-0.3f, 0.0f, 0.0f);               // left corner of diamond
   //   glEnd();
-  }
 
   glFlush();
   glutSwapBuffers();          // swap buffers (we earlier set double buffer)
