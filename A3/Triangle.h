@@ -7,6 +7,14 @@ public:
 	Triangle(Point p1, Point p2, Point p3, UVPoint uv1, UVPoint uv2, UVPoint uv3);
 	
 	//instance methods
+	Point getP1();
+	Point getP2();
+	Point getP3();
+	
+	UVPoint getUV1();
+	UVPoint getUV2();
+	UVPoint getUV3();
+
 	Point getMidpoint12();
 	Point getMidpoint23();
 	Point getMidpoint31();
