@@ -170,7 +170,6 @@ void myDisplay() {
   Patch currPatch;
 
   std::cout<<"patches length: "<<patches.size()<<std::endl;
-  patches[0].getP3().print();
   // for (int i = 0; i < patchesLength; i++) {
   glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
   glBegin(GL_QUADS);
@@ -189,16 +188,30 @@ void myDisplay() {
     Vector3 n3 = currPatch.getN3();
     Vector3 n4 = currPatch.getN4();
 
-    // glNormal3f(n1.getX(), n1.getY(), n1.getZ());
+    n1.normalize();
+    n2.normalize();
+    n3.normalize();
+    n4.normalize();
+
+    p1.print();
+    n1.print();
+    p2.print();
+    n2.print();
+    p3.print();
+    n3.print();
+    p4.print();
+    n4.print();
+
+    glNormal3f(n1.getX(), n1.getY(), n1.getZ());
     glVertex3f(p1.getX(), p1.getY(), p1.getZ());
     
-    // glNormal3f(n2.getX(), n2.getY(), n2.getZ());
+    glNormal3f(n2.getX(), n2.getY(), n2.getZ());
     glVertex3f(p2.getX(), p2.getY(), p2.getZ());
 
-    // glNormal3f(n3.getX(), n3.getY(), n3.getZ());
+    glNormal3f(n3.getX(), n3.getY(), n3.getZ());
     glVertex3f(p3.getX(), p3.getY(), p3.getZ());
 
-    // glNormal3f(n4.getX(), n4.getY(), n4.getZ());
+    glNormal3f(n4.getX(), n4.getY(), n4.getZ());
     glVertex3f(p4.getX(), p4.getY(), p4.getZ());
 
 
@@ -427,7 +440,7 @@ void drawSurfaces(){
       int size = ceil(1/subdivision)*ceil(1/subdivision); //TODO check here
       patchesLength = size;
       // patches = std::vector<Patch>(patchesLength);
-      // if (surfaceIndex == 0){
+      // if (surfaceIndex == 1){
         uniformTesselation(subdivision, subdivision, surfaceIndex, patches);
         // patches[0].getP3().print();
       // }

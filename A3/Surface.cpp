@@ -30,6 +30,40 @@ Point Surface::computeBezier(float u, float v){
 	return c.computeDecasteljau(v);
 }
 
+Vector3 Surface::computeNormal(float u, float v){
+	// cout << "COMPUTE BEZIER (u,v): (" << u << ", " << v << ")\n"; 
+	Point cp1 = this->c1.computeDecasteljau(u);
+	Point cp2 = this->c2.computeDecasteljau(u);
+	Point cp3 = this->c3.computeDecasteljau(u);
+	Point cp4 = this->c4.computeDecasteljau(u);
+	// cp1.print();
+	// cp2.print();
+	// cp3.print();
+	// cp4.print();
+	Curve cv = Curve(cp1, cp2, cp3, cp4);
+	Vector3 DPdv = cv.computeDecNorm(v);
+
+
+	Curve cv1 = Curve(c1.getP1(), c2.getP1(), c3.getP1(), c4.getP1());
+	Curve cv2 = Curve(c1.getP2(), c2.getP2(), c3.getP2(), c4.getP2());
+	Curve cv3 = Curve(c1.getP3(), c2.getP3(), c3.getP3(), c4.getP3());
+	Curve cv4 = Curve(c1.getP4(), c2.getP4(), c3.getP4(), c4.getP4()); 
+
+	Point cpv1 = cv1.computeDecasteljau(v);
+	Point cpv2 = cv2.computeDecasteljau(v);
+	Point cpv3 = cv3.computeDecasteljau(v);
+	Point cpv4 = cv4.computeDecasteljau(v);
+
+	Curve cu = Curve(cpv1, cpv2, cpv3, cpv4);
+	Vector3 DPdu = cu.computeDecNorm(u);
+	// cout << "printing curve: \n";
+	// c.print();
+	// std::cout << "BEZIER RESULT: ";
+	 // c.computeDecasteljau(v).print();
+	// std::cout << std::endl;
+	return Vector3::cross(DPdu, DPdv);
+}
+
 Patch Surface::determinePatch(float u, float v, float du, float dv){
 	//return patch starting from u,v, and going clockwise
 	if (u < 0 || v < 0 || du < 0 || dv < 0 || u+du > 1 || v+dv >1){
@@ -47,10 +81,10 @@ Patch Surface::determinePatch(float u, float v, float du, float dv){
 	// p3.print();
 	Point p4 = this->computeBezier(u,v+dv);
 	// p4.print();
-	Vector3 n1 = Vector3();
-	Vector3 n2 = Vector3();
-	Vector3 n3 = Vector3();
-	Vector3 n4 = Vector3();
+	Vector3 n1 = this->computeNormal(u,v);
+	Vector3 n2 = this->computeNormal(u+du,v);
+	Vector3 n3 = this->computeNormal(u+du,v+dv);
+	Vector3 n4 = this->computeNormal(u,v+dv);
 	return Patch(p1, p2, p3, p4, n1, n2, n3, n4);
 }
 

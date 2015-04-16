@@ -7,7 +7,13 @@ public:
 
 	//instance methods
 	Point computeDecasteljau(float u);
+	Vector3 computeDecNorm(float u);
 	void print();
+	Point getP1();
+	Point getP2();
+	Point getP3();
+	Point getP4();
+
 
 private:
 	Point c1;

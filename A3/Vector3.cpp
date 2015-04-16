@@ -56,7 +56,7 @@ Vector3 Vector3::scalarDivide(Vector3 vec, float i){
 }
 
 void Vector3::print(){
-	std::cout << "Printing Vector...\n(";
+	std::cout << "Printing Vector...(";
 	std::cout << this->x;
 	std::cout << ", ";
 	std::cout << this->y;

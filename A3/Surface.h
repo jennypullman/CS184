@@ -7,6 +7,7 @@ public:
 
 	//instance methods
 	Point computeBezier(float u, float v);
+	Vector3 computeNormal(float u, float v);
 	Patch determinePatch(float u, float v, float du, float dv);
 	void print();
 
