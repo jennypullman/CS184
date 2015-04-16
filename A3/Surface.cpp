@@ -64,6 +64,24 @@ Vector3 Surface::computeNormal(float u, float v){
 	return Vector3::cross(DPdu, DPdv);
 }
 
+Vector3 Surface::computeNormal(Point p1, Point p2, Point p3, Point p4) {
+	if (!p1.equals(p2)) {
+		if (!p1.equals(p4)) {
+			Vector3 v21 = Vector3(p2.getX()-p1.getX(), p2.getY()-p1.getY(), p2.getZ()-p1.getZ());
+			Vector3 v41 = Vector3(p4.getX()-p1.getX(), p4.getY()-p1.getY(), p4.getZ()-p1.getZ());
+			return Vector3::cross(v21, v41);
+		} else {
+			Vector3 v21 = Vector3(p2.getX()-p1.getX(), p2.getY()-p1.getY(), p2.getZ()-p1.getZ());
+			Vector3 v31 = Vector3(p3.getX()-p1.getX(), p3.getY()-p1.getY(), p3.getZ()-p1.getZ());
+			return Vector3::cross(v21, v31);
+		}
+	} else {
+		Vector3 v31 = Vector3(p3.getX()-p1.getX(), p3.getY()-p1.getY(), p3.getZ()-p1.getZ());
+		Vector3 v41 = Vector3(p4.getX()-p1.getX(), p4.getY()-p1.getY(), p4.getZ()-p1.getZ());
+		return Vector3::cross(v31, v41);
+	}
+}
+
 Patch Surface::determinePatch(float u, float v, float du, float dv){
 	//return patch starting from u,v, and going clockwise
 	if (u < 0 || v < 0 || du < 0 || dv < 0 || u+du > 1 || v+dv >1){
@@ -81,10 +99,15 @@ Patch Surface::determinePatch(float u, float v, float du, float dv){
 	// p3.print();
 	Point p4 = this->computeBezier(u,v+dv);
 	// p4.print();
-	Vector3 n1 = this->computeNormal(u,v);
-	Vector3 n2 = this->computeNormal(u+du,v);
-	Vector3 n3 = this->computeNormal(u+du,v+dv);
-	Vector3 n4 = this->computeNormal(u,v+dv);
+	// Vector3 n1 = this->computeNormal(u,v);
+	// Vector3 n2 = this->computeNormal(u+du,v);
+	// Vector3 n3 = this->computeNormal(u+du,v+dv);
+	// Vector3 n4 = this->computeNormal(u,v+dv);
+
+	Vector3 n1 = this->computeNormal(p1, p2, p3, p4);
+	Vector3 n2 = this->computeNormal(p1, p2, p3, p4);
+	Vector3 n3 = this->computeNormal(p1, p2, p3, p4);
+	Vector3 n4 = this->computeNormal(p1, p2, p3, p4);
 	return Patch(p1, p2, p3, p4, n1, n2, n3, n4);
 }
 

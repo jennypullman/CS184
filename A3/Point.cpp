@@ -25,3 +25,14 @@ float Point::getZ(){
 void Point::print(){
 	std::cout << "(" << this->x << ", " << this->y << ", " << this->z << ")" << std::endl;
 }
+
+bool Point::equals(Point p) {
+	if (x == p.getX()) {
+		if (y == p.getY()) {
+			if (z == p.getZ()) {
+				return true;
+			}
+		}
+	}
+	return false;
+}
