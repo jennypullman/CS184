@@ -6,7 +6,7 @@ UVPoint::UVPoint(){
 
 UVPoint::UVPoint(float u, float v){
 	this->u = u;
-	this->u = v;
+	this->v = v;
 }
 
 float UVPoint::getU(){

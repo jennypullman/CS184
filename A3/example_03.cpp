@@ -555,7 +555,7 @@ int readBezierFile(string fileName){
   
   for (int i = 0; i < numSurfaces; i++){
     cout << "Surface " << i+1 << ": \n";
-    surfaces[i].print();
+    //surfaces[i].print();
   }
 }
 
@@ -578,6 +578,9 @@ void processArgs(int argc, char *argv[]) {
         subdivision = DEFAULT;
         error = atof(argv[2]);
         option = ADAPTIVE;
+      } else {
+	//TODO
+	cout << "Bad third argument (can only be -a)\n";
       }
     } else {
       subdivision = atof(argv[2]);
@@ -636,6 +639,9 @@ void uniformTesselation(float du, float dv, int surfaceNum, std::vector<Patch>& 
 }
 
 void adaptiveTriangulation(Triangle tri, int surfaceNum){
+  //cout << "surfaceNum = " << surfaceNum << "\n";
+  //tri.print();
+  //tri.printUV();
   Surface curSurface = surfaces[surfaceNum];
   //check all midpoints:
   //compute all midpoints (will compare to actual points on curve)
@@ -664,8 +670,10 @@ void adaptiveTriangulation(Triangle tri, int surfaceNum){
   if (dist12 <= error){
     if (dist23 <= error){
       if (dist31 <= error){
+	//cout << "good\n";
 	triangles.push_back(tri);
       }else{
+	//cout << "almost there\n";
 	Vector3 normTri1 = curSurface.computeNormal(tri.getP1(), tri.getP2(), actualMid31, actualMid31);
 	Vector3 normTri2 = curSurface.computeNormal(actualMid31, tri.getP2(), tri.getP3(), tri.getP3());
 	Triangle tri1 = Triangle(tri.getP1(), tri.getP2(), actualMid31, tri.getUV1(), tri.getUV2(), uvMid31, normTri1, tri.getSN1(), tri.getSN2(), mid31Normal);
@@ -675,6 +683,7 @@ void adaptiveTriangulation(Triangle tri, int surfaceNum){
       }
     }else {
       if (dist31 <= error){
+	//cout << "almost there\n";
 	Vector3 normTri1 = curSurface.computeNormal(tri.getP1(), tri.getP2(), actualMid23, actualMid23);
 	Vector3 normTri2 = curSurface.computeNormal(tri.getP1(), actualMid23, tri.getP3(), tri.getP3());
 	Triangle tri1 = Triangle(tri.getP1(), tri.getP2(), actualMid23, tri.getUV1(), tri.getUV2(), uvMid23, normTri1, tri.getSN1(), tri.getSN2(), mid23Normal);
@@ -696,6 +705,7 @@ void adaptiveTriangulation(Triangle tri, int surfaceNum){
   } else {
     if (dist23 <= error){
       if (dist31 <= error){
+	//cout << "almost there\n";
 	Vector3 normTri1 = curSurface.computeNormal(tri.getP1(), actualMid12, tri.getP3(), tri.getP3());
 	Vector3 normTri2 = curSurface.computeNormal(actualMid12, tri.getP2(), tri.getP3(), tri.getP3());
 	Triangle tri1 = Triangle(tri.getP1(), actualMid12, tri.getP3(), tri.getUV1(), uvMid12, tri.getUV3(), normTri1, tri.getSN1(), mid12Normal, tri.getSN3());
@@ -703,6 +713,7 @@ void adaptiveTriangulation(Triangle tri, int surfaceNum){
 	adaptiveTriangulation(tri1, surfaceNum);
 	adaptiveTriangulation(tri2, surfaceNum);
       }else{
+	//cout << "only dist23 is good\n";
 	Vector3 normTri1 = curSurface.computeNormal(tri.getP1(), actualMid12, actualMid31, actualMid31);
 	Vector3 normTri2 = curSurface.computeNormal(actualMid31, actualMid12, tri.getP3(), tri.getP3());
 	Vector3 normTri3 = curSurface.computeNormal(actualMid12, tri.getP2(), tri.getP3(), tri.getP3());
@@ -715,6 +726,7 @@ void adaptiveTriangulation(Triangle tri, int surfaceNum){
       }
     }else {
       if (dist31 <= error){
+	//cout << "only dist31 is good\n";
 	Vector3 normTri1 = curSurface.computeNormal(tri.getP1(), actualMid12, actualMid23, actualMid23);
 	Vector3 normTri2 = curSurface.computeNormal(actualMid12, tri.getP2(), actualMid23, actualMid23);
 	Vector3 normTri3 = curSurface.computeNormal(tri.getP1(), actualMid23, tri.getP3(), tri.getP3());
@@ -725,6 +737,7 @@ void adaptiveTriangulation(Triangle tri, int surfaceNum){
 	adaptiveTriangulation(tri2, surfaceNum);
 	adaptiveTriangulation(tri3, surfaceNum);
       }else{
+	//cout << "nothing is good\n";
 	Vector3 normTri1 = curSurface.computeNormal(tri.getP1(), actualMid12, actualMid31, actualMid31);
 	Vector3 normTri2 = curSurface.computeNormal(actualMid12, tri.getP2(), actualMid23, actualMid23);
 	Vector3 normTri3 = curSurface.computeNormal(actualMid31, actualMid23, tri.getP3(), tri.getP3());
@@ -733,6 +746,15 @@ void adaptiveTriangulation(Triangle tri, int surfaceNum){
 	Triangle tri2 = Triangle(actualMid12, tri.getP2(), actualMid23, uvMid12, tri.getUV2(), uvMid23, normTri2, mid12Normal, tri.getSN2(), mid23Normal);
 	Triangle tri3 = Triangle(actualMid31, actualMid23, tri.getP3(), uvMid31, uvMid23, tri.getUV3(), normTri3, mid31Normal, mid23Normal, tri.getSN3());
 	Triangle tri4 = Triangle(actualMid31, actualMid12, actualMid23, uvMid31, uvMid12, uvMid23, normTri4, mid31Normal, mid12Normal, mid23Normal);
+	//cout << "all four triangles\n";
+	//tri1.printUV();
+	//tri2.printUV();
+	//tri3.printUV();
+	//tri4.printUV();
+	//tri1.print();
+	//tri2.print();
+	//tri3.print();
+	//tri4.print();
 	adaptiveTriangulation(tri1, surfaceNum);
 	adaptiveTriangulation(tri2, surfaceNum);
 	adaptiveTriangulation(tri3, surfaceNum);
@@ -742,7 +764,7 @@ void adaptiveTriangulation(Triangle tri, int surfaceNum){
   }
 }
 
-void makeTriangles(std::vector<Triangle>& triangles, int surfaceNum){
+void makeTriangles(std::vector<Triangle>& surfaceTriangles, int surfaceNum){
   Surface curSurface = surfaces[surfaceNum];
   Point surfacePoints[16];
   UVPoint uvPoints[16];
@@ -758,12 +780,15 @@ void makeTriangles(std::vector<Triangle>& triangles, int surfaceNum){
     surfacePoints[i*4+2] = surfaceCurves[i].getP3();
     surfacePoints[i*4+3] = surfaceCurves[i].getP4();
     }*/
-  for (float i = 0; i < 4.0; i+=1.0) {
-    for (float j = 0; j < 4.0; j+=1.0) {
-      int y = i;
-      int x = j;
-      uvPoints[y*4+x] = UVPoint(j/3, i/3);
-      smoothNormals[y*4+x] = curSurface.computeNormal(j/3, i/3);
+  for (int i = 0; i < 4; i++) {
+    for (int j = 0; j < 4; j++) {
+      float u = j/3.0;
+      //cout << u;
+      float v = i/3.0;
+      //cout << v;
+      uvPoints[i*4+j] = UVPoint(u, v);
+      //uvPoints[i*4+j].print();
+      smoothNormals[i*4+j] = curSurface.computeNormal(u, v);
     }
   }
   
@@ -777,9 +802,9 @@ void makeTriangles(std::vector<Triangle>& triangles, int surfaceNum){
     for (int j = 0; j < 3; j++){
       Vector3 flatNorm1 = curSurface.computeNormal(surfacePoints[i*4+j], surfacePoints[(i+1)*4+j], surfacePoints[(i+1)*4+j+1], surfacePoints[(i+1)*4+j+1]);
       Vector3 flatNorm2 = curSurface.computeNormal(surfacePoints[i*4+j], surfacePoints[(i+1)*4+j+1], surfacePoints[i*4+j+1], surfacePoints[i*4+j+1]);
-      triangles.push_back(Triangle(surfacePoints[i*4+j], surfacePoints[(i+1)*4+j], surfacePoints[(i+1)*4+j+1], uvPoints[i*4+j], uvPoints[(i+1)*4+j], uvPoints[(i+1)*4+j+1],
+      surfaceTriangles.push_back(Triangle(surfacePoints[i*4+j], surfacePoints[(i+1)*4+j], surfacePoints[(i+1)*4+j+1], uvPoints[i*4+j], uvPoints[(i+1)*4+j], uvPoints[(i+1)*4+j+1],
 				   flatNorm1, smoothNormals[i*4+j], smoothNormals[(i+1)*4+j], smoothNormals[(i+1)*4+j+1]));
-      triangles.push_back(Triangle(surfacePoints[i*4+j], surfacePoints[(i+1)*4+j+1], surfacePoints[i*4+j+1], uvPoints[i*4+j], uvPoints[(i+1)*4+j+1], uvPoints[i*4+j+1], 
+      surfaceTriangles.push_back(Triangle(surfacePoints[i*4+j], surfacePoints[(i+1)*4+j+1], surfacePoints[i*4+j+1], uvPoints[i*4+j], uvPoints[(i+1)*4+j+1], uvPoints[i*4+j+1], 
 				   flatNorm2, smoothNormals[i*4+j], smoothNormals[(i+1)*4+j+1], smoothNormals[i*4+j+1]));
     }
   }
@@ -799,10 +824,11 @@ void drawSurfaces(){
       // }
     } else {
       // TODO fill in ADAPTIVE tesselation
-      std::vector<Triangle> triangles;
-      makeTriangles(triangles, surfaceIndex);
+      std::vector<Triangle> surfaceTriangles;
+      makeTriangles(surfaceTriangles, surfaceIndex);
       Triangle currTriangle;
-      for(std::vector<Triangle>::iterator it = triangles.begin() ; it != triangles.end(); ++it) {
+      cout << "drawing surfaces\n";
+      for(std::vector<Triangle>::iterator it = surfaceTriangles.begin() ; it != surfaceTriangles.end(); ++it) {
 	currTriangle = *it;
 	adaptiveTriangulation(currTriangle, surfaceIndex);
       }
