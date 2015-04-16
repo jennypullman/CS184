@@ -432,12 +432,90 @@ void uniformTesselation(float du, float dv, int surfaceNum, std::vector<Patch>& 
   }
 }
 
-void adaptiveTriangulation(Triangle tri){
+void adaptiveTriangulation(Triangle tri, int surfaceNum){
+  Surface curSurface = surfaces[surfaceNum];
   //check all midpoints:
-  //find current midpoint of line.
-  //c
-  //subdivide if bad, recursively call adaptiveTriangulation on subdivisions
-  //draw if all good
+  //compute all midpoints (will compare to actual points on curve)
+  Point mid12 = tri.getMidpoint12();
+  Point mid23 = tri.getMidpoint23();
+  Point mid31 = tri.getMidpoint31();
+  //compute all uv midpoints (will use to compute actual points on curve)
+  UVPoint uvMid12 = tri.getUVMidpoint12();
+  UVPoint uvMid23 = tri.getUVMidpoint23();
+  UVPoint uvMid31 = tri.getUVMidpoint31();
+  //compute actual midpoints using uv midpoints
+  Point actualMid12 = curSurface.computeBezier(uvMid12.getU(), uvMid12.getV());
+  Point actualMid23 = curSurface.computeBezier(uvMid23.getU(), uvMid23.getV());
+  Point actualMid31 = curSurface.computeBezier(uvMid31.getU(), uvMid31.getV());
+  
+  //compute distances from midpoints to actual midpoints to compute error
+  float dist12 = mid12.getDistance(actualMid12);
+  float dist23 = mid23.getDistance(actualMid23);
+  float dist31 = mid31.getDistance(actualMid31);
+
+  if (dist12 <= error){
+    if (dist23 <= error){
+      if (dist31 <= error){
+	//draw
+      }else{
+	Triangle tri1 = Triangle(tri.getP1(), tri.getP2(), actualMid31, tri.getUV1(), tri.getUV2(), uvMid31);
+	Triangle tri2 = Triangle(actualMid31, tri.getP2(), tri.getP3(), uvMid31, tri.getUV2(), tri.getUV3());
+	adaptiveTriangulation(tri1, surfaceNum);
+	adaptiveTriangulation(tri2, surfaceNum);
+      }
+    }else {
+      if (dist31 <= error){
+	Triangle tri1 = Triangle(tri.getP1(), tri.getP2(), actualMid23, tri.getUV1(), tri.getUV2(), uvMid23);
+	Triangle tri2 = Triangle(tri.getP1(), actualMid23, tri.getP3(), tri.getUV1(), uvMid23, tri.getUV3());
+	adaptiveTriangulation(tri1, surfaceNum);
+	adaptiveTriangulation(tri2, surfaceNum);
+      }else{
+	Triangle tri1 = Triangle(tri.getP1(), tri.getP2(), actualMid31, tri.getUV1(), tri.getUV2(), uvMid31);
+	Triangle tri2 = Triangle(actualMid31, tri.getP2(), actualMid23, uvMid31, tri.getUV2(), tri.getUV3());
+	Triangle tri3 = Triangle(actualMid31, actualMid23, tri.getP3(), uvMid31, uvMid23, tri.getUV3());
+	adaptiveTriangulation(tri1, surfaceNum);
+	adaptiveTriangulation(tri2, surfaceNum);
+	adaptiveTriangulation(tri3, surfaceNum);
+      }
+    }
+  } else {
+    if (dist23 <= error){
+      if (dist31 <= error){
+	Triangle tri1 = Triangle(tri.getP1(), actualMid12, tri.getP3(), tri.getUV1(), uvMid12, tri.getUV3());
+	Triangle tri2 = Triangle(actualMid12, tri.getP2(), tri.getP3(), uvMid12, tri.getUV2(), tri.getUV3());
+	adaptiveTriangulation(tri1, surfaceNum);
+	adaptiveTriangulation(tri2, surfaceNum);
+      }else{
+	Triangle tri1 = Triangle(tri.getP1(), actualMid12, actualMid31, tri.getUV1(), uvMid12, uvMid31);
+	Triangle tri2 = Triangle(actualMid31, actualMid12, tri.getP3(), uvMid31, uvMid12, tri.getUV3());
+	Triangle tri3 = Triangle(actualMid12, tri.getP2(), tri.getP3(), uvMid12, tri.getUV2(), tri.getUV3());
+	adaptiveTriangulation(tri1, surfaceNum);
+	adaptiveTriangulation(tri2, surfaceNum);
+	adaptiveTriangulation(tri3, surfaceNum);
+      }
+    }else {
+      if (dist31 <= error){
+	Triangle tri1 = Triangle(tri.getP1(), actualMid12, actualMid23, tri.getUV1(), uvMid12, uvMid23);
+	Triangle tri2 = Triangle(actualMid12, tri.getP2(), actualMid23, uvMid12, tri.getUV2(), uvMid23);
+	Triangle tri3 = Triangle(tri.getP1(), actualMid23, tri.getP3(), tri.getUV1(), uvMid23, tri.getUV3());
+	adaptiveTriangulation(tri1, surfaceNum);
+	adaptiveTriangulation(tri2, surfaceNum);
+	adaptiveTriangulation(tri3, surfaceNum);
+      }else{
+	Triangle tri1 = Triangle(tri.getP1(), actualMid12, actualMid31, tri.getUV1(), uvMid12, uvMid31);
+	Triangle tri2 = Triangle(actualMid12, tri.getP2(), actualMid23, uvMid12, tri.getUV2(), uvMid23);
+	Triangle tri3 = Triangle(actualMid31, actualMid23, tri.getP3(), uvMid31, uvMid23, tri.getUV3());
+	Triangle tri4 = Triangle(actualMid31, actualMid12, actualMid23, uvMid31, uvMid12, uvMid23);
+	adaptiveTriangulation(tri1, surfaceNum);
+	adaptiveTriangulation(tri2, surfaceNum);
+	adaptiveTriangulation(tri3, surfaceNum);
+	adaptiveTriangulation(tri4, surfaceNum);
+      }
+    }
+  }
+}
+
+void makeTriangles(std::vector<Triangle>& triangles){
 }
 
 void drawSurfaces(){
@@ -453,6 +531,7 @@ void drawSurfaces(){
       // }
     } else {
       // TODO fill in ADAPTIVE tesselation
+      
     }
     // for (Patch patch : patches){
     //   if (option == ADAPTIVE){

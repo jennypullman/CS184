@@ -1,6 +1,7 @@
 #include <iostream>
 using namespace std;
 #include <stdlib.h>
+#include <math.h>
 
 class Point{
 public:
@@ -11,6 +12,7 @@ public:
 	float getX();
 	float getY();
 	float getZ();
+	float getDistance(Point p);
 	void print();
 	bool equals(Point p);
 

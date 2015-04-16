@@ -22,6 +22,10 @@ float Point::getZ(){
 	return this->z;
 }
 
+float Point::getDistance(Point p){
+  return sqrt(pow(this->x-p.getX(),2)+pow(this->y-p.getY(),2)+pow(this->z-p.getZ(),2));
+}
+
 void Point::print(){
 	std::cout << "(" << this->x << ", " << this->y << ", " << this->z << ")" << std::endl;
 }

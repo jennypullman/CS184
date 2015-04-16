@@ -12,6 +12,30 @@ Triangle::Triangle(Point p1, Point p2, Point p3, UVPoint uv1, UVPoint uv2, UVPoi
 	this->uv3 = uv3;
 }
 
+Point Triangle::getP1(){
+  return this->p1;
+}
+
+Point Triangle::getP2(){
+  return this->p2;
+}
+
+Point Triangle::getP3(){
+  return this->p3;
+}
+
+UVPoint Triangle::getUV1(){
+  return this->uv1;
+}
+
+UVPoint Triangle::getUV2(){
+  return this->uv2;
+}
+
+UVPoint Triangle::getUV3(){
+  return this->uv3;
+}
+
 /*
  * Gets midpoint between points 1 and 2. For testing against the actual
  * point which should be computed by first using getUVMidpoint12 and then
