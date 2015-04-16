@@ -85,11 +85,25 @@ Vector3 Surface::computeNormal(Point p1, Point p2, Point p3, Point p4) {
 		if (!p1.equals(p4)) {
 			Vector3 v21 = Vector3(p2.getX()-p1.getX(), p2.getY()-p1.getY(), p2.getZ()-p1.getZ());
 			Vector3 v41 = Vector3(p4.getX()-p1.getX(), p4.getY()-p1.getY(), p4.getZ()-p1.getZ());
+			// Vector3 toReturn = Vector3::cross(v21, v41);
+			// if (!toReturn.getX() || !toReturn.getY() || !toReturn.getZ()) {
+			// 	std::cout << "CASE 1: " << std::endl;
+			// 	toReturn.print();
+			// 	v21.print();
+			// 	v41.print();
+			// }
 			return Vector3::cross(v21, v41);
 		} else {
 			// std::cout << "p1 equals p4" << std::endl;
 			Vector3 v21 = Vector3(p2.getX()-p1.getX(), p2.getY()-p1.getY(), p2.getZ()-p1.getZ());
 			Vector3 v31 = Vector3(p3.getX()-p1.getX(), p3.getY()-p1.getY(), p3.getZ()-p1.getZ());
+			// Vector3 toReturn = Vector3::cross(v21, v31);
+			// if (!toReturn.getX() || !toReturn.getY() || !toReturn.getZ()) {
+			// 	std::cout << "CASE 2: " << std::endl;
+			// 	toReturn.print();
+			// 	v21.print();
+			// 	v31.print();
+			// }
 			return Vector3::cross(v21, v31);
 		}
 	} else {
@@ -106,9 +120,16 @@ Vector3 Surface::computeNormal(Point p1, Point p2, Point p3, Point p4) {
 		// v41.print();
 		// Vector3::cross(v31, v41).print();
 		// return Vector3::cross(v31, v41);
-
+		// std::cout << "p1 equals p2" << std::endl;
 		Vector3 v14 = Vector3(p1.getX()-p4.getX(), p1.getY()-p4.getY(), p1.getZ()-p4.getZ());
 		Vector3 v34 = Vector3(p3.getX()-p4.getX(), p3.getY()-p4.getY(), p3.getZ()-p4.getZ());
+		// Vector3 toReturn = Vector3::cross(v14, v34);
+		// if (!toReturn.getX() || !toReturn.getY() || !toReturn.getZ()) {
+		// 	std::cout << "CASE 3: " << std::endl;
+		// 	toReturn.print();
+		// 	v14.print();
+		// 	v34.print();
+		// }
 		return Vector3::cross(v14, v34);
 	}
 }
@@ -116,12 +137,12 @@ Vector3 Surface::computeNormal(Point p1, Point p2, Point p3, Point p4) {
 Patch Surface::determinePatch(float u, float v, float du, float dv){
 	float ep = 0.0001;
 	//return patch starting from u,v, and going clockwise
-	if (u < 0 || v < 0 || du < 0 || dv < 0 || u+du > (1+ep) || v+dv > (1+ep)){
-		// cout << (u < 0) << (v < 0) << (du < 0) << (dv < 0) << (u+du >= 1) << (v+dv >= 1) << endl;
-		// cout << "v+dv: " << v+dv << endl;
-		cout << "Incorrect arguments in determinePatch\n";
-		//TO DO 
-	}
+	// if (u < 0 || v < 0 || du < 0 || dv < 0 || (u+du) > (1+ep) || (v+dv) > (1+ep)){
+	// 	// cout << (u < 0) << (v < 0) << (du < 0) << (dv < 0) << (u+du >= 1) << (v+dv >= 1) << endl;
+	// 	// cout << "v+dv: " << v+dv << endl;
+	// 	cout << "Incorrect arguments in determinePatch\n";
+	// 	//TO DO 
+	// }
 	// cout << "(u,v,du,dv): (" << u << ", " << v << ", " << du << ", " << dv << ")\n"; 
 	Point p1 = this->computeBezier(u,v);
 	// p1.print();

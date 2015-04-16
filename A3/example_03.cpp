@@ -263,17 +263,22 @@ void myDisplay() {
 
 
       Vector3 n1, n2, n3, n4;
-      if (flat) {
-        n1 = currPatch.getFN1();
-        n2 = currPatch.getFN2();
-        n3 = currPatch.getFN3();
-        n4 = currPatch.getFN4();
-      } else {
-        n1 = currPatch.getSN1();
-        n2 = currPatch.getSN2();
-        n3 = currPatch.getSN3();
-        n4 = currPatch.getSN4();
-      }
+      // if (flat) {
+      //   n1 = currPatch.getFN1();
+      //   n2 = currPatch.getFN2();
+      //   n3 = currPatch.getFN3();
+      //   n4 = currPatch.getFN4();
+      // } else {
+      //   n1 = currPatch.getSN1();
+      //   n2 = currPatch.getSN2();
+      //   n3 = currPatch.getSN3();
+      //   n4 = currPatch.getSN4();
+      // }
+
+      n1 = currPatch.getSN1();
+      n2 = currPatch.getSN2();
+      n3 = currPatch.getSN3();
+      n4 = currPatch.getSN4();
 
       n1.normalize();
       n2.normalize();
@@ -774,7 +779,7 @@ void adaptiveTriangulation(Triangle tri, int surfaceNum){
   }
 }
 
-void makeTriangles(std::vector<Triangle>& triangles, int surfaceNum){
+void makeTriangles(std::vector<Triangle>& surfaceTriangles, int surfaceNum){
   Surface curSurface = surfaces[surfaceNum];
   Point surfacePoints[16];
   UVPoint uvPoints[16];
@@ -809,9 +814,9 @@ void makeTriangles(std::vector<Triangle>& triangles, int surfaceNum){
     for (int j = 0; j < 3; j++){
       Vector3 flatNorm1 = curSurface.computeNormal(surfacePoints[i*4+j], surfacePoints[(i+1)*4+j], surfacePoints[(i+1)*4+j+1], surfacePoints[(i+1)*4+j+1]);
       Vector3 flatNorm2 = curSurface.computeNormal(surfacePoints[i*4+j], surfacePoints[(i+1)*4+j+1], surfacePoints[i*4+j+1], surfacePoints[i*4+j+1]);
-      triangles.push_back(Triangle(surfacePoints[i*4+j], surfacePoints[(i+1)*4+j], surfacePoints[(i+1)*4+j+1], uvPoints[i*4+j], uvPoints[(i+1)*4+j], uvPoints[(i+1)*4+j+1],
+      surfaceTriangles.push_back(Triangle(surfacePoints[i*4+j], surfacePoints[(i+1)*4+j], surfacePoints[(i+1)*4+j+1], uvPoints[i*4+j], uvPoints[(i+1)*4+j], uvPoints[(i+1)*4+j+1],
 				   flatNorm1, smoothNormals[i*4+j], smoothNormals[(i+1)*4+j], smoothNormals[(i+1)*4+j+1]));
-      triangles.push_back(Triangle(surfacePoints[i*4+j], surfacePoints[(i+1)*4+j+1], surfacePoints[i*4+j+1], uvPoints[i*4+j], uvPoints[(i+1)*4+j+1], uvPoints[i*4+j+1], 
+      surfaceTriangles.push_back(Triangle(surfacePoints[i*4+j], surfacePoints[(i+1)*4+j+1], surfacePoints[i*4+j+1], uvPoints[i*4+j], uvPoints[(i+1)*4+j+1], uvPoints[i*4+j+1], 
 				   flatNorm2, smoothNormals[i*4+j], smoothNormals[(i+1)*4+j+1], smoothNormals[i*4+j+1]));
     }
   }
@@ -831,10 +836,10 @@ void drawSurfaces(){
       // }
     } else {
       // TODO fill in ADAPTIVE tesselation
-      std::vector<Triangle> triangles;
-      makeTriangles(triangles, surfaceIndex);
+      std::vector<Triangle> surfaceTriangles;
+      makeTriangles(surfaceTriangles, surfaceIndex);
       Triangle currTriangle;
-      for(std::vector<Triangle>::iterator it = triangles.begin() ; it != triangles.end(); ++it) {
+      for(std::vector<Triangle>::iterator it = surfaceTriangles.begin() ; it != surfaceTriangles.end(); ++it) {
 	currTriangle = *it;
 	adaptiveTriangulation(currTriangle, surfaceIndex);
       }
