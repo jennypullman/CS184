@@ -12,6 +12,7 @@ public:
 	float getY();
 	float getZ();
 	void print();
+	bool equals(Point p);
 
 private:
 	float x;

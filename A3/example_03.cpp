@@ -107,7 +107,7 @@ void myReshape(int w, int h) {
   // glOrtho(-1, 1 + (w-400)/200.0 , -1 -(h-400)/200.0, 1, 1, -1); // resize type = add
   // glOrtho(-w/400.0, w/400.0, -h/400.0, h/400.0, 1, -1); // resize type = center
 
-  glOrtho(-5, 5, -5, 5, 1, -1);    // resize type = stretch
+  glOrtho(-5, 5, -5, 5, 5, -5);    // resize type = stretch
 }
 
 //****************************************************
@@ -115,6 +115,10 @@ void myReshape(int w, int h) {
 //****************************************************
 void initScene(){
   glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // Clear to black, fully transparent
+
+  // glEnable(GL_CULL_FACE);
+  // glEnable(GL_DEPTH_TEST);
+  // glDepthMask(GL_TRUE);
 
   myReshape(viewport.w,viewport.h);
 }
@@ -139,11 +143,12 @@ void setPixel(int x, int y, GLfloat r, GLfloat g, GLfloat b) {
 //***************************************************
 void myDisplay() {
 
-  glClear(GL_COLOR_BUFFER_BIT);       // clear the color buffer
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);       // clear the color buffer
+  // glClear(GL_COLOR_BUFFER_BIT);       // clear the color buffer
+
 
   glEnable(GL_LIGHTING);
   glEnable(GL_LIGHT0);
-  // glEnable(GL_DEPTH_TEST);
 
   // glEnable(GL_DEPTH_TEST);   // Enable depth testing for z-culling
   glMatrixMode(GL_MODELVIEW);             // indicate we are specifying camera transformations
@@ -169,9 +174,12 @@ void myDisplay() {
 
   Patch currPatch;
 
-  std::cout<<"patches length: "<<patches.size()<<std::endl;
+  // std::cout<<"patches length: "<<patches.size()<<std::endl;
   // for (int i = 0; i < patchesLength; i++) {
-  glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+
+  // glPolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+  glPolygonMode( GL_FRONT_AND_BACK, GL_FILL );
+
   glBegin(GL_QUADS);
   for(std::vector<Patch>::iterator it = patches.begin() ; it != patches.end(); ++it) {
     
@@ -193,45 +201,40 @@ void myDisplay() {
     n3.normalize();
     n4.normalize();
 
-    p1.print();
+    // p1.print();
     n1.print();
-    p2.print();
+    // p2.print();
     n2.print();
-    p3.print();
+    // p3.print();
     n3.print();
-    p4.print();
+    // p4.print();
     n4.print();
 
-    glNormal3f(n1.getX(), n1.getY(), n1.getZ());
-    glVertex3f(p1.getX(), p1.getY(), p1.getZ());
+    // // glNormal3f(n1.getX(), n1.getY(), n1.getZ());
+    // glVertex3f(p1.getX(), p1.getY(), p1.getZ());
     
-    glNormal3f(n2.getX(), n2.getY(), n2.getZ());
-    glVertex3f(p2.getX(), p2.getY(), p2.getZ());
+    // // glNormal3f(n2.getX(), n2.getY(), n2.getZ());
+    // glVertex3f(p2.getX(), p2.getY(), p2.getZ());
 
-    glNormal3f(n3.getX(), n3.getY(), n3.getZ());
-    glVertex3f(p3.getX(), p3.getY(), p3.getZ());
+    // // glNormal3f(n3.getX(), n3.getY(), n3.getZ());
+    // glVertex3f(p3.getX(), p3.getY(), p3.getZ());
 
-    glNormal3f(n4.getX(), n4.getY(), n4.getZ());
-    glVertex3f(p4.getX(), p4.getY(), p4.getZ());
+    // // glNormal3f(n4.getX(), n4.getY(), n4.getZ());
+    // glVertex3f(p4.getX(), p4.getY(), p4.getZ());
 
 
-// switch z, y for testing purposes
-    // glBegin(GL_POLYGON);
-    // // std::cout<<"drawing patch "<<i<<std::endl;
-    // // currPatch = patches[i];
-    // currPatch = *it;
-    // Point p = currPatch.getP1();
-    // p.print();
-    // glVertex3f(p.getX(), p.getZ(), p.getY());
-    // p = currPatch.getP2();
-    // p.print();
-    // glVertex3f(p.getX(), p.getZ(), p.getY());
-    // p = currPatch.getP3();
-    // p.print();
-    // glVertex3f(p.getX(), p.getZ(), p.getY());
-    // p = currPatch.getP4();
-    // p.print();
-    // glVertex3f(p.getX(), p.getZ(), p.getY());
+// // switch z, y for testing purposes
+    glNormal3f(n1.getX(), n1.getZ(), n1.getY());
+    glVertex3f(p1.getX(), p1.getZ(), p1.getY());
+    
+    glNormal3f(n2.getX(), n2.getZ(), n2.getY());
+    glVertex3f(p2.getX(), p2.getZ(), p2.getY());
+
+    glNormal3f(n3.getX(), n3.getZ(), n3.getY());
+    glVertex3f(p3.getX(), p3.getZ(), p3.getY());
+
+    glNormal3f(n4.getX(), n4.getZ(), n4.getY());
+    glVertex3f(p4.getX(), p4.getZ(), p4.getY());
     // glEnd();
   }
   glEnd();
