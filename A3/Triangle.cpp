@@ -85,3 +85,21 @@ UVPoint Triangle::getUVMidpoint23(){
 UVPoint Triangle::getUVMidpoint31(){
   return UVPoint(.5*this->uv3.getU()+.5*this->uv1.getU(), .5*this->uv3.getV()+.5*this->uv1.getV());
 }
+
+void Triangle::printUV(){
+  cout << "UVPoints: \n";
+  this->uv1.print();
+  cout << ", ";
+  this->uv2.print();
+  cout << ", ";
+  this->uv3.print();
+}
+
+void Triangle::print(){
+  cout << "Triangle: \n";
+  this->p1.print();
+  cout << ", ";
+  this->p2.print();
+  cout << ", ";
+  this->p3.print();
+}

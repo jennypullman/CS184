@@ -31,6 +31,9 @@ public:
 	UVPoint getUVMidpoint23();
 	UVPoint getUVMidpoint31();
 
+	void printUV();
+	void print();
+
 private:
 	Point p1, p2, p3;
 	UVPoint uv1, uv2, uv3;
