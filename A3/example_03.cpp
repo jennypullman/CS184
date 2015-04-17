@@ -737,7 +737,7 @@ void adaptiveTriangulation(Triangle tri, int surfaceNum){
 	Vector3 normTri2 = curSurface.computeNormal(actualMid31, tri.getP2(), actualMid23, actualMid23);
 	Vector3 normTri3 = curSurface.computeNormal(actualMid31, actualMid23, tri.getP3(), tri.getP3());
 	Triangle tri1 = Triangle(tri.getP1(), tri.getP2(), actualMid31, tri.getUV1(), tri.getUV2(), uvMid31, normTri1, tri.getSN1(), tri.getSN2(), mid31Normal);
-	Triangle tri2 = Triangle(actualMid31, tri.getP2(), actualMid23, uvMid31, tri.getUV2(), tri.getUV3(), normTri2, mid31Normal, tri.getSN2(), mid23Normal);
+	Triangle tri2 = Triangle(actualMid31, tri.getP2(), actualMid23, uvMid31, tri.getUV2(), uvMid23, normTri2, mid31Normal, tri.getSN2(), mid23Normal);
 	Triangle tri3 = Triangle(actualMid31, actualMid23, tri.getP3(), uvMid31, uvMid23, tri.getUV3(), normTri3, mid31Normal, mid23Normal, tri.getSN3());
 	adaptiveTriangulation(tri1, surfaceNum);
 	adaptiveTriangulation(tri2, surfaceNum);
