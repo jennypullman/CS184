@@ -62,22 +62,11 @@ Vector3 Surface::computeNormal(float u, float v){
 	if (DPdv.isDegenerate()) {
 		std::cout << "V DEGENERATE" << std::endl;
 
-		// calculate first
-		// Curve cv11 = Curve(c1.getP1(), c2.getP1(), c3.getP1(), c4.getP1());
-		// Curve cv12 = Curve(c1.getP2(), c2.getP2(), c3.getP2(), c4.getP2());
-		// Curve cv13 = Curve(c1.getP3(), c2.getP3(), c3.getP3(), c4.getP3());
-		// Curve cv14 = Curve(c1.getP4(), c2.getP4(), c3.getP4(), c4.getP4()); 
-
-		// Point cpv11 = cv1.computeDecasteljau(v);
-		// Point cpv12 = cv2.computeDecasteljau(v);
-		// Point cpv13 = cv3.computeDecasteljau(v);
-		// Point cpv14 = cv4.computeDecasteljau(v);
-
-		// Curve cu = Curve(cpv1, cpv2, cpv3, cpv4);
-		// Vector3 DPdu = cu.computeDecNorm(u);
-		// calculate second
-
-		// return cross
+		Curve cu1 = Curve(c1.getP1(), c2.getP1(), c3.getP1(), c4.getP1());
+		Vector3 DPdu1 = cu1.computeDecNorm(u);
+		Curve cu4 = Curve(c1.getP4(), c2.getP4(), c3.getP4(), c4.getP4());
+		Vector3 DPdu4 = cu4.computeDecNorm(u);
+		return Vector3::cross(DPdu1, DPdu4);
 	}
 
 
@@ -96,6 +85,10 @@ Vector3 Surface::computeNormal(float u, float v){
 
 	if (DPdu.isDegenerate()) {
 		std::cout << "U DEGENERATE" << std::endl;
+
+		Vector3 DPdv1 = c1.computeDecNorm(v);
+		Vector3 DPdv4 = c4.computeDecNorm(v);
+		return Vector3::cross(DPdv1, DPdv4);
 	}
 	// cout << "printing curve: \n";
 	// c.print();

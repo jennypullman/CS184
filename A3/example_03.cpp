@@ -336,20 +336,20 @@ void myDisplay() {
 
 
       Vector3 n1, n2, n3;
-      // if (flat) {
-      //   n1 = currTri.getFN();
-      //   n2 = currTri.getFN();
-      //   n3 = currTri.getFN();
-      // } else {
-      //   n1 = currTri.getSN1();
-      //   n2 = currTri.getSN2();
-      //   n3 = currTri.getSN3();
-      // }
-
-      
+      if (flat) {
+        n1 = currTri.getFN();
+        n2 = currTri.getFN();
+        n3 = currTri.getFN();
+      } else {
         n1 = currTri.getSN1();
         n2 = currTri.getSN2();
         n3 = currTri.getSN3();
+      }
+
+      
+        // n1 = currTri.getSN1();
+        // n2 = currTri.getSN2();
+        // n3 = currTri.getSN3();
 
       n1.normalize();
       n2.normalize();
