@@ -111,7 +111,7 @@ void myReshape(int w, int h) {
   // glOrtho(-1, 1 + (w-400)/200.0 , -1 -(h-400)/200.0, 1, 1, -1); // resize type = add
   // glOrtho(-w/400.0, w/400.0, -h/400.0, h/400.0, 1, -1); // resize type = center
 
-  glOrtho(-4, 4, -4, 4, -4, 4);    // resize type = stretch
+  glOrtho(-4, 4, -4, 4, -10, 10);    // resize type = stretch
 }
 
 //****************************************************
@@ -147,6 +147,7 @@ void initScene(){
   GLfloat cyan[] = {0.f, .8f, .8f, 1.f};
   GLfloat orange[] = {.8f, .4f, 0.f, 1.f};
   GLfloat green[] = {0.f, .8f, 0.1f, 1.f};
+  GLfloat white[] = {1.f, 1.f, 1.f, 1.f};
   glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, cyan);
   // glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular);
 
