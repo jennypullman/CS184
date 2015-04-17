@@ -62,11 +62,18 @@ Vector3 Surface::computeNormal(float u, float v){
 	if (DPdv.isDegenerate()) {
 		std::cout << "V DEGENERATE" << std::endl;
 
-		Curve cu1 = Curve(c1.getP1(), c2.getP1(), c3.getP1(), c4.getP1());
-		Vector3 DPdu1 = cu1.computeDecNorm(u);
-		Curve cu4 = Curve(c1.getP4(), c2.getP4(), c3.getP4(), c4.getP4());
-		Vector3 DPdu4 = cu4.computeDecNorm(u);
-		return Vector3::cross(DPdu1, DPdu4);
+		Vector3 DPd1 = cv.computeDecNorm(0);
+		Vector3 DPd2 = cv.computeDecNorm(1);
+		return Vector3::cross(DPd1, DPd2);
+		// Vector3 DPdv1 = c1.computeDecNorm(u);
+		// Vector3 DPdv4 = c4.computeDecNorm(u);
+		// return Vector3::cross(DPdv1, DPdv4);
+
+		// Curve cu1 = Curve(c1.getP1(), c2.getP1(), c3.getP1(), c4.getP1());
+		// Vector3 DPdu1 = cu1.computeDecNorm(u);
+		// Curve cu4 = Curve(c1.getP4(), c2.getP4(), c3.getP4(), c4.getP4());
+		// Vector3 DPdu4 = cu4.computeDecNorm(u);
+		// return Vector3::cross(DPdu1, DPdu4);
 	}
 
 
@@ -85,16 +92,38 @@ Vector3 Surface::computeNormal(float u, float v){
 
 	if (DPdu.isDegenerate()) {
 		std::cout << "U DEGENERATE" << std::endl;
+		// cv1.print();
+		// cv2.print();
+		// cv3.print();
+		// cv4.print();
+		// cu.print();
+		// DPdu.print();
 
-		Vector3 DPdv1 = c1.computeDecNorm(v);
-		Vector3 DPdv4 = c4.computeDecNorm(v);
-		return Vector3::cross(DPdv1, DPdv4);
+		// Vector3 DPd1 = cu.computeDecNorm(0);
+		// DPd1.print();
+		// Vector3 DPd2 = cu.computeDecNorm(1);
+		// DPd2.print();
+		// return Vector3::cross(DPd1, DPd2);
+
+		// Vector3 DPdv1 = c1.computeDecNorm(v);
+		// Vector3 DPdv4 = c4.computeDecNorm(v);
+		// return Vector3::cross(DPdv1, DPdv4);
+
+		Curve cu1 = Curve(c1.getP1(), c2.getP1(), c3.getP1(), c4.getP1());
+		Vector3 DPdu1 = cu1.computeDecNorm(v);
+		DPdu1.print();
+		Curve cu4 = Curve(c1.getP4(), c2.getP4(), c3.getP4(), c4.getP4());
+		Vector3 DPdu4 = cu4.computeDecNorm(v);
+		DPdu4.print();
+		Vector3::cross(DPdu1, DPdu4).print();
+		return Vector3::cross(DPdu1, DPdu4);
 	}
 	// cout << "printing curve: \n";
 	// c.print();
 	// std::cout << "BEZIER RESULT: ";
 	 // c.computeDecasteljau(v).print();
 	// std::cout << std::endl;
+
 	return Vector3::cross(DPdu, DPdv);
 }
 

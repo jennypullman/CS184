@@ -286,13 +286,13 @@ void myDisplay() {
       n4.normalize();
 
       // p1.print();
-      // n1.print();
+      n1.print();
       // p2.print();
-      // n2.print();
+      n2.print();
       // p3.print();
-      // n3.print();
+      n3.print();
       // p4.print();
-      // n4.print();
+      n4.print();
 
       glNormal3f(n1.getX(), n1.getY(), n1.getZ());
       glVertex3f(p1.getX(), p1.getY(), p1.getZ());
