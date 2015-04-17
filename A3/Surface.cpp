@@ -60,20 +60,36 @@ Vector3 Surface::computeNormal(float u, float v){
 	Vector3 DPdv = cv.computeDecNorm(v);
 
 	if (DPdv.isDegenerate()) {
-		std::cout << "V DEGENERATE" << std::endl;
+		// Curve 1
+		Curve cv11 = Curve(c1.getP1(), c2.getP1(), c3.getP1(), c4.getP1());
+		Curve cv12 = Curve(c1.getP2(), c2.getP2(), c3.getP2(), c4.getP2());
+		Curve cv13 = Curve(c1.getP3(), c2.getP3(), c3.getP3(), c4.getP3());
+		Curve cv14 = Curve(c1.getP4(), c2.getP4(), c3.getP4(), c4.getP4()); 
 
-		Vector3 DPd1 = cv.computeDecNorm(0);
-		Vector3 DPd2 = cv.computeDecNorm(1);
-		return Vector3::cross(DPd1, DPd2);
-		// Vector3 DPdv1 = c1.computeDecNorm(u);
-		// Vector3 DPdv4 = c4.computeDecNorm(u);
-		// return Vector3::cross(DPdv1, DPdv4);
+		Point cpv11 = cv11.computeDecasteljau(0);
+		Point cpv12 = cv12.computeDecasteljau(0);
+		Point cpv13 = cv13.computeDecasteljau(0);
+		Point cpv14 = cv14.computeDecasteljau(0);
 
-		// Curve cu1 = Curve(c1.getP1(), c2.getP1(), c3.getP1(), c4.getP1());
-		// Vector3 DPdu1 = cu1.computeDecNorm(u);
-		// Curve cu4 = Curve(c1.getP4(), c2.getP4(), c3.getP4(), c4.getP4());
-		// Vector3 DPdu4 = cu4.computeDecNorm(u);
-		// return Vector3::cross(DPdu1, DPdu4);
+		Curve cu1 = Curve(cpv11, cpv12, cpv13, cpv14);
+		Vector3 DPdu1 = cu1.computeDecNorm(u);
+
+		// Curve 2
+		Curve cv21 = Curve(c1.getP1(), c2.getP1(), c3.getP1(), c4.getP1());
+		Curve cv22 = Curve(c1.getP2(), c2.getP2(), c3.getP2(), c4.getP2());
+		Curve cv23 = Curve(c1.getP3(), c2.getP3(), c3.getP3(), c4.getP3());
+		Curve cv24 = Curve(c1.getP4(), c2.getP4(), c3.getP4(), c4.getP4()); 
+
+		Point cpv21 = cv21.computeDecasteljau(1);
+		Point cpv22 = cv22.computeDecasteljau(1);
+		Point cpv23 = cv23.computeDecasteljau(1);
+		Point cpv24 = cv24.computeDecasteljau(1);
+
+		Curve cu2 = Curve(cpv21, cpv22, cpv23, cpv24);
+		Vector3 DPdu2 = cu2.computeDecNorm(u);
+
+		// return
+		return Vector3::cross(DPdu1, DPdu2);
 	}
 
 
@@ -91,38 +107,35 @@ Vector3 Surface::computeNormal(float u, float v){
 	Vector3 DPdu = cu.computeDecNorm(u);
 
 	if (DPdu.isDegenerate()) {
-		std::cout << "U DEGENERATE" << std::endl;
-		// cv1.print();
-		// cv2.print();
-		// cv3.print();
-		// cv4.print();
-		// cu.print();
-		// DPdu.print();
 
-		// Vector3 DPd1 = cu.computeDecNorm(0);
-		// DPd1.print();
-		// Vector3 DPd2 = cu.computeDecNorm(1);
-		// DPd2.print();
-		// return Vector3::cross(DPd1, DPd2);
+		// Curve 1
+		Point cp11 = this->c1.computeDecasteljau(0);
+		Point cp12 = this->c2.computeDecasteljau(0);
+		Point cp13 = this->c3.computeDecasteljau(0);
+		Point cp14 = this->c4.computeDecasteljau(0);
+		// cp1.print();
+		// cp2.print();
+		// cp3.print();
+		// cp4.print();
+		Curve cv1 = Curve(cp11, cp12, cp13, cp14);
+		Vector3 DPdv1 = cv1.computeDecNorm(v);
 
-		// Vector3 DPdv1 = c1.computeDecNorm(v);
-		// Vector3 DPdv4 = c4.computeDecNorm(v);
-		// return Vector3::cross(DPdv1, DPdv4);
 
-		Curve cu1 = Curve(c1.getP1(), c2.getP1(), c3.getP1(), c4.getP1());
-		Vector3 DPdu1 = cu1.computeDecNorm(v);
-		DPdu1.print();
-		Curve cu4 = Curve(c1.getP4(), c2.getP4(), c3.getP4(), c4.getP4());
-		Vector3 DPdu4 = cu4.computeDecNorm(v);
-		DPdu4.print();
-		Vector3::cross(DPdu1, DPdu4).print();
-		return Vector3::cross(DPdu1, DPdu4);
+		// Curve 2
+		Point cp21 = this->c1.computeDecasteljau(1);
+		Point cp22 = this->c2.computeDecasteljau(1);
+		Point cp23 = this->c3.computeDecasteljau(1);
+		Point cp24 = this->c4.computeDecasteljau(1);
+		// cp1.print();
+		// cp2.print();
+		// cp3.print();
+		// cp4.print();
+		Curve cv2 = Curve(cp21, cp22, cp23, cp24);
+		Vector3 DPdv2 = cv2.computeDecNorm(v);
+
+		// return
+		return Vector3::cross(DPdv2, DPdv1);
 	}
-	// cout << "printing curve: \n";
-	// c.print();
-	// std::cout << "BEZIER RESULT: ";
-	 // c.computeDecasteljau(v).print();
-	// std::cout << std::endl;
 
 	return Vector3::cross(DPdu, DPdv);
 }
