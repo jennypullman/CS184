@@ -69,13 +69,24 @@ void Vector3::print(){
 }
 
 bool Vector3::isDegenerate() {
-	if (x == 0.0f) {
-		if (y == 0.0f) {
-			if (z == 0.0f) {
+	float er = 0.0001;
+	float min = 0.0f - er;
+	float max = 0.0f + er;
+	if (x < max && x > min) {
+		if (y < max && y > min) {
+			if (z < max && z > min) {
 				return true;
 			}
 		}
 	}
+
+	// if (x == 0) {
+	// 	if (y == 0) {
+	// 		if (z == 0) {
+	// 			return true;
+	// 		}
+	// 	}
+	// }
 
 	return false;
 }

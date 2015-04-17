@@ -187,7 +187,19 @@ void myDisplay() {
   // glLoadIdentity();               // make sure transformation is "zero'd"
 
 
-  
+  if (transR) {
+    glTranslatef(0.05f, 0.0f, 0.0f);
+    transR = false;
+  } else if (transL) {
+    glTranslatef(-0.05f, 0.0f, 0.0f);
+    transL = false;
+  } else if (transU) {
+    glTranslatef(0.0f, 0.05f, 0.0f);
+    transU = false;
+  } else if (transD) {
+    glTranslatef(0.0f, -0.05f, -0.0f);
+    transD = false;
+  }
 
   if (rotateR) {
     glRotatef(1.0f, 0.0f, 1.0f, 0.0f);
@@ -201,20 +213,6 @@ void myDisplay() {
   } else if (rotateD) {
     glRotatef(1.0f, 1.0f, 0.0f, 0.0f);
     rotateD = false;
-  }
-
-  if (transR) {
-    glTranslatef(0.05f, 0.0f, 0.0f);
-    transR = false;
-  } else if (transL) {
-    glTranslatef(-0.05f, 0.0f, 0.0f);
-    transL = false;
-  } else if (transU) {
-    glTranslatef(0.0f, 0.05f, 0.0f);
-    transU = false;
-  } else if (transD) {
-    glTranslatef(0.0f, -0.05f, 0.0f);
-    transD = false;
   }
 
   if (in) {
@@ -510,7 +508,7 @@ int readBezierFile(string fileName){
   if (file.is_open()){
     //get number of surfaces
     getline(file, line);
-    std::cout << "line: " << line << std::endl;
+    // std::cout << "line: " << line << std::endl;
     char c;
     string numSurfacesStr = "";
     int i = 0;
@@ -519,10 +517,10 @@ int readBezierFile(string fileName){
       numSurfacesStr += c;
       i++;
     }
-    std::cout << "NumSurfacesStr: " << numSurfacesStr << "\n";
+    // std::cout << "NumSurfacesStr: " << numSurfacesStr << "\n";
     //get surfaces
     numSurfaces = stoi(numSurfacesStr);
-    std::cout << "NumSurfaces: " << numSurfaces << "\n";
+    // std::cout << "NumSurfaces: " << numSurfaces << "\n";
 
     surfaces = new Surface[numSurfaces];
     
@@ -530,11 +528,11 @@ int readBezierFile(string fileName){
     int surfaceIndex = 0;
     Curve curves[4];
     while (getline(file, line)){
-      std::cout << "line: " << line << std::endl;
+      // std::cout << "line: " << line << std::endl;
       // std::cout << "line length: " << line.length() << std::endl;
       // if (isspace(line[0])){
       if (line.length() <= 1) {
-        std::cout << "end line b/c space" << std::endl;
+        // std::cout << "end line b/c space" << std::endl;
         surfaceIndex++;
         if (curCurveIndex < 4 && curCurveIndex != 0){
           cout << "not enough curves in patch\n";
@@ -569,6 +567,10 @@ int readBezierFile(string fileName){
         }
         
       }
+      if (curPoint != ""){
+        // cout << "hereee\n";
+        coordinates[coordinateIndex++] = stof(curPoint);
+      }
       if (coordinateIndex < 12){
         cout << "not enough points\n";
         //TODO
@@ -597,7 +599,7 @@ int readBezierFile(string fileName){
   
   for (int i = 0; i < numSurfaces; i++){
     // cout << "Surface " << i+1 << ": \n";
-    //surfaces[i].print();
+    // surfaces[i].print();
   }
 }
 
@@ -629,9 +631,9 @@ void processArgs(int argc, char *argv[]) {
       option = UNIFORM;
     }
 
-    std::cout << "fileName: " << fileName <<std::endl;
-    std::cout << "subdivision: " << subdivision << std::endl;
-    std::cout << "option: " << option <<std::endl;
+    // std::cout << "fileName: " << fileName <<std::endl;
+    // std::cout << "subdivision: " << subdivision << std::endl;
+    // std::cout << "option: " << option <<std::endl;
 
     readBezierFile(fileName);
   }
@@ -900,7 +902,7 @@ void drawSurfaces(){
 // the usual stuff, nothing exciting here
 //****************************************************
 int main(int argc, char *argv[]) {
-  runTests();
+  // runTests();
   //This initializes glut
   glutInit(&argc, argv);
 
@@ -915,7 +917,7 @@ int main(int argc, char *argv[]) {
   //The size and position of the window
   glutInitWindowSize(viewport.w, viewport.h);
   glutInitWindowPosition(0,0);
-  cout << argv[0] << "\n";
+  // cout << argv[0] << "\n";
   glutCreateWindow(argv[0]);
 
   initScene();              // quick function to set up scene
