@@ -15,6 +15,7 @@ public:
 	void normalize();
 	float getMagnitude();
 	void print();
+	bool isDegenerate();
 
 	//static methods (obviously)
 	static Vector3 add(Vector3 vec1, Vector3 vec2);
