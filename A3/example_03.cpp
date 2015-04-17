@@ -703,7 +703,10 @@ void adaptiveTriangulation(Triangle tri, int surfaceNum){
   Vector3 mid12Normal = curSurface.computeNormal(uvMid12.getU(), uvMid12.getV());
   Vector3 mid23Normal = curSurface.computeNormal(uvMid23.getU(), uvMid23.getV());
   Vector3 mid31Normal = curSurface.computeNormal(uvMid31.getU(), uvMid31.getV());
-  
+  mid12Normal = Vector3::scalarMultiply(mid12Normal, -1.0);
+  mid23Normal = Vector3::scalarMultiply(mid23Normal, -1.0);
+  mid31Normal = Vector3::scalarMultiply(mid31Normal, -1.0);
+
   //compute distances from midpoints to actual midpoints to compute error
   float dist12 = mid12.getDistance(actualMid12);
   float dist23 = mid23.getDistance(actualMid23);
@@ -831,6 +834,7 @@ void makeTriangles(std::vector<Triangle>& surfaceTriangles, int surfaceNum){
       uvPoints[i*4+j] = UVPoint(u, v);
       //uvPoints[i*4+j].print();
       smoothNormals[i*4+j] = curSurface.computeNormal(u, v);
+      smoothNormals[i*4+j] = Vector3::scalarMultiply(smoothNormals[i*4+j], -1.0);
     }
   }
   
