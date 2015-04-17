@@ -846,8 +846,8 @@ void makeTriangles(std::vector<Triangle>& surfaceTriangles, int surfaceNum){
 
   for (int i = 0; i < 3; i++){
     for (int j = 0; j < 3; j++){
-      Vector3 flatNorm1 = curSurface.computeNormal(surfacePoints[i*4+j], surfacePoints[(i+1)*4+j], surfacePoints[(i+1)*4+j+1], surfacePoints[(i+1)*4+j+1]);
-      Vector3 flatNorm2 = curSurface.computeNormal(surfacePoints[i*4+j], surfacePoints[(i+1)*4+j+1], surfacePoints[i*4+j+1], surfacePoints[i*4+j+1]);
+      Vector3 flatNorm1 = curSurface.computeNormal(surfacePoints[i*4+j], surfacePoints[(i+1)*4+j+1],  surfacePoints[(i+1)*4+j], surfacePoints[(i+1)*4+j]);
+      Vector3 flatNorm2 = curSurface.computeNormal(surfacePoints[i*4+j], surfacePoints[i*4+j+1], surfacePoints[(i+1)*4+j+1], surfacePoints[(i+1)*4+j+1]);
       surfaceTriangles.push_back(Triangle(surfacePoints[i*4+j], surfacePoints[(i+1)*4+j+1], surfacePoints[(i+1)*4+j], uvPoints[i*4+j], uvPoints[(i+1)*4+j+1], uvPoints[(i+1)*4+j],
 					  flatNorm1, smoothNormals[i*4+j], smoothNormals[(i+1)*4+j+1], smoothNormals[(i+1)*4+j]));
       surfaceTriangles.push_back(Triangle(surfacePoints[i*4+j], surfacePoints[i*4+j+1], surfacePoints[(i+1)*4+j+1], uvPoints[i*4+j], uvPoints[i*4+j+1], uvPoints[(i+1)*4+j+1], 
