@@ -59,6 +59,10 @@ Vector3 Surface::computeNormal(float u, float v){
 	Curve cv = Curve(cp1, cp2, cp3, cp4);
 	Vector3 DPdv = cv.computeDecNorm(v);
 
+	if (DPdv.isDegenerate()) {
+		std::cout << "V DEGENERATE" << std::endl;
+	}
+
 
 	Curve cv1 = Curve(c1.getP1(), c2.getP1(), c3.getP1(), c4.getP1());
 	Curve cv2 = Curve(c1.getP2(), c2.getP2(), c3.getP2(), c4.getP2());
@@ -72,6 +76,10 @@ Vector3 Surface::computeNormal(float u, float v){
 
 	Curve cu = Curve(cpv1, cpv2, cpv3, cpv4);
 	Vector3 DPdu = cu.computeDecNorm(u);
+
+	if (DPdu.isDegenerate()) {
+		std::cout << "U DEGENERATE" << std::endl;
+	}
 	// cout << "printing curve: \n";
 	// c.print();
 	// std::cout << "BEZIER RESULT: ";

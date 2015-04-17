@@ -67,3 +67,15 @@ void Vector3::print(){
 	std::cout << this->z;
 	std::cout << ")\n";
 }
+
+bool Vector3::isDegenerate() {
+	if (x == 0.0f) {
+		if (y == 0.0f) {
+			if (z == 0.0f) {
+				return true;
+			}
+		}
+	}
+
+	return false;
+}
