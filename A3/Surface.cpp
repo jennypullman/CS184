@@ -81,7 +81,7 @@ Vector3 Surface::computeNormal(float u, float v){
 		// Curve cu1 = Curve(cpv11, cpv12, cpv13, cpv14);
 		// Vector3 DPdu1 = cu1.computeDecNorm(u);
 		Vector3 DPdu1 = c1.computeDecNorm(u);
-		DPdu1.print();
+		// DPdu1.print();
 
 		// Curve 2
 		// Point cpv21 = this->c1.computeDecasteljau(1);
@@ -97,12 +97,12 @@ Vector3 Surface::computeNormal(float u, float v){
 		// Curve cu2 = Curve(cpv21, cpv22, cpv23, cpv24);
 		// Vector3 DPdu2 = cu2.computeDecNorm(u);
 		Vector3 DPdu2 = c2.computeDecNorm(u);
-		DPdu2.print();
+		// DPdu2.print();
 
 		// return
 		// Vector3::cross(DPdu1, DPdu2).print();
 		// Vector3::cross(DPdu2, DPdu1).print();
-		Vector3::cross(DPdu1, DPdu2).print();
+		// Vector3::cross(DPdu1, DPdu2).print();
 		return Vector3::cross(DPdu1, DPdu2);
 	}
 
