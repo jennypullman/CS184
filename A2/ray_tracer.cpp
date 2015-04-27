@@ -1315,33 +1315,22 @@ int do_ray_tracing() {
   // std::cout << "Shape: " << typeid(shape).name() << '\n';
 
   for (int i = 0; i < numPixels; i++){
-<<<<<<< HEAD
-   //std::cout << "pixelnum: " << i << ": ";
-=======
     // if (i >= 550000 && i < 551000) {
     //   PRINT = true;
     // } else {
     //   PRINT = false;
     // }
     if (PRINT) {std::cout << "pixelnum: " << i << ": ";}
->>>>>>> 65b95a6df0b92f9d7eadee2cbaaaf3d7ae2f060d
 
     //TO DO (lauren?)
     //get correct point through viewplane
     Point viewPoint = viewplane.getPixelCoords(i);
-<<<<<<< HEAD
-    //std::cout << "viewPoint X: " << viewPoint.getX() << ", Y:" << viewPoint.getY() << ", Z:" << viewPoint.getZ() << std::endl;
-    
-    // TODO semantics of ray definition
-    Ray viewRay = Ray(viewPoint.getX(), viewPoint.getY(), viewPoint.getZ(), viewPoint.getX()-camera.getX(), viewPoint.getY()-camera.getY(), viewPoint.getZ()-camera.getZ());
-    //std::cout << "viewRay X: " << viewRay.getDirectionX() << ", Y:" << viewRay.getDirectionY() << ", Z:" << viewRay.getDirectionZ() << std::endl;
-=======
+
     // std::cout << "viewPoint X: " << viewPoint.getX() << ", Y:" << viewPoint.getY() << ", Z:" << viewPoint.getZ() << std::endl;
     
     // TODO semantics of ray definition
     Ray viewRay = Ray(viewPoint.getX(), viewPoint.getY(), viewPoint.getZ(), viewPoint.getX()-camera.getX(), viewPoint.getY()-camera.getY(), viewPoint.getZ()-camera.getZ());
     // std::cout << "viewRay X: " << viewRay.getDirectionX() << ", Y:" << viewRay.getDirectionY() << ", Z:" << viewRay.getDirectionZ() << std::endl;
->>>>>>> 65b95a6df0b92f9d7eadee2cbaaaf3d7ae2f060d
 
     //call follow_ray with 5 as recursive depth
     Color pixelColor = follow_ray(viewRay, 5);

@@ -23,15 +23,7 @@ float cx, float cy, float cz, float pxx,
 	this->pzz = pzz;*/
 
 Ellipsoid::Ellipsoid(Material material, Transformation trans, float cx, float cy, float cz, float r){
-<<<<<<< HEAD
-	Transformation transformToUnit = Transformation(cx, cy, cz, 't');
-  	transformToUnit = Transformation::transformMultiply(transformToUnit, trans);
-  	Transformation scale = Transformation(r, r, r, 's');
-  	transformToUnit = Transformation::transformMultiply(transformToUnit, scale);
-	this->transformation = transformToUnit;
-	Point center = Transformation::transformPoint(trans, Point(cx, cy, cz));
-	center = Transformation::transformPoint(scale, center);
-=======
+
 	Transformation transformFromUnit = Transformation(cx, cy, cz, 't');
 	Point center = Point(0,0,0);
 	center = Transformation::transformPoint(trans, center);
@@ -43,7 +35,7 @@ Ellipsoid::Ellipsoid(Material material, Transformation trans, float cx, float cy
   	//transformFromUnit = Transformation::transformMultiply(tmp, transformFromUnit);
 	this->transformation = transformFromUnit;
 	// Point center = Transformation::transformPoint(transformFromUnit, Point(0, 0, 0));
->>>>>>> 65b95a6df0b92f9d7eadee2cbaaaf3d7ae2f060d
+
 	this->material = material;
 	this->cx = center.getX();
 	this->cy = center.getY();
@@ -237,18 +229,13 @@ Point Ellipsoid::getMostRecentHitPoint(){
 }
 
 Vector3 Ellipsoid::getNormalAtPoint(Point pnt){
-<<<<<<< HEAD
-	Vector3 normal = Vector3(pnt.getX(), pnt.getY(), pnt.getZ());
-	
-	//normal = Transformation::vectorMultiply(this->transformation, normal);
-=======
+
 	pnt = Transformation::transformPoint(inverseTransformation, pnt);
 	// Vector3 normal = Vector3(pnt.getX()-this->cx, pnt.getY()-this->cy, pnt.getZ()-this->cz);
 	Vector3 normal = Vector3(pnt.getX(), pnt.getY(), pnt.getZ());
 	// std::cout << cx << ", " << cy << ", " << cz << std::endl;
 		
 	// normal = Transformation::vectorMultiply(this->transformation, normal);
->>>>>>> 65b95a6df0b92f9d7eadee2cbaaaf3d7ae2f060d
 	normal = Transformation::vectorMultiply(Transformation::getTranspose(this->inverseTransformation), normal);
 	// normal = Transformation::vectorMultiply(Transformation::getTranspose(this->transformation), normal);
 	
