@@ -1,0 +1,7 @@
+Image 3 of 5 showing our ray tracer handles reflections.
+
+This image is of three different colored shiny spheres, centered at the same point along the z-axis, over and in front of diffuse planes.  All surfaces are reflective.  The scene is under a white directional light pointing down the y- and z-axes.  The rendered image correctly shows that every object reflects onto every other object in the scene.
+
+Time to render: 3 seconds.
+
+Command line:  ./as1 examples/input-20

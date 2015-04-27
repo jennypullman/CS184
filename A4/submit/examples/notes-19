@@ -1,0 +1,7 @@
+Image 2 of 5 showing our ray tracer handles reflections.
+
+This image is of seven different reflective spheres placed in the shape of a flower and under a white directional light pointing down the z-axis.  The pink sphers (leaves) are the same size as the yellow sphere, but they are placed farther down the z-axis.  The rendered image correctly shows that the pink spheres reflect onto each other and the yellow sphere, while the yellow sphere does not reflect onto the pink spheres because it is in front of them.  
+
+Time to render: 19 seconds.
+
+Command line:  ./as1 examples/input-19

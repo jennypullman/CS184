@@ -1,0 +1,7 @@
+Image 2 of 2 showing our ray tracer handles shadows, spheres, and polygons.
+
+This image is of three different colored shiny spheres, centered at the same point along the z-axis, over a diffuse plane.  The scene is under a white directional light pointing down the y- and z-axes.  The rendered image correctly shows shadows on the plane below the spheres that are offset according to their y-positions.
+
+Time to render: 2 seconds.
+
+Command line:  ./as1 examples/input-17
