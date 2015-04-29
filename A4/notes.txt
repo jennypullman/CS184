@@ -1,0 +1,8 @@
+* first sphere is the closest to origin, then last sphere will have the endpoint
+* xfs applies until a new one is seen
+* no xft, xfr, or xfz
+
+* every ellipse/limb has a left joint who's center it pivots around
+
+*every ellipsoid has a theta
+*theta is different from the transformation since the transformation is only used for drawing (intersections)

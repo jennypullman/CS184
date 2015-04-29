@@ -10,8 +10,8 @@ endif
 	
 RM = /bin/rm -f 
 all: main 
-main: Color.o Point.o Vertex.o ViewPlane.o Material.o Ray.o Camera.o Vector3.o Transformation.o Image.o Light.o AmbientLight.o PointLight.o DirectedLight.o Shape.o Triangle.o Polygon.o Ellipsoid.o ray_tracer.o 
-	$(CC) $(CFLAGS) -o as1 Color.o Point.o Vertex.o ViewPlane.o Vector3.o Ray.o Camera.o Transformation.o Material.o Image.o Light.o AmbientLight.o PointLight.o DirectedLight.o Shape.o Triangle.o Polygon.o Ellipsoid.o ray_tracer.o $(LDFLAGS)
+main: Color.o Point.o Vertex.o ViewPlane.o Material.o Ray.o Camera.o Vector3.o Transformation.o Image.o Light.o AmbientLight.o PointLight.o DirectedLight.o Shape.o Triangle.o Polygon.o Ellipsoid.o kinematics_solver.o 
+	$(CC) $(CFLAGS) -o as1 Color.o Point.o Vertex.o ViewPlane.o Vector3.o Ray.o Camera.o Transformation.o Material.o Image.o Light.o AmbientLight.o PointLight.o DirectedLight.o Shape.o Triangle.o Polygon.o Ellipsoid.o kinematics_solver.o $(LDFLAGS)
 Image.o: Image.cpp
 	$(CC) $(CFLAGS) -c Image.cpp -o Image.o
 Color.o: Color.cpp
@@ -48,8 +48,8 @@ DirectedLight.o: DirectedLight.cpp
 	$(CC) $(CFLAGS) -c DirectedLight.cpp -o DirectedLight.o
 Shape.o: Shape.cpp
 	$(CC) $(CFLAGS) -c Shape.cpp -o Shape.o
-ray_tracer.o: ray_tracer.cpp
-	$(CC) -std=c++11 $(CFLAGS) -c ray_tracer.cpp -o ray_tracer.o
+kinematics_solver.o: kinematics_solver.cpp
+	$(CC) -std=c++11 $(CFLAGS) -c kinematics_solver.cpp -o kinematics_solver.o
 clean: 
 	$(RM) *.o as1
  

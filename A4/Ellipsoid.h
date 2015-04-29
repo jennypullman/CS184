@@ -5,7 +5,7 @@ class Ellipsoid: public Shape{
 public: 
 	Ellipsoid();
 	Ellipsoid(Material material, Transformation transformation, 
-		float cx, float cy, float cz, float radius);
+		float radius, float xRadius, bool isBallJoint);
 
 	//instance methods
 	Material getMaterial();
@@ -14,6 +14,20 @@ public:
 	float getCenterY();
 	float getCenterZ();
 	float getOriginalRadius();
+	void setLeft(Ellipsoid* jnt);
+	void setRight(Ellipsoid* jnt);
+	bool isJoint();
+	Ellipsoid* getLeft();
+	Ellipsoid* getRight();
+	float getXRadius();
+	void updateTransformation(Transformation trans);
+	void revertTransformation();
+
+	void setTheta(float thetaX, float thetaY, float thetaZ);
+	float getThetaX();
+	float getThetaY();
+	float getThetaZ();
+
 	Point getMostRecentHitPoint();
 	Vector3 getNormalAtPoint(Point pnt);
 	void print();
@@ -24,7 +38,13 @@ private:
 	float cy;		// Center y
 	float cz;		// Center z
 	float radius;
+	float thetaX, thetaY, thetaZ;
+	Transformation scaleTransformation;
 	Transformation transformation;
 	Transformation inverseTransformation;
-	Point mostRecentHitPoint;	
+	Point mostRecentHitPoint;
+	Ellipsoid* left;
+	Ellipsoid* right;
+	bool isBallJoint;
+	float xRadius;	
 };

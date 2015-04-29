@@ -22,6 +22,9 @@ float Vector3::getZ(){
 
 void Vector3::normalize() {
 	float magnitude = getMagnitude();
+	if (magnitude == 0.0) {
+		return;
+	}
 	x = x / magnitude;
 	y = y / magnitude;
 	z = z / magnitude;

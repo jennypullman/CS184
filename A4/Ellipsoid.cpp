@@ -2,7 +2,8 @@
 
 
 Ellipsoid::Ellipsoid(){
-
+	this->left = NULL;
+	this->right = right;
 }
 /*
 float cx, float cy, float cz, float pxx, 
@@ -22,16 +23,20 @@ float cx, float cy, float cz, float pxx,
 	this->pzy = pzy;
 	this->pzz = pzz;*/
 
-Ellipsoid::Ellipsoid(Material material, Transformation trans, float cx, float cy, float cz, float r){
-	Transformation transformFromUnit = Transformation(cx, cy, cz, 't');
+Ellipsoid::Ellipsoid(Material material, Transformation trans, float r, float xRadius, bool isBallJoint){
+	//Transformation transformFromUnit = Transformation(cx, cy, cz, 't');
+	this->thetaX = 0.0;
+	this->thetaY = 0.0;
+	this->thetaZ = 0.0;
 	Point center = Point(0,0,0);
-	center = Transformation::transformPoint(trans, center);
-	center = Transformation::transformPoint(transformFromUnit, center);
-  	transformFromUnit = Transformation::transformMultiply(transformFromUnit,trans);
+	//center = Transformation::transformPoint(trans, center);
+	//center = Transformation::transformPoint(transformFromUnit, center);
+  	Transformation transformFromUnit = trans;//Transformation::transformMultiply(transformFromUnit,trans);
   	transformFromUnit = Transformation::transformMultiply(transformFromUnit, Transformation(r, r, r, 's'));
   	//transformFromUnit = Transformation::transformMultiply(transformFromUnit, Transformation(r, r, r, 's'));
   	//Transformation tmp = Transformation::transformMultiply(trans, Transformation(r, r, r, 's'));
   	//transformFromUnit = Transformation::transformMultiply(tmp, transformFromUnit);
+	this->scaleTransformation = transformFromUnit;
 	this->transformation = transformFromUnit;
 	// Point center = Transformation::transformPoint(transformFromUnit, Point(0, 0, 0));
 	this->material = material;
@@ -41,10 +46,67 @@ Ellipsoid::Ellipsoid(Material material, Transformation trans, float cx, float cy
 	this->radius = r;
 	this->inverseTransformation = Transformation::getInverse(transformation);
 	//inverseTransformation.print();
+	this->left = NULL;
+	this->right = NULL;
+	this->xRadius = xRadius;
+	this->isBallJoint = isBallJoint;
+}
+
+void Ellipsoid::setLeft(Ellipsoid* ellipsoid){
+	this->left = ellipsoid;
+}
+
+void Ellipsoid::setRight(Ellipsoid* ellipsoid){
+	this->right = ellipsoid;
+}
+
+bool Ellipsoid::isJoint(){
+	return this->isBallJoint;
+}
+
+Ellipsoid* Ellipsoid::getLeft(){
+	return this->left;
+}
+
+Ellipsoid* Ellipsoid::getRight(){
+	return this->right;
+}
+
+
+float Ellipsoid::getXRadius(){
+	return this->xRadius;
 }
 
 Material Ellipsoid::getMaterial(){
 	return this->material;
+}
+
+void Ellipsoid::setTheta(float thetaX, float thetaY, float thetaZ){
+	this->thetaX = thetaX;
+	this->thetaY = thetaY;
+	this->thetaZ = thetaZ;
+}
+
+float Ellipsoid::getThetaX(){
+	return this->thetaX;
+}
+
+float Ellipsoid::getThetaY(){
+	return this->thetaY;
+}
+
+float Ellipsoid::getThetaZ(){
+	return this->thetaZ;
+}
+
+void Ellipsoid::updateTransformation(Transformation trans){
+	this->transformation = Transformation::transformMultiply(trans, this->transformation);
+	this->inverseTransformation = Transformation::getInverse(this->transformation);
+}
+
+void Ellipsoid::revertTransformation(){
+	this->transformation = this->scaleTransformation;
+	this->inverseTransformation = Transformation::getInverse(this->transformation);
 }
 
 float Ellipsoid::hit(Ray ray){

@@ -5,13 +5,34 @@ lta 1 1 1
 
 
 
-xfr 0 0 45
+xfr 0 0 15
+xft 1 0 0
 
+xfr 0 0 15
+xfs 1.5 1 1
 
+sph 0 0 0 1
+
+xfz
+
+xfr 0 0 15
+xfs 1.5 1 1
+
+sph 0 0 0 1
+
+xfz
+
+xfr 0 0 15
 xft 2 0 0
-xfr 0 0 45
 
+xfr 0 0 15
+xft 1 0 0
 
-xfs 2 1 1
+xfr 0 0 15
+xfs 1.5 1 1
+
+sph 0 0 0 1
+
+xfz
 
 sph 0 0 0 1
