@@ -5,7 +5,7 @@ ifeq ($(shell sw_vers 2>/dev/null | grep Mac | awk '{ print $$2}'),Mac)
     	-L/usr/local/Cellar/libpng/1.6.16/lib -lpng16 \
     	-lm -lstdc++
 else
-	LDFLAGS = -lpng
+	LDFLAGS = -lpng -O2
 endif
 	
 RM = /bin/rm -f 

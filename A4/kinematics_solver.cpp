@@ -22,6 +22,17 @@ using namespace std;
 //#include "Ray.h";
 #include "Ellipsoid.h"
 
+#include <Eigen/Dense>
+#include <Eigen/SVD>
+//using Eigen::MatrixXd;
+//using Eigen::JacobiSVD;
+using namespace Eigen;
+
+
+
+//#include <armadillo>
+//using namespace arma;
+
 
 struct Face {
   int vert1;
@@ -1020,6 +1031,7 @@ int do_ray_tracing() {
 }
 
 
+
 void angleTest(float thetaX, float thetaY, float thetaZ){
   Ellipsoid* currEllipsoid = lastEllipsoid;
   while(currEllipsoid != NULL){
@@ -1034,6 +1046,40 @@ void angleTest(float thetaX, float thetaY, float thetaZ){
   updateTranformations();
   do_ray_tracing();
 
+}
+
+void pinvTest(){
+  MatrixXd m(3,2);
+  m(0,0) = 3;
+  m(1,0) = 2.5;
+  m(2,0) = 10;
+  m(0,1) = -1;
+  m(1,1) = m(1,0) + m(0,1);
+  m(2,1) = 5;
+  cout << m << endl;
+  MatrixXd t = pinv(m);
+  cout << "inverse: " << t << endl;
+}
+
+MatrixXd pinv(MatrixXd A) {
+  float pinvtolerance = 0.000001;
+  JacobiSVD<MatrixXd> svd(A, ComputeFullU | ComputeFullV);
+  VectorXd diag = svd.singularValues();
+  int diagInvSize = svd.matrixU().outerSize();
+  MatrixXd diagInv(svd.matrixV().outerSize(), svd.matrixU().outerSize());
+  for (int j = 0; j < svd.matrixV().outerSize(); j++){
+    for (int i = 0; i < svd.matrixU().outerSize(); i++){
+      if (i>=diag.size()||
+        (diag(i) < pinvtolerance && diag(i) > -pinvtolerance)||
+        i != j){
+        diagInv(j,i) = 0.0;
+      } else {
+        diagInv(j,i) = 1.0/diag(i);
+      }
+    }
+  }
+  
+  return svd.matrixV()*(diagInv*svd.matrixU().transpose());
 }
 
 //****************************************************
@@ -1054,8 +1100,11 @@ int main(int argc, char *argv[]) {
     int success = do_ray_tracing();
     std::cout << "END do_ray_tracing: " << success << std::endl;
 
-    angleTest(0.0, 0.0, 15.0);
-    angleTest(0.0, 0.0, 30.0);
+    //angleTest(0.0, 0.0, 15.0);
+    //angleTest(0.0, 15.0, 30.0);    
+    //angleTest(0.0, 30.0, 45.0);
+    //angleTest(0.0, 45.0, 60.0);
+    //angleTest(0.0, 60.0, 90.0);
   }
 
   return 0;
