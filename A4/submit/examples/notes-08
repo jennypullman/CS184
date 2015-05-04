@@ -1,0 +1,7 @@
+Image 2 of 4 showing our ray tracer uses simple Phong shading.
+
+This image is of a green sphere with a specular component that reflects blue light under a white point light at (1,1,1).  The rendered sphere correctly has a small cyan specular contribution.
+
+Time to render: less than 1 second.
+
+Command line:  ./as1 examples/input-08

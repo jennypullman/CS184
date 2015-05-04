@@ -1,0 +1,12 @@
+* first sphere is the closest to origin, then last sphere will have the endpoint
+* xfs applies until a new one is seen
+* no xft, xfr, or xfz
+
+* every ellipse/limb has a left joint who's center it pivots around
+
+*every ellipsoid has a theta
+*theta is different from the transformation since the transformation is only used for drawing (intersections)
+
+*angleTest contains a sample of forward kinematics. The key points are that first, the thetas (x, y, z) must be stored in the ellipsoids (after determining them through inverse kinematics for example or just choosing the thetas in the case of angleTest). Then, updateTransformations must be called, because this gives the transformations that will create the end products of the ellipsoids (this way we can just call do_ray_tracing as usual). Finally we call do_ray_tracing. This is more brute force, as in no calculations are ever saved, so it is a bit slow.
+
+* pinv takes in a MatrixXd (which is a matrix of size X), and returns a new matrix that is its pseudoinverse. I tested this a little bit by comparing solutions to wolfram alpha so it should be fine.

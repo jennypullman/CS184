@@ -45,8 +45,8 @@ list<Polygon> polygons;
 //list<Sphere> spheres;
 list<Ellipsoid> ellipsoids;
 list<Shape*> shapes;
-int pixelsV = 1000; // Default value, TODO allow to be overridden by arguments
-int pixelsH = 1000; // Default value, TODO allow to be overridden by arguments
+int pixelsV = 100; // Default value, TODO allow to be overridden by arguments
+int pixelsH = 100; // Default value, TODO allow to be overridden by arguments
 // int pixelsV = 5; // Default value, TODO allow to be overridden by arguments
 // int pixelsH = 5; // Default value, TODO allow to be overridden by arguments
 ViewPlane viewplane;
@@ -1325,6 +1325,7 @@ int do_ray_tracing() {
     //TO DO (lauren?)
     //get correct point through viewplane
     Point viewPoint = viewplane.getPixelCoords(i);
+
     // std::cout << "viewPoint X: " << viewPoint.getX() << ", Y:" << viewPoint.getY() << ", Z:" << viewPoint.getZ() << std::endl;
     
     // TODO semantics of ray definition

@@ -1,0 +1,9 @@
+Lauren Speers cs184-cf
+Jenny Pullman cs184-cg
+
+Linux (Ubuntu)
+Our code was submitted by Lauren Speers (-cf) on hive3.cs.berkeley.edu.  It runs on this server.
+
+Our image, input, notes, and obj files can be found in the examples/ directory.
+
+Each run of the program writes a 1000x1000 pixel image to the file "outImg.png."
