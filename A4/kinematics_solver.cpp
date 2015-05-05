@@ -500,10 +500,17 @@ void handleXfz(){
 
 MatrixXd calculateJacobian() {
 
+  // get current thetas
+  // call calcEndPoint to estimate partial derivates for jacobian
+
   return MatrixXd();
 }
 
 void calculateAngles(Point target, MatrixXd j) {
+
+  // calculate inverse of jacobian
+  // get current thetas
+  // use netwon's method (currently described in notes) to update thetas
 
 }
 
