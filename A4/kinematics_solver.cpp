@@ -1048,18 +1048,6 @@ void angleTest(float thetaX, float thetaY, float thetaZ){
 
 }
 
-void pinvTest(){
-  MatrixXd m(3,2);
-  m(0,0) = 3;
-  m(1,0) = 2.5;
-  m(2,0) = 10;
-  m(0,1) = -1;
-  m(1,1) = m(1,0) + m(0,1);
-  m(2,1) = 5;
-  cout << m << endl;
-  MatrixXd t = pinv(m);
-  cout << "inverse: " << t << endl;
-}
 
 MatrixXd pinv(MatrixXd A) {
   float pinvtolerance = 0.000001;
@@ -1080,6 +1068,19 @@ MatrixXd pinv(MatrixXd A) {
   }
   
   return svd.matrixV()*(diagInv*svd.matrixU().transpose());
+}
+
+void pinvTest(){
+  MatrixXd m(3,2);
+  m(0,0) = 3;
+  m(1,0) = 2.5;
+  m(2,0) = 10;
+  m(0,1) = -1;
+  m(1,1) = m(1,0) + m(0,1);
+  m(2,1) = 5;
+  cout << m << endl;
+  MatrixXd t = pinv(m);
+  cout << "inverse: " << t << endl;
 }
 
 //****************************************************
