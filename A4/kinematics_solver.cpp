@@ -498,6 +498,15 @@ void handleXfz(){
   curTransform = Transformation();
 }
 
+/* TODO JENNY calculate F
+*/
+Point calcEndPoint(MatrixXd theta) {
+  // theta is a matrix with n rows and 3 columns, where n is the number of joints
+  // the Point object returned holds the point the arm points to when transformed according to theta
+
+  return Point();
+}
+
 /*
 * updateTransformations creates rotation transformations 
 * out of the thetas stored in each ellipsoid. That is, the 
