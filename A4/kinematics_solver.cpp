@@ -498,6 +498,15 @@ void handleXfz(){
   curTransform = Transformation();
 }
 
+MatrixXd calculateJacobian() {
+
+  return MatrixXd();
+}
+
+void calculateAngles(Point target, MatrixXd j) {
+
+}
+
 /* TODO JENNY calculate F
 */
 Point calcEndPoint(MatrixXd theta) {
@@ -1112,9 +1121,29 @@ int main(int argc, char *argv[]) {
     processArgs(argc, argv);
     std::cout << "END processArgs" << std::endl;
 
-    std::cout << "START do_ray_tracing" << std::endl;
-    int success = do_ray_tracing();
-    std::cout << "END do_ray_tracing: " << success << std::endl;
+    list<Point> curve;
+
+    // TODO define curve
+
+    curve.push_back(Point(18.0, 0.0, 0.0));
+
+    for (Point target : curve) {
+
+      MatrixXd jacobian = calculateJacobian(); // calculate Jacobian based on current location of arm
+      calculateAngles(target, jacobian); // update all Ellipse objects so that angles get arm as close to target as possible
+
+      updateTranformations();
+
+      // TODO change filename for every timestep ?
+
+      std::cout << "START do_ray_tracing" << std::endl;
+      int success = do_ray_tracing();
+      std::cout << "END do_ray_tracing: " << success << std::endl;
+    }
+
+    // std::cout << "START do_ray_tracing" << std::endl;
+    // int success = do_ray_tracing();
+    // std::cout << "END do_ray_tracing: " << success << std::endl;
 
     //angleTest(0.0, 0.0, 15.0);
     //angleTest(0.0, 15.0, 30.0);    
