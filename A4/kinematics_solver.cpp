@@ -587,10 +587,55 @@ MatrixXd calculateJacobian() {
 
 void calculateAngles(Point target, MatrixXd j) {
 
+  float epsilon = 0.0001;
+
   // calculate inverse of jacobian
-  // jInv = 
+  MatrixXd jInv = pinv(j);
+
   // get current thetas
-  // use netwon's method (currently described in notes) to update thetas
+  // std::cout << "num ellipsoids: " << ellipsoids.size() << std::endl;
+  int row = ellipsoids.size()/2; // number of arm segments
+  int col = 3; // rx, ry, rz
+  MatrixXd theta(row, col);
+
+  int index = 0;
+
+  Ellipsoid* currEllipsoid = lastEllipsoid;
+  while(currEllipsoid->getLeft() != NULL){
+    if (!currEllipsoid->isJoint()) {
+      theta(index, 0) = currEllipsoid->getThetaX();
+      theta(index, 1) = currEllipsoid->getThetaY();
+      theta(index, 2) = currEllipsoid->getThetaZ();
+      index++;
+    }
+    currEllipsoid = currEllipsoid->getLeft();
+  }
+
+  // use iterative algorithm from piazza to update thetas - newton's method doesn't seem to work with exp. maps
+  // 1. Initialize all rotations ri=0. 
+  // TODO make sure it is okay to skip this
+
+  // 2. Find the system end effector pe. Check if ||pe−g||<ϵ. If yes, we are done. Else continue to step 3.
+  // int iter = 0;
+  // int iterMax = 100;
+
+  // Point endEffector;
+  // while(iter < iterMax){
+  //   endEffector = calcEndPoint(theta);
+  //   if (target.distToPt(endEffector) < epsilon) {
+  //     updateAngles(theta);
+  //     return;
+  //   }
+
+  //   // update
+    
+  // } 
+
+
+
+  // 3. Find the system Jacobian (discussed below) J and its pseudo inverse J+.
+  // 4. Find the change in rotation dr=J+×λ(g−pe) for some positive step size λ.
+  // 5. Update all rotations ri using dr. Find pi and render the system in OpenGL. Go to step 2.
 
 }
 
