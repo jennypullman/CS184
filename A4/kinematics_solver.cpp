@@ -498,20 +498,27 @@ void handleXfz(){
   curTransform = Transformation();
 }
 
-MatrixXd calculateJacobian() {
 
-  // get current thetas
-  // call calcEndPoint to estimate partial derivates for jacobian
 
-  return MatrixXd();
-}
-
-void calculateAngles(Point target, MatrixXd j) {
-
-  // calculate inverse of jacobian
-  // get current thetas
-  // use netwon's method (currently described in notes) to update thetas
-
+MatrixXd pinv(MatrixXd A) {
+  float pinvtolerance = 0.000001;
+  JacobiSVD<MatrixXd> svd(A, ComputeFullU | ComputeFullV);
+  VectorXd diag = svd.singularValues();
+  int diagInvSize = svd.matrixU().outerSize();
+  MatrixXd diagInv(svd.matrixV().outerSize(), svd.matrixU().outerSize());
+  for (int j = 0; j < svd.matrixV().outerSize(); j++){
+    for (int i = 0; i < svd.matrixU().outerSize(); i++){
+      if (i>=diag.size()||
+        (diag(i) < pinvtolerance && diag(i) > -pinvtolerance)||
+        i != j){
+        diagInv(j,i) = 0.0;
+      } else {
+        diagInv(j,i) = 1.0/diag(i);
+      }
+    }
+  }
+  
+  return svd.matrixV()*(diagInv*svd.matrixU().transpose());
 }
 
 /* TODO JENNY calculate F
@@ -521,6 +528,70 @@ Point calcEndPoint(MatrixXd theta) {
   // the Point object returned holds the point the arm points to when transformed according to theta
 
   return Point();
+}
+
+MatrixXd calculateJacobian() {
+
+  // get current thetas
+  // std::cout << "num ellipsoids: " << ellipsoids.size() << std::endl;
+  int row = ellipsoids.size()/2; // number of arm segments
+  int col = 3; // rx, ry, rz
+  MatrixXd theta(row, col);
+
+  int index = 0;
+
+  Ellipsoid* currEllipsoid = lastEllipsoid;
+  while(currEllipsoid->getLeft() != NULL){
+    if (!currEllipsoid->isJoint()) {
+      theta(index, 0) = currEllipsoid->getThetaX();
+      theta(index, 1) = currEllipsoid->getThetaY();
+      theta(index, 2) = currEllipsoid->getThetaZ();
+      index++;
+    }
+    currEllipsoid = currEllipsoid->getLeft();
+  }
+
+  float epsilon = 0.0001;
+  float denom = 2*epsilon;
+
+  MatrixXd jacob(col, row*col); // jacobian has 3 rows and 3*n columns, where n is number of ellipsoids
+  // call calcEndPoint to estimate partial derivates for jacobian
+  for (int r = 0; r < row; r++) {
+    for (int c = 0; c < col; c++) {
+      int c_index = r*col + c; // corresponding column in jacobian
+
+      
+      // peturb specific theta to be less
+      theta(r,c) = theta(r,c) - epsilon;
+      Point pL = calcEndPoint(theta);
+
+      // peturb specific theta to be more
+      theta(r,c) = theta(r,c) + 2*epsilon;
+      Point pR = calcEndPoint(theta);
+
+      theta(r,c) = theta(r,c) - epsilon; // return theta to initial value
+      
+      // look at change in end point to estimate derivate
+      float derivativeX = (pR.getX()-pL.getX())/denom;
+      float derivativeY = (pR.getY()-pL.getY())/denom;
+      float derivativeZ = (pR.getZ()-pL.getZ())/denom;
+
+      jacob(0, c_index) = derivativeX;
+      jacob(1, c_index) = derivativeY;
+      jacob(2, c_index) = derivativeZ;
+    }
+  }
+
+  return jacob;
+}
+
+void calculateAngles(Point target, MatrixXd j) {
+
+  // calculate inverse of jacobian
+  // jInv = 
+  // get current thetas
+  // use netwon's method (currently described in notes) to update thetas
+
 }
 
 /*
@@ -1080,27 +1151,6 @@ void angleTest(float thetaX, float thetaY, float thetaZ){
 
 }
 
-MatrixXd pinv(MatrixXd A) {
-  float pinvtolerance = 0.000001;
-  JacobiSVD<MatrixXd> svd(A, ComputeFullU | ComputeFullV);
-  VectorXd diag = svd.singularValues();
-  int diagInvSize = svd.matrixU().outerSize();
-  MatrixXd diagInv(svd.matrixV().outerSize(), svd.matrixU().outerSize());
-  for (int j = 0; j < svd.matrixV().outerSize(); j++){
-    for (int i = 0; i < svd.matrixU().outerSize(); i++){
-      if (i>=diag.size()||
-        (diag(i) < pinvtolerance && diag(i) > -pinvtolerance)||
-        i != j){
-        diagInv(j,i) = 0.0;
-      } else {
-        diagInv(j,i) = 1.0/diag(i);
-      }
-    }
-  }
-  
-  return svd.matrixV()*(diagInv*svd.matrixU().transpose());
-}
-
 void pinvTest(){
   MatrixXd m(3,2);
   m(0,0) = 3;
@@ -1136,8 +1186,13 @@ int main(int argc, char *argv[]) {
 
     for (Point target : curve) {
 
+      std::cout << "START calculateJacobian" << std::endl;
       MatrixXd jacobian = calculateJacobian(); // calculate Jacobian based on current location of arm
+      std::cout << "END calculateJacobian" << std::endl;
+      
+      std::cout << "START calculateAngles" << std::endl;
       calculateAngles(target, jacobian); // update all Ellipse objects so that angles get arm as close to target as possible
+      std::cout << "END calculateAngles" << std::endl;
 
       updateTranformations();
 
