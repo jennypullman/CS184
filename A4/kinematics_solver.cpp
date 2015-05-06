@@ -539,17 +539,17 @@ Point calcEndPoint(MatrixXd theta) {
   }
 
 
-  Transformation totalTransform = Transformation(currEllipsoid->getXRadius(), 0.0, 0.0, 't');
+  Transformation totalTransform = Transformation();//Transformation(currEllipsoid->getXRadius(), 0.0, 0.0, 't');
 
   currEllipsoid = currEllipsoid->getRight();
 
   for (int i = 0; i < theta.innerSize(); i++){
     Transformation rotation = Transformation(theta(i,0), theta(i,1), 
       theta(i,2), 'r');
-    float currLength = 2*currEllipsoid->getXRadius();
+    float currLength = currEllipsoid->getLeft()->getXRadius()+2*currEllipsoid->getXRadius();
     currEllipsoid = currEllipsoid->getRight();
     if (currEllipsoid != NULL){
-      currLength += 2*currEllipsoid->getXRadius();
+      currLength += currEllipsoid->getXRadius();
       currEllipsoid = currEllipsoid->getRight();
     }
     Transformation translate = Transformation(currLength, 0.0, 0.0, 't');
@@ -660,9 +660,9 @@ void calculateAngles(Point target, MatrixXd j) {
 
   // 2. Find the system end effector pe. Check if ||pe−g||<ϵ. If yes, we are done. Else continue to step 3.
   int iter = 0;
-  int iterMax = 100;
+  int iterMax = 1000;
 
-  float lambda = 0.1;
+  float lambda = 0.01;
 
   Point endEffector;
   while(iter < iterMax){
@@ -728,7 +728,7 @@ void updateTranformations(){
   }
 
 
-  Transformation totalTransform = Transformation(currEllipsoid->getXRadius(), 0.0, 0.0, 't');
+  Transformation totalTransform = Transformation();//Transformation(currEllipsoid->getXRadius(), 0.0, 0.0, 't');
 
   currEllipsoid = currEllipsoid->getRight();
 
@@ -739,7 +739,7 @@ void updateTranformations(){
     Transformation rotation = Transformation(currEllipsoid->getThetaX(), 
       currEllipsoid->getThetaY(), currEllipsoid->getThetaZ(), 'r');
 
-    Transformation translate = Transformation(currEllipsoid->getXRadius(), 0.0, 0.0, 't');
+    Transformation translate = Transformation(currEllipsoid->getLeft()->getXRadius()+currEllipsoid->getXRadius(), 0.0, 0.0, 't');
     totalTransform = Transformation::transformMultiply(totalTransform, rotation);
     totalTransform = Transformation::transformMultiply(totalTransform, translate);
     currEllipsoid->updateTransformation(totalTransform);
@@ -749,7 +749,7 @@ void updateTranformations(){
       if (!currEllipsoid->getRight()->isJoint()){
         cout << "HOLY CRAP WE HAVE A PROBLEM. NO JOINT TO THE SEGMENT\n";
       }
-      translate = Transformation(currEllipsoid->getXRadius()*2+currEllipsoid->getRight()->getXRadius(), 
+      translate = Transformation(currEllipsoid->getLeft()->getXRadius()+currEllipsoid->getXRadius()*2+currEllipsoid->getRight()->getXRadius(), 
         0.0, 0.0, 't');
       tmpTransform = Transformation::transformMultiply(tmpTransform, rotation);
       tmpTransform = Transformation::transformMultiply(tmpTransform, translate);
@@ -757,8 +757,9 @@ void updateTranformations(){
       currEllipsoid->updateTransformation(tmpTransform);
 
     }
-    translate = Transformation(currEllipsoid->getXRadius(), 0.0, 0.0, 't');
-    totalTransform = Transformation::transformMultiply(tmpTransform, translate);
+    //translate = Transformation(currEllipsoid->getXRadius(), 0.0, 0.0, 't');
+    //totalTransform = Transformation::transformMultiply(tmpTransform, translate);
+    totalTransform = tmpTransform;
     currEllipsoid = currEllipsoid->getRight();
   }
 }
@@ -1293,7 +1294,7 @@ int main(int argc, char *argv[]) {
     curve.push_back(Point(18.0, 18.0, 0.0));
     curve.push_back(Point(10.0, 20.0, 0.0));
     curve.push_back(Point(0.0, 20.0, 0.0));
-
+    curve.push_back(Point(-18.0, -18.0, 0.0));
 
 
     for (Point target : curve) {
