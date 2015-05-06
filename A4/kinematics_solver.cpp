@@ -1289,6 +1289,10 @@ int main(int argc, char *argv[]) {
     // TODO define curve
 
     curve.push_back(Point(18.0, 18.0, 0.0));
+    curve.push_back(Point(10.0, 20.0, 0.0));
+    curve.push_back(Point(0.0, 20.0, 0.0));
+
+
 
     for (Point target : curve) {
 
