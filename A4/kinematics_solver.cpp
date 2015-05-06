@@ -662,6 +662,8 @@ void calculateAngles(Point target, MatrixXd j) {
   int iter = 0;
   int iterMax = 100;
 
+  float lambda = 0.1;
+
   Point endEffector;
   while(iter < iterMax){
     endEffector = calcEndPoint(theta);
@@ -675,9 +677,9 @@ void calculateAngles(Point target, MatrixXd j) {
     MatrixXd jacInv = pinv(jac);
 
     MatrixXd delta(3, 1);
-    delta(0,0) = target.getX() - endEffector.getX();
-    delta(1,0) = target.getY() - endEffector.getY();
-    delta(2,0) = target.getZ() - endEffector.getZ();
+    delta(0,0) = lambda*(target.getX() - endEffector.getX());
+    delta(1,0) = lambda*(target.getY() - endEffector.getY());
+    delta(2,0) = lambda*(target.getZ() - endEffector.getZ());
 
     MatrixXd dr = jacInv*delta;
 
