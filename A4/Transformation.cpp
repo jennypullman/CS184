@@ -50,9 +50,9 @@ Transformation::Transformation(float f1, float f2, float f3, char type){
 		this->matrix[15] = 1.0;
 	} else if (type == 'r'){
 		Vector3 rhat = Vector3(f1, f2, f3);
-		std::cout << "f1 = " << f1 << "\n";
-		std::cout << "f2 = " << f2 << "\n";
-		std::cout << "f3 = " << f3 << "\n";
+		// std::cout << "f1 = " << f1 << "\n";
+		// std::cout << "f2 = " << f2 << "\n";
+		// std::cout << "f3 = " << f3 << "\n";
 		float theta = rhat.getMagnitude();
 		if (theta == 0.0){
 			//TO DO
@@ -82,15 +82,15 @@ Transformation::Transformation(float f1, float f2, float f3, char type){
 		if ((cosTheta > 0.0 && cosTheta < thetaEpisilon) || (cosTheta < 0.0 || cosTheta > -thetaEpisilon)){
 			cosTheta = 0.0;
 		}*/
-		std::cout << "theta = " << theta << "\n";
+		// std::cout << "theta = " << theta << "\n";
 		rhat.normalize();
 		float rhatMatr[16] = {rhat.getX()*rhat.getX(), rhat.getX()*rhat.getY(), 
 			rhat.getX()*rhat.getZ(), 0.0, rhat.getX()*rhat.getY(), 
 			rhat.getY()*rhat.getY(), rhat.getY()*rhat.getZ(), 0.0, 
 			rhat.getX()*rhat.getZ(), rhat.getY()*rhat.getZ(), 
 			rhat.getZ()*rhat.getZ(), 0.0, 0.0, 0.0, 0.0, 0.0};
-		cout << "rhat getX^2 " << rhat.getX()*rhat.getX() << "\n";
-		cout << "rhatMatr0 " << rhatMatr[0] << "\n";
+		// cout << "rhat getX^2 " << rhat.getX()*rhat.getX() << "\n";
+		// cout << "rhatMatr0 " << rhatMatr[0] << "\n";
 
 		float rCrossMatr[16] = {0, -rhat.getZ(), rhat.getY(), 0.0, rhat.getZ(), 
 			0.0, -rhat.getX(), 0.0, -rhat.getY(), rhat.getX(), 0.0, 0.0, 

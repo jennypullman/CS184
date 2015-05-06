@@ -660,9 +660,9 @@ void calculateAngles(Point target, MatrixXd j) {
 
   // 2. Find the system end effector pe. Check if ||pe−g||<ϵ. If yes, we are done. Else continue to step 3.
   int iter = 0;
-  int iterMax = 1000;
+  int iterMax = 5000;
 
-  float lambda = 0.01;
+  float lambda = 0.001;
 
   Point endEffector;
   while(iter < iterMax){
