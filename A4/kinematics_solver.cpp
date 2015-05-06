@@ -614,6 +614,18 @@ MatrixXd calculateJacobian() {
   return jacob;
 }
 
+void updateAngles(MatrixXd theta) {  
+  int index = 0;
+  Ellipsoid* currEllipsoid = lastEllipsoid;
+  while(currEllipsoid->getLeft() != NULL){
+    if (!currEllipsoid->isJoint()) {
+      currEllipsoid->setTheta(theta(index, 0), theta(index, 1), theta(index, 2));
+      index++;
+    }
+    currEllipsoid = currEllipsoid->getLeft();
+  }
+}
+
 void calculateAngles(Point target, MatrixXd j) {
 
   float epsilon = 0.0001;
@@ -645,20 +657,38 @@ void calculateAngles(Point target, MatrixXd j) {
   // TODO make sure it is okay to skip this
 
   // 2. Find the system end effector pe. Check if ||pe−g||<ϵ. If yes, we are done. Else continue to step 3.
-  // int iter = 0;
-  // int iterMax = 100;
+  int iter = 0;
+  int iterMax = 100;
 
-  // Point endEffector;
-  // while(iter < iterMax){
-  //   endEffector = calcEndPoint(theta);
-  //   if (target.distToPt(endEffector) < epsilon) {
-  //     updateAngles(theta);
-  //     return;
-  //   }
+  Point endEffector;
+  while(iter < iterMax){
+    endEffector = calcEndPoint(theta);
+    if (target.distToPt(endEffector) < epsilon) {
+      // updateAngles(theta);
+      return;
+    }
 
-  //   // update
-    
-  // } 
+    // update theta
+    MatrixXd jac = calculateJacobian();
+    MatrixXd jacInv = pinv(jac);
+
+    MatrixXd delta(3, 1);
+    delta(0,0) = target.getX() - endEffector.getX();
+    delta(1,0) = target.getY() - endEffector.getY();
+    delta(2,0) = target.getZ() - endEffector.getZ();
+
+    MatrixXd dr = jacInv*delta;
+
+    for (int r = 0; r < row; r++) {
+      for (int c = 0; c < col; c++) {
+        theta(r,c) = theta(r,c) + dr(r*col + c);
+      }
+    }
+
+    updateAngles(theta);
+
+    iter++;
+  } 
 
 
 
@@ -1256,7 +1286,7 @@ int main(int argc, char *argv[]) {
 
     // TODO define curve
 
-    curve.push_back(Point(18.0, 0.0, 0.0));
+    curve.push_back(Point(18.0, 18.0, 0.0));
 
     for (Point target : curve) {
 
