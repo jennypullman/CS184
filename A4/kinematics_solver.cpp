@@ -22,8 +22,8 @@ using namespace std;
 //#include "Ray.h";
 #include "Ellipsoid.h"
 
-#include <Eigen/Dense>
-#include <Eigen/SVD>
+#include "Eigen/Dense"
+#include "Eigen/SVD"
 //using Eigen::MatrixXd;
 //using Eigen::JacobiSVD;
 using namespace Eigen;
@@ -498,7 +498,52 @@ void handleXfz(){
   curTransform = Transformation();
 }
 
+/* TODO JENNY calculate F
+*/
+Point calcEndPoint(MatrixXd theta) {
+  // theta is a matrix with n rows and 3 columns, where n is the number of joints
+  // the Point object returned holds the point the arm points to when transformed according to theta
 
+
+  Ellipsoid* currEllipsoid = lastEllipsoid;
+  
+  if (currEllipsoid == NULL){
+    return Point();
+  }
+
+  while(currEllipsoid->getLeft() != NULL){
+    currEllipsoid = currEllipsoid->getLeft();
+  }
+
+
+  Transformation totalTransform = Transformation(currEllipsoid->getXRadius(), 0.0, 0.0, 't');
+
+  currEllipsoid = currEllipsoid->getRight();
+
+  for (int i = 0; i < theta.innerSize(); i++){
+    Transformation rotation = Transformation(theta(i,0), theta(i,1), 
+      theta(i,2), 'r');
+    float currLength = 2*currEllipsoid->getXRadius();
+    currEllipsoid = currEllipsoid->getRight();
+    if (currEllipsoid != NULL){
+      currLength += 2*currEllipsoid->getXRadius();
+      currEllipsoid = currEllipsoid->getRight();
+    }
+    Transformation translate = Transformation(currLength, 0.0, 0.0, 't');
+    totalTransform = Transformation::transformMultiply(totalTransform, rotation);
+    totalTransform = Transformation::transformMultiply(totalTransform, translate);
+  }
+  return Transformation::transformPoint(totalTransform, Point(0.0, 0.0, 0.0));
+}
+
+/*
+* updateTransformations creates rotation transformations 
+* out of the thetas stored in each ellipsoid. That is, the 
+* ellipsoids should already have the updated thetas stored in them. 
+* This method just stores the final transformation for each 
+* ellipsoid in the ellipsoid, so that draw will be able to see the 
+* transformation.
+*/
 void updateTranformations(){
   if (lastEllipsoid->getLeft() != NULL){
     cout << "radii: " << lastEllipsoid->getXRadius() << " " << lastEllipsoid->getLeft()->getXRadius() << "\n";
@@ -1047,7 +1092,6 @@ void angleTest(float thetaX, float thetaY, float thetaZ){
   do_ray_tracing();
 
 }
-
 
 MatrixXd pinv(MatrixXd A) {
   float pinvtolerance = 0.000001;

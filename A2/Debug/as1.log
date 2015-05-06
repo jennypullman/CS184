@@ -1,93 +1,46 @@
-﻿Build started 3/11/2015 2:22:46 PM.
+﻿Build started 3/20/2015 9:25:11 PM.
      1>Project "C:\Users\jpleazy\Documents\cs184\cs184Code\CS184\A2\as1.vcxproj" on node 2 (Build target(s)).
      1>ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"glut-3.7.6-bin" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt DirectedLight.cpp Image.cpp PointLight.cpp Polygon.cpp Triangle.cpp ray_tracer.cpp
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\CL.exe /c /I"glut-3.7.6-bin" /ZI /nologo /W3 /WX- /Od /Oy- /D WIN32 /D _DEBUG /D _CONSOLE /D _UNICODE /D UNICODE /Gm /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /Fo"Debug\\" /Fd"Debug\vc120.pdb" /Gd /TP /analyze- /errorReport:prompt Color.cpp DirectedLight.cpp Image.cpp PointLight.cpp Polygon.cpp Triangle.cpp Vector3.cpp ray_tracer.cpp
          ray_tracer.cpp
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\ray_tracer.cpp(10): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\ray_tracer.cpp(11): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\triangle.h(1): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\triangle.h(2): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\ray_tracer.cpp(13): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\ray.h(1): error C2011: 'Ray' : 'class' type redefinition
-                 c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\ray.h(1) : see declaration of 'Ray'
-         PointLight.cpp
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\light.h(11): error C2146: syntax error : missing ';' before identifier 'getColor'
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\light.h(11): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\light.h(11): warning C4183: 'getColor': missing return type; assumed to be a member function returning 'int'
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\pointlight.h(8): error C2146: syntax error : missing ';' before identifier 'getColor'
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\pointlight.h(8): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\pointlight.h(8): warning C4183: 'getColor': missing return type; assumed to be a member function returning 'int'
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\pointlight.cpp(19): error C2143: syntax error : missing ';' before 'PointLight::getColor'
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\pointlight.cpp(19): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\pointlight.cpp(20): error C2064: term does not evaluate to a function taking 3 arguments
-         Image.cpp
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\image.h(7): error C2146: syntax error : missing ';' before identifier 'get_Color'
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\image.h(7): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\image.h(7): warning C4183: 'get_Color': missing return type; assumed to be a member function returning 'int'
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\image.h(8): error C2061: syntax error : identifier 'Color'
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\image.h(17): error C2143: syntax error : missing ';' before '*'
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\image.h(17): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\image.cpp(15): error C2065: 'rgb' : undeclared identifier
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\image.cpp(15): error C2061: syntax error : identifier 'Color'
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\image.cpp(24): error C2143: syntax error : missing ';' before 'Image::get_Color'
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\image.cpp(24): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\image.cpp(25): error C2065: 'rgb' : undeclared identifier
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\image.cpp(28): error C2061: syntax error : identifier 'Color'
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\image.cpp(29): error C2065: 'rgb' : undeclared identifier
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\image.cpp(29): error C2065: 'color' : undeclared identifier
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\image.cpp(86): error C2065: 'rgb' : undeclared identifier
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\image.cpp(86): error C2228: left of '.get_r' must have class/struct/union
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\image.cpp(87): error C2065: 'rgb' : undeclared identifier
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\image.cpp(87): error C2228: left of '.get_g' must have class/struct/union
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\image.cpp(88): error C2065: 'rgb' : undeclared identifier
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\image.cpp(88): error C2228: left of '.get_b' must have class/struct/union
-         DirectedLight.cpp
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\light.h(11): error C2146: syntax error : missing ';' before identifier 'getColor'
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\light.h(11): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\light.h(11): warning C4183: 'getColor': missing return type; assumed to be a member function returning 'int'
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\directedlight.h(8): error C2146: syntax error : missing ';' before identifier 'getColor'
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\directedlight.h(8): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\directedlight.h(8): warning C4183: 'getColor': missing return type; assumed to be a member function returning 'int'
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\directedlight.cpp(19): error C2143: syntax error : missing ';' before 'DirectedLight::getColor'
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\directedlight.cpp(19): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\directedlight.cpp(20): error C2064: term does not evaluate to a function taking 3 arguments
-         Generating Code...
-         Compiling...
-         Polygon.cpp
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\polygon.cpp(1): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\triangle.h(1): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\shape.h(10): error C2146: syntax error : missing ';' before identifier 'getColor'
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\shape.h(10): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\shape.h(10): warning C4183: 'getColor': missing return type; assumed to be a member function returning 'int'
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\triangle.h(2): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\triangle.h(10): error C2146: syntax error : missing ';' before identifier 'getColor'
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\triangle.h(10): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\triangle.h(10): warning C4183: 'getColor': missing return type; assumed to be a member function returning 'int'
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\polygon.h(9): error C2146: syntax error : missing ';' before identifier 'getColor'
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\polygon.h(9): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\polygon.h(9): warning C4183: 'getColor': missing return type; assumed to be a member function returning 'int'
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\polygon.cpp(21): error C2143: syntax error : missing ';' before 'Polygon::getColor'
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\polygon.cpp(21): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\polygon.cpp(22): error C2064: term does not evaluate to a function taking 3 arguments
-         Generating Code...
-         Compiling...
+     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\ray_tracer.cpp(165): warning C4305: '+=' : truncation from 'double' to 'float'
+     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\ray_tracer.cpp(166): warning C4305: '+=' : truncation from 'double' to 'float'
+     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\ray_tracer.cpp(190): warning C4305: '+=' : truncation from 'double' to 'float'
+     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\ray_tracer.cpp(191): warning C4305: '+=' : truncation from 'double' to 'float'
+     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\ray_tracer.cpp(215): warning C4305: 'argument' : truncation from 'double' to 'float'
+     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\ray_tracer.cpp(284): warning C4244: 'argument' : conversion from 'double' to 'int', possible loss of data
+     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\ray_tracer.cpp(645): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\ray_tracer.cpp(685): warning C4018: '<' : signed/unsigned mismatch
+     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\ray_tracer.cpp(780): warning C4244: 'argument' : conversion from 'float' to 'int', possible loss of data
+     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\ray_tracer.cpp(979): warning C4305: 'initializing' : truncation from 'double' to 'float'
+     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\ray_tracer.cpp(1241): warning C4244: 'argument' : conversion from 'double' to 'float', possible loss of data
+     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\ray_tracer.cpp(1080): warning C4101: 'lightHitTime' : unreferenced local variable
+         Vector3.cpp
          Triangle.cpp
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\triangle.cpp(1): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\triangle.h(1): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\shape.h(10): error C2146: syntax error : missing ';' before identifier 'getColor'
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\shape.h(10): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\shape.h(10): warning C4183: 'getColor': missing return type; assumed to be a member function returning 'int'
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\triangle.h(2): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\triangle.h(10): error C2146: syntax error : missing ';' before identifier 'getColor'
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\triangle.h(10): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\triangle.h(10): warning C4183: 'getColor': missing return type; assumed to be a member function returning 'int'
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\triangle.cpp(2): warning C4067: unexpected tokens following preprocessor directive - expected a newline
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\triangle.cpp(16): error C2143: syntax error : missing ';' before 'Triangle::getColor'
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\triangle.cpp(16): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
-     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\triangle.cpp(17): error C2064: term does not evaluate to a function taking 3 arguments
+     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\triangle.cpp(59): warning C4305: 'initializing' : truncation from 'double' to 'float'
+     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\triangle.cpp(158): warning C4305: 'initializing' : truncation from 'double' to 'float'
+         Polygon.cpp
+     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\polygon.cpp(23): warning C4305: 'initializing' : truncation from 'double' to 'float'
+         PointLight.cpp
+     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\pointlight.cpp(80): error C3861: 'max': identifier not found
+     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\pointlight.cpp(82): error C3861: 'max': identifier not found
+     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\pointlight.cpp(92): error C3861: 'max': identifier not found
+     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\pointlight.cpp(94): error C3861: 'max': identifier not found
+     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\pointlight.cpp(104): error C3861: 'max': identifier not found
+     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\pointlight.cpp(106): error C3861: 'max': identifier not found
+         Image.cpp
+     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\image.cpp(7): fatal error C1083: Cannot open include file: 'png.h': No such file or directory
+         DirectedLight.cpp
+     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\directedlight.cpp(84): error C3861: 'max': identifier not found
+     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\directedlight.cpp(86): error C3861: 'max': identifier not found
+     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\directedlight.cpp(96): error C3861: 'max': identifier not found
+     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\directedlight.cpp(98): error C3861: 'max': identifier not found
+     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\directedlight.cpp(108): error C3861: 'max': identifier not found
+     1>c:\users\jpleazy\documents\cs184\cs184code\cs184\a2\directedlight.cpp(110): error C3861: 'max': identifier not found
+         Color.cpp
          Generating Code...
      1>Done Building Project "C:\Users\jpleazy\Documents\cs184\cs184Code\CS184\A2\as1.vcxproj" (Build target(s)) -- FAILED.
 
 Build FAILED.
 
-Time Elapsed 00:00:03.30
+Time Elapsed 00:00:14.04
