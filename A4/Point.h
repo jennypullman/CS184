@@ -8,6 +8,8 @@ public:
 	float getY();
 	float getZ();
 
+	float distToPt(Point p);
+
 private:
 	float x;
 	float y;

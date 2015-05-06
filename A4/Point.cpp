@@ -1,4 +1,5 @@
 #include "Point.h"
+#include <cmath>
 
 Point::Point(){
 	this->x, this->y, this->z = 0.0;
@@ -20,4 +21,13 @@ float Point::getY(){
 
 float Point::getZ(){
 	return this->z;
+}
+
+float Point::distToPt(Point p) {
+	float diffX = (p.getX()-x);
+	float diffY = (p.getY()-y);
+	float diffZ = (p.getZ()-z);
+	float temp = diffX*diffX + diffY*diffY + diffZ*diffZ;
+
+	return sqrt(temp);
 }

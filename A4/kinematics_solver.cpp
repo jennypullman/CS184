@@ -498,6 +498,29 @@ void handleXfz(){
   curTransform = Transformation();
 }
 
+
+
+MatrixXd pinv(MatrixXd A) {
+  float pinvtolerance = 0.000001;
+  JacobiSVD<MatrixXd> svd(A, ComputeFullU | ComputeFullV);
+  VectorXd diag = svd.singularValues();
+  int diagInvSize = svd.matrixU().outerSize();
+  MatrixXd diagInv(svd.matrixV().outerSize(), svd.matrixU().outerSize());
+  for (int j = 0; j < svd.matrixV().outerSize(); j++){
+    for (int i = 0; i < svd.matrixU().outerSize(); i++){
+      if (i>=diag.size()||
+        (diag(i) < pinvtolerance && diag(i) > -pinvtolerance)||
+        i != j){
+        diagInv(j,i) = 0.0;
+      } else {
+        diagInv(j,i) = 1.0/diag(i);
+      }
+    }
+  }
+  
+  return svd.matrixV()*(diagInv*svd.matrixU().transpose());
+}
+
 /* TODO JENNY calculate F
 */
 Point calcEndPoint(MatrixXd theta) {
@@ -534,6 +557,115 @@ Point calcEndPoint(MatrixXd theta) {
     totalTransform = Transformation::transformMultiply(totalTransform, translate);
   }
   return Transformation::transformPoint(totalTransform, Point(0.0, 0.0, 0.0));
+}
+
+MatrixXd calculateJacobian() {
+
+  // get current thetas
+  // std::cout << "num ellipsoids: " << ellipsoids.size() << std::endl;
+  int row = ellipsoids.size()/2; // number of arm segments
+  int col = 3; // rx, ry, rz
+  MatrixXd theta(row, col);
+
+  int index = 0;
+
+  Ellipsoid* currEllipsoid = lastEllipsoid;
+  while(currEllipsoid->getLeft() != NULL){
+    if (!currEllipsoid->isJoint()) {
+      theta(index, 0) = currEllipsoid->getThetaX();
+      theta(index, 1) = currEllipsoid->getThetaY();
+      theta(index, 2) = currEllipsoid->getThetaZ();
+      index++;
+    }
+    currEllipsoid = currEllipsoid->getLeft();
+  }
+
+  float epsilon = 0.0001;
+  float denom = 2*epsilon;
+
+  MatrixXd jacob(col, row*col); // jacobian has 3 rows and 3*n columns, where n is number of ellipsoids
+  // call calcEndPoint to estimate partial derivates for jacobian
+  for (int r = 0; r < row; r++) {
+    for (int c = 0; c < col; c++) {
+      int c_index = r*col + c; // corresponding column in jacobian
+
+      
+      // peturb specific theta to be less
+      theta(r,c) = theta(r,c) - epsilon;
+      Point pL = calcEndPoint(theta);
+
+      // peturb specific theta to be more
+      theta(r,c) = theta(r,c) + 2*epsilon;
+      Point pR = calcEndPoint(theta);
+
+      theta(r,c) = theta(r,c) - epsilon; // return theta to initial value
+      
+      // look at change in end point to estimate derivate
+      float derivativeX = (pR.getX()-pL.getX())/denom;
+      float derivativeY = (pR.getY()-pL.getY())/denom;
+      float derivativeZ = (pR.getZ()-pL.getZ())/denom;
+
+      jacob(0, c_index) = derivativeX;
+      jacob(1, c_index) = derivativeY;
+      jacob(2, c_index) = derivativeZ;
+    }
+  }
+
+  return jacob;
+}
+
+void calculateAngles(Point target, MatrixXd j) {
+
+  float epsilon = 0.0001;
+
+  // calculate inverse of jacobian
+  MatrixXd jInv = pinv(j);
+
+  // get current thetas
+  // std::cout << "num ellipsoids: " << ellipsoids.size() << std::endl;
+  int row = ellipsoids.size()/2; // number of arm segments
+  int col = 3; // rx, ry, rz
+  MatrixXd theta(row, col);
+
+  int index = 0;
+
+  Ellipsoid* currEllipsoid = lastEllipsoid;
+  while(currEllipsoid->getLeft() != NULL){
+    if (!currEllipsoid->isJoint()) {
+      theta(index, 0) = currEllipsoid->getThetaX();
+      theta(index, 1) = currEllipsoid->getThetaY();
+      theta(index, 2) = currEllipsoid->getThetaZ();
+      index++;
+    }
+    currEllipsoid = currEllipsoid->getLeft();
+  }
+
+  // use iterative algorithm from piazza to update thetas - newton's method doesn't seem to work with exp. maps
+  // 1. Initialize all rotations ri=0. 
+  // TODO make sure it is okay to skip this
+
+  // 2. Find the system end effector pe. Check if ||pe−g||<ϵ. If yes, we are done. Else continue to step 3.
+  // int iter = 0;
+  // int iterMax = 100;
+
+  // Point endEffector;
+  // while(iter < iterMax){
+  //   endEffector = calcEndPoint(theta);
+  //   if (target.distToPt(endEffector) < epsilon) {
+  //     updateAngles(theta);
+  //     return;
+  //   }
+
+  //   // update
+    
+  // } 
+
+
+
+  // 3. Find the system Jacobian (discussed below) J and its pseudo inverse J+.
+  // 4. Find the change in rotation dr=J+×λ(g−pe) for some positive step size λ.
+  // 5. Update all rotations ri using dr. Find pi and render the system in OpenGL. Go to step 2.
+
 }
 
 /*
@@ -1093,27 +1225,6 @@ void angleTest(float thetaX, float thetaY, float thetaZ){
 
 }
 
-MatrixXd pinv(MatrixXd A) {
-  float pinvtolerance = 0.000001;
-  JacobiSVD<MatrixXd> svd(A, ComputeFullU | ComputeFullV);
-  VectorXd diag = svd.singularValues();
-  int diagInvSize = svd.matrixU().outerSize();
-  MatrixXd diagInv(svd.matrixV().outerSize(), svd.matrixU().outerSize());
-  for (int j = 0; j < svd.matrixV().outerSize(); j++){
-    for (int i = 0; i < svd.matrixU().outerSize(); i++){
-      if (i>=diag.size()||
-        (diag(i) < pinvtolerance && diag(i) > -pinvtolerance)||
-        i != j){
-        diagInv(j,i) = 0.0;
-      } else {
-        diagInv(j,i) = 1.0/diag(i);
-      }
-    }
-  }
-  
-  return svd.matrixV()*(diagInv*svd.matrixU().transpose());
-}
-
 void pinvTest(){
   MatrixXd m(3,2);
   m(0,0) = 3;
@@ -1141,9 +1252,34 @@ int main(int argc, char *argv[]) {
     processArgs(argc, argv);
     std::cout << "END processArgs" << std::endl;
 
-    std::cout << "START do_ray_tracing" << std::endl;
-    int success = do_ray_tracing();
-    std::cout << "END do_ray_tracing: " << success << std::endl;
+    list<Point> curve;
+
+    // TODO define curve
+
+    curve.push_back(Point(18.0, 0.0, 0.0));
+
+    for (Point target : curve) {
+
+      std::cout << "START calculateJacobian" << std::endl;
+      MatrixXd jacobian = calculateJacobian(); // calculate Jacobian based on current location of arm
+      std::cout << "END calculateJacobian" << std::endl;
+      
+      std::cout << "START calculateAngles" << std::endl;
+      calculateAngles(target, jacobian); // update all Ellipse objects so that angles get arm as close to target as possible
+      std::cout << "END calculateAngles" << std::endl;
+
+      updateTranformations();
+
+      // TODO change filename for every timestep ?
+
+      std::cout << "START do_ray_tracing" << std::endl;
+      int success = do_ray_tracing();
+      std::cout << "END do_ray_tracing: " << success << std::endl;
+    }
+
+    // std::cout << "START do_ray_tracing" << std::endl;
+    // int success = do_ray_tracing();
+    // std::cout << "END do_ray_tracing: " << success << std::endl;
 
     //angleTest(0.0, 0.0, 15.0);
     //angleTest(0.0, 15.0, 30.0);    
