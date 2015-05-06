@@ -568,13 +568,14 @@ MatrixXd calculateJacobian() {
   MatrixXd theta(row, col);
 
   int index = 0;
+  int indexMax = row-1;
 
   Ellipsoid* currEllipsoid = lastEllipsoid;
   while(currEllipsoid->getLeft() != NULL){
     if (!currEllipsoid->isJoint()) {
-      theta(index, 0) = currEllipsoid->getThetaX();
-      theta(index, 1) = currEllipsoid->getThetaY();
-      theta(index, 2) = currEllipsoid->getThetaZ();
+      theta(indexMax - index, 0) = currEllipsoid->getThetaX();
+      theta(indexMax - index, 1) = currEllipsoid->getThetaY();
+      theta(indexMax - index, 2) = currEllipsoid->getThetaZ();
       index++;
     }
     currEllipsoid = currEllipsoid->getLeft();
@@ -615,12 +616,12 @@ MatrixXd calculateJacobian() {
 }
 
 void updateAngles(MatrixXd theta) {  
-  int index = 0;
+  int index = ellipsoids.size()/2 - 1;
   Ellipsoid* currEllipsoid = lastEllipsoid;
   while(currEllipsoid->getLeft() != NULL){
     if (!currEllipsoid->isJoint()) {
       currEllipsoid->setTheta(theta(index, 0), theta(index, 1), theta(index, 2));
-      index++;
+      index--;
     }
     currEllipsoid = currEllipsoid->getLeft();
   }
@@ -640,13 +641,14 @@ void calculateAngles(Point target, MatrixXd j) {
   MatrixXd theta(row, col);
 
   int index = 0;
+  int indexMax = row-1;
 
   Ellipsoid* currEllipsoid = lastEllipsoid;
   while(currEllipsoid->getLeft() != NULL){
     if (!currEllipsoid->isJoint()) {
-      theta(index, 0) = currEllipsoid->getThetaX();
-      theta(index, 1) = currEllipsoid->getThetaY();
-      theta(index, 2) = currEllipsoid->getThetaZ();
+      theta(indexMax - index, 0) = currEllipsoid->getThetaX();
+      theta(indexMax - index, 1) = currEllipsoid->getThetaY();
+      theta(indexMax - index, 2) = currEllipsoid->getThetaZ();
       index++;
     }
     currEllipsoid = currEllipsoid->getLeft();
