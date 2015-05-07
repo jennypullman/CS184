@@ -1,3 +1,5 @@
+#include <iostream>
+
 class Point{
 public:
 	Point();
@@ -9,6 +11,7 @@ public:
 	float getZ();
 
 	float distToPt(Point p);
+	void print();
 
 private:
 	float x;

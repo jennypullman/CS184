@@ -12,3 +12,7 @@
 * pinv takes in a MatrixXd (which is a matrix of size X), and returns a new matrix that is its pseudoinverse. I tested this a little bit by comparing solutions to wolfram alpha so it should be fine.
 
 * first joint is top row of thetas
+
+* run armTest2.txt
+* can change the radius and angles of the circle when Equation is created in main
+* to get more images lower the timestep (may have to change stopping point, right now it's 2*PI plus some constant so that I could be sure to make a full circle)

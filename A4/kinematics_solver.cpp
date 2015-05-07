@@ -6,6 +6,8 @@
 #include <vector>
 
 
+#include "Equation.h"
+
 #define PI 3.14159265  // Should be used from mathlib
 inline float sqr(float x) { return x*x; }
 using namespace std;
@@ -58,6 +60,7 @@ Polygon lastPolygon;
 Ellipsoid* lastEllipsoid = NULL;
 Ellipsoid lastJoint;
 list<Ellipsoid> ellipsoids;
+Ellipsoid ellipsoidLeader;
 
 int pixelsV = 1000; // Default value, TODO allow to be overridden by arguments
 int pixelsH = 1000; // Default value, TODO allow to be overridden by arguments
@@ -764,6 +767,12 @@ void updateTranformations(){
   }
 }
 
+void updateEllipsoidLeader(Point target){
+  cout << "target: " << target.getX() << ", " << target.getY() << ", " << target.getZ() << endl;
+  ellipsoidLeader.revertTransformation();
+  ellipsoidLeader.updateTransformation(Transformation(target.getX(), target.getY(), target.getZ(), 't'));
+}
+
 // Color getColorFromRay(Ray ray, float startTime){
 	//find minimum time of intersection between ray and all objects
 	//t>=startTime
@@ -846,7 +855,7 @@ void processArgs(int argc, char *argv[]) {
     fs.close();
   }; 
   
-
+  ellipsoidLeader = Ellipsoid(Material(1, 1, 1, 1, 1, 1, .1, .1, .1, 64, .05, .05, .05 ), Transformation(), 1, 1, false);
   updateTranformations();
 }
 
@@ -926,6 +935,19 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
           use_poly = false;
           use_ellipsoid = true;
         }
+      }
+
+      //TO DO
+      /*
+      * check if hit leader ellipsoid
+      */
+      hitTime = ellipsoidLeader.hit(curRay);
+      if (minHit < epsilon || (hitTime >= epsilon && hitTime < minHit)){
+        minHit = hitTime;
+        hitEllipsoid = ellipsoidLeader;
+        use_tri = false;
+        use_poly = false;
+        use_ellipsoid = true;
       }
       //std::cout << minHit;
       //std::cout << "\n";
@@ -1021,6 +1043,15 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
             minHit = hitTime;
           }
         }
+
+        //TO DO
+        /*
+        * added for ellipsoidLeader
+        */
+        hitTime = ellipsoidLeader.hit(lightRay);
+        if (minHit < epsilon || (hitTime >= epsilon && hitTime < minHit)){
+          minHit = hitTime;
+        }
         //std::cout << minHit;
         //std::cout << "\n";
         // std::cout << "hit time: " << minHit << std::endl;
@@ -1114,6 +1145,15 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
             minHit = hitTime;
           }
         }
+
+        //TO DO
+        /*
+        * added for ellipsoidLeader
+        */
+        hitTime = ellipsoidLeader.hit(lightRay);
+        if (minHit < epsilon || (hitTime >= epsilon && hitTime < minHit)){
+          minHit = hitTime;
+        }        
 
         // std::cout << "hit time: " << minHit << std::endl;
         // END COPIED CODE FROM ABOVE
@@ -1290,11 +1330,17 @@ int main(int argc, char *argv[]) {
     list<Point> curve;
 
     // TODO define curve
-
-    curve.push_back(Point(18.0, 18.0, 0.0));
-    curve.push_back(Point(10.0, 20.0, 0.0));
-    curve.push_back(Point(0.0, 20.0, 0.0));
-    curve.push_back(Point(-18.0, -18.0, 0.0));
+    Equation firstEquation = Equation(10.0, 50.0, 30.0, 0.0, 0.0, 0.0);
+    for (float i = 0.0; i <= 2*PI+.5; i += PI/2){
+      cout << "i = " << i << endl;
+      Point newPoint = Point(firstEquation.getX(i), firstEquation.getY(i), firstEquation.getZ(i));
+      newPoint.print();
+      curve.push_back(Point(firstEquation.getX(i), firstEquation.getY(i), firstEquation.getZ(i))); 
+    }
+    // curve.push_back(Point(18.0, 18.0, 0.0));
+    // curve.push_back(Point(10.0, 20.0, 0.0));
+    // curve.push_back(Point(0.0, 20.0, 0.0));
+    // curve.push_back(Point(-18.0, -18.0, 0.0));
 
 
     for (Point target : curve) {
@@ -1306,7 +1352,7 @@ int main(int argc, char *argv[]) {
       std::cout << "START calculateAngles" << std::endl;
       calculateAngles(target, jacobian); // update all Ellipse objects so that angles get arm as close to target as possible
       std::cout << "END calculateAngles" << std::endl;
-
+      updateEllipsoidLeader(target);
       updateTranformations();
 
       // TODO change filename for every timestep ?

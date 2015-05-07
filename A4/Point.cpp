@@ -31,3 +31,7 @@ float Point::distToPt(Point p) {
 
 	return sqrt(temp);
 }
+
+void Point::print(){
+	std::cout << "Point: (" << this->x << ", " << this->y << ", " << this->z << ")\n";
+} 
