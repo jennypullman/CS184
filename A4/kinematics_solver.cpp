@@ -855,7 +855,7 @@ void processArgs(int argc, char *argv[]) {
     fs.close();
   }; 
   
-  ellipsoidLeader = Ellipsoid(Material(1, 1, 1, 1, 1, 1, .1, .1, .1, 64, .05, .05, .05 ), Transformation(), 1, 1, false);
+  ellipsoidLeader = Ellipsoid(Material(1, 1, 1, 1, 1, 1, .1, .1, .1, 64, .05, .05, .05 ), Transformation(), 0.25, 0.25, false);
   updateTranformations();
 }
 
@@ -1235,7 +1235,7 @@ Color follow_ray(Ray start_ray, int recursiveDepth){
   return curColor;
 }
 
-int do_ray_tracing() {
+int do_ray_tracing(int imgNum) {
   // for each pixel
     // determine view ray
     // initialize Color object
@@ -1278,7 +1278,37 @@ int do_ray_tracing() {
   // std::cout << "END pixel loop" << std::endl;
 
   // std::cout << "START print to file" << std::endl;
-  char fileName[] = {'o','u','t','I','m','g','.','p','n','g', '\0'};
+  // char hundreds[1], tens[1], ones[1];
+  // sprintf(hundreds, "%d", imgNum/100);
+  // sprintf(tens, "%d", (imgNum%100)/10);
+  // sprintf(ones, "%d", imgNum%10);
+
+  string name = "outImgs/outImg";
+  if (imgNum < 100) {
+    name = name + "0";
+  }
+  if (imgNum < 10) {
+    name = name + "0";
+  }
+  name = name + std::to_string(imgNum);
+  name = name + ".png";
+  // string fName[] = name;
+  // char fileName[] = name; 
+
+  int nameLen = name.size()+1; // +1 for terminating char
+  char fileName[nameLen];
+  for (int j = 0; j < nameLen-1; j++) {
+    fileName[j] = name[j];
+  }
+  fileName[nameLen-1] = '\0';
+
+
+  // char hundreds[] = imgNum/100;
+  // char tens[] = (imgNum%100)/10;
+  // char ones[] = imgNum%10;
+  // std::cout << imgNum/100 << ", " << (imgNum%100)/10 << ", " << imgNum%10 << std::endl;
+  // char fileName[] = {'o','u','t','I','m','g','s','/','o','u','t','I','m','g',hundreds,tens,ones,'.','p','n','g','\0'};
+  // std::cout << "fileName: " << fileName << std::endl;
   return image.printToFile(fileName);
 }
 
@@ -1296,7 +1326,7 @@ void angleTest(float thetaX, float thetaY, float thetaZ){
   }
   cout << "angle test: updateTranformations\n";
   updateTranformations();
-  do_ray_tracing();
+  do_ray_tracing(0);
 
 }
 
@@ -1330,8 +1360,8 @@ int main(int argc, char *argv[]) {
     list<Point> curve;
 
     // TODO define curve
-    Equation firstEquation = Equation(10.0, 50.0, 30.0, 0.0, 0.0, 0.0);
-    for (float i = 0.0; i <= 2*PI+.5; i += PI/2){
+    Equation firstEquation = Equation(15.0, 50.0, 30.0, 0.0, 10.0, 0.0);
+    for (float i = 0.0; i <= 2*PI+.5; i += PI/20){
       cout << "i = " << i << endl;
       Point newPoint = Point(firstEquation.getX(i), firstEquation.getY(i), firstEquation.getZ(i));
       newPoint.print();
@@ -1341,6 +1371,8 @@ int main(int argc, char *argv[]) {
     // curve.push_back(Point(10.0, 20.0, 0.0));
     // curve.push_back(Point(0.0, 20.0, 0.0));
     // curve.push_back(Point(-18.0, -18.0, 0.0));
+
+    int imgNum = 0;
 
 
     for (Point target : curve) {
@@ -1358,8 +1390,9 @@ int main(int argc, char *argv[]) {
       // TODO change filename for every timestep ?
 
       std::cout << "START do_ray_tracing" << std::endl;
-      int success = do_ray_tracing();
+      int success = do_ray_tracing(imgNum);
       std::cout << "END do_ray_tracing: " << success << std::endl;
+      imgNum++;
     }
 
     // std::cout << "START do_ray_tracing" << std::endl;
