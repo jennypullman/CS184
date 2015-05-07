@@ -16,3 +16,4 @@
 * run armTest2.txt
 * can change the radius and angles of the circle when Equation is created in main
 * to get more images lower the timestep (may have to change stopping point, right now it's 2*PI plus some constant so that I could be sure to make a full circle)
+* ball that is being followed is ellipsoidLeader
