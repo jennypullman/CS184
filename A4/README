@@ -1,0 +1,14 @@
+Lauren Speers cs184-cf
+Jenny Pullman cs184-cg
+
+Linux (Ubuntu)
+Our code was submitted by Lauren Speers (-cf) on hive3.cs.berkeley.edu.  It runs on this server.
+
+After the program runs, the images are saved in the outImgs folder.
+
+To run our program with the sorted arm lengths (cyan), use the command "./as1 sortedArms.txt".
+To run our program with unsorted arm lengths (yellow), use the command "./as1 unsortedArms.txt".
+
+To see the basic circle, uncomment the basic circle code marked between "// START --- Basic" and "END --- Basic".  Comment out the complex circle code.
+
+To see the complex circle, uncomment the complex circle code marked between "// START --- Complex" and "END --- Complex".  Comment out the basic circle code.

@@ -1359,18 +1359,53 @@ int main(int argc, char *argv[]) {
 
     list<Point> curve;
 
-    // TODO define curve
-    Equation firstEquation = Equation(15.0, 50.0, 30.0, 0.0, 10.0, 0.0);
-    for (float i = 0.0; i <= 2*PI+.5; i += PI/20){
+    // START --- Complex
+    float stepSize = PI/20;
+    Equation firstEquation = Equation(15.0, 50.0, 30.0, 0.0, 10.0, 0.0); 
+
+    for (float i = 0.0; i <= 2*PI+.00001; i += stepSize){
       cout << "i = " << i << endl;
       Point newPoint = Point(firstEquation.getX(i), firstEquation.getY(i), firstEquation.getZ(i));
       newPoint.print();
       curve.push_back(Point(firstEquation.getX(i), firstEquation.getY(i), firstEquation.getZ(i))); 
     }
-    // curve.push_back(Point(18.0, 18.0, 0.0));
-    // curve.push_back(Point(10.0, 20.0, 0.0));
-    // curve.push_back(Point(0.0, 20.0, 0.0));
-    // curve.push_back(Point(-18.0, -18.0, 0.0));
+    // END --- Complex
+
+    // START --- Basic
+    // float stepSize = PI/50;
+    // Equation firstEquation = Equation(10.0, 0.0, 0.0, 0.0, 10.0, 0.0); 
+
+    // for (float i = 0.0; i <= 2*PI+.00001; i += stepSize){
+    //   cout << "i = " << i << endl;
+    //   Point newPoint = Point(firstEquation.getX(i), firstEquation.getY(i), firstEquation.getZ(i));
+    //   newPoint.print();
+    //   curve.push_back(Point(firstEquation.getX(i), firstEquation.getY(i), firstEquation.getZ(i))); 
+    // }
+    // END --- Basic
+
+    
+    // START --- Figure 8.  Not submitted
+    // float radius = 10;
+    // Equation secondEquation = Equation(radius, 0.0, 0.0, 10.0, 0.0, 0.0);
+    // Equation firstEquation = Equation(radius, 0.0, 0.0, -10.0, 0.0, 0.0);
+
+
+    // for (float i = 2*PI; i <= 7*PI/2+0.0001; i += PI/4){
+    //   // cout << "i = " << i << endl;
+    //   Point newPoint = Point(secondEquation.getX(i), firstEquation.getY(i), firstEquation.getZ(i));
+    //   newPoint.print();
+    //   curve.push_back(Point(secondEquation.getX(i), firstEquation.getY(i), firstEquation.getZ(i))); 
+    // }
+
+
+    // //PI/2 to 5PI/2
+    // for (float i = 5*PI/2; i >= PI/2 - 0.0001; i -= PI/4){
+    //   // cout << "i = " << i << endl;
+    //   Point newPoint = Point(firstEquation.getX(i), firstEquation.getY(i), firstEquation.getZ(i));
+    //   newPoint.print();
+    //   curve.push_back(Point(firstEquation.getX(i), firstEquation.getY(i), firstEquation.getZ(i))); 
+    // }
+    // END -- Figure 8
 
     int imgNum = 0;
 
